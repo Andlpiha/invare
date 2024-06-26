@@ -1,0 +1,37 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Design.PreviewWith>
+    <Border Padding="20">
+      <!-- Add Controls for Previewer Here -->
+    </Border>
+  </Design.PreviewWith>
+
+  <!-- Add Styles Here -->
+	<Style Selector="Border#ToolbarBorder">
+		<Setter Property="Background" Value="{DynamicResource LightGrayBrush}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource DarkGrayBrush}"/>
+		<Setter Property="BorderThickness" Value="0 2 0 2"/>
+		<Setter Property="BoxShadow" Value="inset 0 0 5 0 DarkGray"/>
+		<Setter Property="Padding" Value="5"/>
+	</Style>
+
+	<Style Selector="Button.Toolbar,ToggleButton.Toolbar">
+		<Setter Property="Background" Value="{DynamicResource LightGrayBrush}"/>
+		
+		<Setter Property="BorderBrush" Value="{DynamicResource DarkGrayBrush}"/>
+		<Setter Property="BorderThickness" Value="1"/>
+	</Style>
+
+	<Style Selector="Button.shadow">
+		<Setter Property="Effect">
+			<Setter.Value>
+				<DropShadowDirectionEffect Color="Gray" Direction="135" ShadowDepth="2" BlurRadius="3" />
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style Selector="Separator.Toolbar">
+		<Setter Property="Opacity" Value="0"/>
+		<Setter Property="Width" Value="-5"/>
+	</Style>
+</Styles>

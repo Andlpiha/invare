@@ -1,0 +1,74 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:Inv.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:DataType="vm:MenuBarViewModel"
+             x:Class="Inv.MenuBar">
+
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MenuBarViewModel/>
+	</Design.DataContext>
+
+	<Menu Background="{DynamicResource LightGrayBrush}">
+		<MenuItem Header="Справочник"/>
+
+		<MenuItem Header="Действия">
+			<MenuItem Header="Добавить комплект" Command=""/>
+			<MenuItem Header="Добавить единицу" Command=""/>
+			<MenuItem Header="Добавить ремонт" Command=""/>
+
+			<Separator/>
+			<MenuItem Header="Редактировать" Command=""/>
+			<Separator/>
+
+			<MenuItem Header="Удалить" Command=""/>
+			<MenuItem Header="Переместить в другой комплект" Command=""/>
+			<MenuItem Header="Переместить" Command=""/>
+			<MenuItem Header="Возврат" Command=""/>
+			<MenuItem Header="Провилактика" Command=""/>
+			<MenuItem Header="Выгрузка в excel" Command=""/>
+		</MenuItem>
+
+		<MenuItem Header="Ремонты">
+			<MenuItem Header="Просмотр ремонтов" Command=""/>
+			<Separator/>
+
+			<MenuItem Header="Уст. Дату Входа" Command=""/>
+			<MenuItem Header="Уст. Дату Завершения" Command=""/>
+			<MenuItem Header="Уст. Дату Выдачи" Command=""/>
+		</MenuItem>
+
+		<MenuItem Header="Отчеты">
+			<MenuItem Header="Отчет по БД" InputGesture="Alt+F7" Command=""/>
+			<MenuItem Header="Страрый фильтр" Command=""/>
+			<MenuItem Header="Отчет по ремонтам" Command=""/>
+
+			<Separator/>
+			<MenuItem Header="Реестр ПЭВМ" Command=""/>
+			<MenuItem Header="Ввод в эксплуатацию" Command=""/>
+			<MenuItem Header="Реестр ПО" Command=""/>
+			<MenuItem Header="Прикл. ПО по подразделениям и ФИО" Command=""/>
+
+		</MenuItem>
+
+		<MenuItem Header="Инструменты">
+			<MenuItem Header="Найти" InputGesture="Ctrl + F" Command=""/>
+			<MenuItem Header="Найти далее" InputGesture="F3" Command=""/>
+
+			<Separator/>
+			<MenuItem Header="Импорт МОЛ" Command=""/>
+			<Separator/>
+
+			<MenuItem Header="Выбор цвета" Command=""/>
+			<MenuItem Header="Смена пользователя" Command=""/>
+			<MenuItem Header="Manage accounts" Command=""/>
+		</MenuItem>
+
+		<MenuItem Header="Выход" x:Name="MenuBar_Exit" Command="{Binding ExitApp}"/>
+	</Menu>
+	
+</UserControl>

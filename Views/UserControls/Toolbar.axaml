@@ -1,0 +1,73 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+			 xmlns:vm="using:Inv.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:DataType="vm:MainWindowViewModel"
+             x:Class="Inv.Toolbar">
+
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:ToolbarViewModel/>
+	</Design.DataContext>
+
+	<StackPanel x:Name="Toolbar_stack" Orientation="Horizontal" Spacing="5">
+		<Button Classes="Toolbar shadow" ToolTip.Tip="Обзор справочника" Click="">
+			<Svg Path="/Assets/toolbar-icons/book.svg"/>
+		</Button>
+
+		<Separator Classes="Toolbar"/>
+		
+		<Button Classes="Toolbar shadow" ToolTip.Tip="Создать комплект" Click="">
+			<Svg Path="/Assets/toolbar-icons/desktop-tower.svg"/>
+		</Button>
+		<Button Classes="Toolbar shadow" ToolTip.Tip="Создать комплектующее" Click="">
+			<Svg Path="/Assets/toolbar-icons/expansion-card-variant.svg"/>
+		</Button>
+		<Button Classes="Toolbar shadow" ToolTip.Tip="Ремонты" Click="">
+			<Svg Path="/Assets/toolbar-icons/tools.svg"/>
+		</Button>
+
+		<Separator Classes="Toolbar"/>
+
+		<Button Classes="Toolbar shadow" ToolTip.Tip="Редактирование" Click="">
+			<Svg Path="/Assets/toolbar-icons/pencil.svg"/>
+		</Button>
+
+		<Separator Classes="Toolbar"/>
+
+		<Button Classes="Toolbar shadow" ToolTip.Tip="Удалить" Click="">
+			<Svg Path="/Assets/toolbar-icons/delete-forever.svg"/>
+		</Button>
+		<Button Classes="Toolbar shadow" ToolTip.Tip="Укомплектовать" Click="">
+			<Svg Path="/Assets/toolbar-icons/package-variant-closed-plus.svg"/>
+		</Button>
+		<Button Classes="Toolbar shadow" ToolTip.Tip="Перемещения" Click="">
+			<Svg Path="/Assets/toolbar-icons/package-up.svg"/>
+		</Button>
+		<Button Classes="Toolbar shadow" ToolTip.Tip="Возврат владельцу" Click="">
+			<Svg Path="/Assets/toolbar-icons/arrow-u-down-right.svg"/>
+		</Button>
+		<Button Classes="Toolbar shadow" ToolTip.Tip="Профилактика" Click="">
+			<Svg Path="/Assets/toolbar-icons/wrench-clock.svg"/>
+		</Button>
+		
+		<Separator Classes="Toolbar"/>
+
+		<Button Classes="Toolbar" ToolTip.Tip="Выгрузить в excel" Click="">
+			<Svg Path="/Assets/toolbar-icons/file-excel.svg"/>
+		</Button>
+		<TextBox Width="105" Margin="0 2 0 2"/>
+		<ToggleButton Classes="Toolbar" ToolTip.Tip="Примерный поиск" Click="" Margin="-2 2 0 1">
+			<TextBlock FontSize="14" FontWeight="1000">Fz</TextBlock>
+		</ToggleButton>
+		<Button Classes="Toolbar" ToolTip.Tip="Выбор искомого параметра" Click="">
+			<Svg Path="/Assets/toolbar-icons/file-search.svg"/>
+		</Button>
+		
+	</StackPanel>
+
+</UserControl>
