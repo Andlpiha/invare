@@ -6,11 +6,12 @@
 		x:DataType="vm:LoginViewModel"
         mc:Ignorable="d"
 		WindowStartupLocation="CenterScreen"
+		Background="{DynamicResource Ivory}"
 		Topmost="True"
 		SystemDecorations="None"
         x:Class="Inv.LoginWindow"
-        Width="300"
-		Height="200"
+        Width="400"
+		Height="400"
         Title="Login">
 
 	<Design.DataContext>
@@ -18,47 +19,54 @@
 	</Design.DataContext>
 
 	<Window.Styles>
-		<Style Selector="Label, TextBox">
-			<Setter Property="FontSize" Value="16"/>
+		<Style Selector="TextBox, Button">
 			<Setter Property="FontWeight" Value="400"/>
-			<Setter Property="CornerRadius" Value="10"/>
+			<Setter Property="CornerRadius" Value="30"/>
+
+			<Setter Property="BorderThickness" Value="2"/>
 		</Style>
+		<Style Selector="TextBox">
+			<Setter Property="FontSize" Value="18"/>
+			<Setter Property="Padding" Value="10"/>
+
+			<Setter Property="TextAlignment" Value="Center"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource DodgerBlue}"/>
+		</Style>
+		<Style Selector="Label">
+			<Setter Property="FontSize" Value="32"/>
+			<Setter Property="FontWeight" Value="600"/>
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<!--<Setter Property="TextAlignment" Value="Center"/>-->
+		</Style>
+		
 		<Style Selector="Button">
-			<Setter Property="Width" Value="60"/>
-			<Setter Property="Height" Value="40"/>
-			<Setter Property="CornerRadius" Value="10"/>
-		</Style>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			
+			<Setter Property="Width" Value="120"/>
+			<Setter Property="Padding" Value="15"/>
+		</Style>	
 		<Style Selector="Separator">
 			<Setter Property="Opacity" Value="0"/>
 		</Style>
 	</Window.Styles>
 	
-	<StackPanel Margin="15" Spacing="5">
-		<DockPanel LastChildFill="False">
-			<Label Content="Логин:" DockPanel.Dock="Left"/>
-			<TextBox DockPanel.Dock="Right" Width="100" Text="{Binding Login, Mode=TwoWay}"/>
-		</DockPanel>
-		<DockPanel LastChildFill="False">
-			<Label Content="Пароль:" DockPanel.Dock="Left"/>
-			<TextBox DockPanel.Dock="Right" Width="150" PasswordChar="*"/>
-		</DockPanel>
-		<DockPanel LastChildFill="False">
-			<Label Content="БД:" DockPanel.Dock="Left"/>
-			<TextBox DockPanel.Dock="Right" Width="200" Text="{Binding DBLocation, Mode=TwoWay}"/>
-		</DockPanel>
-
-		<Separator/>
+	<StackPanel Margin="15" Spacing="10">
+		<Label Content="ВХОД В СИСТЕМУ"/>
 		
-		<DockPanel LastChildFill="False" Height="20">
-			<Button DockPanel.Dock="Right" Click="Exit">
-				<Svg Path="/Assets/login-icons/thin-x.svg"/>
-			</Button>
+		<Separator Height="5"/>
+		
+		<TextBox Width="250" Text="{Binding Login, Mode=TwoWay}" Watermark="Логин"/>
+		<TextBox Width="250" PasswordChar="*" Watermark="Пароль"/>
+		
+		<Separator Height="0"/>
+		<TextBox x:Name="DBLocation" Width="250" Text="{Binding DBLocation, Mode=TwoWay}" Watermark="База данных"/>
 
-			<Separator Width="20"/>
-			
-			<Button DockPanel.Dock="Right" Click="Ok_btnClick">
-				<Svg Path="/Assets/login-icons/lock-open.svg"/>
-			</Button>
-		</DockPanel>
+		<Separator Height="10"/>
+
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+			<Button Content="Войти" Background="{DynamicResource LightGreen}" Click="Ok_btnClick"/>
+			<Button Content="Закрыть" Background="{DynamicResource ImperialRed}" Click="Exit"/>
+		</StackPanel>
 	</StackPanel>
 </Window>

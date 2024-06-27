@@ -60,6 +60,9 @@
     <Compile Update="Views\Login.axaml.cs">
       <DependentUpon>Login.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MessageBox.axaml.cs">
+      <DependentUpon>MessageBox.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

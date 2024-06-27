@@ -15,8 +15,17 @@
     </Application.Styles>
 
 	<Application.Resources>
+		<SolidColorBrush x:Key="Ivory">#FFFFF0</SolidColorBrush>
+		
 		<SolidColorBrush x:Key="LightGrayBrush">#DFDFDF</SolidColorBrush>
 		<SolidColorBrush x:Key="DarkGrayBrush">#787878</SolidColorBrush>
 
+		<SolidColorBrush x:Key="Iceberg">#74B3CE</SolidColorBrush>
+		<SolidColorBrush x:Key="DodgerBlue">#1E90FF</SolidColorBrush>
+
+		<SolidColorBrush x:Key="LightGreen">#5dBB63</SolidColorBrush>
+
+		<SolidColorBrush x:Key="PersianRed">#CA3433</SolidColorBrush>
+		<SolidColorBrush x:Key="ImperialRed">#ED2939</SolidColorBrush>
 	</Application.Resources>
 </Application>

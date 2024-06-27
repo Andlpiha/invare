@@ -1,15 +1,25 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Inv.ViewModels;
+using FirebirdSql.Data.FirebirdClient;
+using Inv.Views;
+using MsgBox;
+using System.Threading.Tasks;
+using System;
 
 namespace Inv;
 
 public partial class LoginWindow : Window
 {
+    private LoginViewModel viewModel;
     public LoginWindow()
     {
-        this.DataContext = new LoginViewModel();
         InitializeComponent();
+
+        viewModel = new LoginViewModel();
+        DataContext = viewModel;
+
+        viewModel.dbConnect();
     }
 
     public void Exit(object sender, RoutedEventArgs args)
@@ -17,14 +27,29 @@ public partial class LoginWindow : Window
         System.Environment.Exit(0);
     }
     
-    public void Ok_btnClick(object sender, RoutedEventArgs args)
+    public async void Ok_btnClick(object sender, RoutedEventArgs args)
     {
+        if (DataContext == null) return;
+
+        if (SQLConn.Instance.GetConnection().State != System.Data.ConnectionState.Open)
+        {
+            bool connectionSuccess = await viewModel.dbConnect();
+            if (!connectionSuccess) return;
+        }
+
         // Сохраняем значения полей при успешном входе
         if (DataContext != null)
         {
-            Properties.Login.Default.DBLocation = ((LoginViewModel)this.DataContext).DBLocation;
-            Properties.Login.Default.Name = ((LoginViewModel)this.DataContext).Login;
+            Properties.Login.Default.DBLocation = viewModel.DBLocation;
+            Properties.Login.Default.Name = viewModel.Login;
             Properties.Login.Default.Save();
         }
+
+        MainWindow mainWindow = new MainWindow();
+        mainWindow.DataContext = new MainWindowViewModel();
+
+        mainWindow.Show();
+
+        this.Close();
     }
 }
