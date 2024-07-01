@@ -55,16 +55,16 @@
 		    <local:Toolbar Height="35"/>
 		</Border>
 
-		<TabControl x:Name="Tabs" ItemsSource="{Binding}" DockPanel.Dock="Top" SelectionChanged="TabChangeHandler">
+		<TabControl x:Name="TabControl" ItemsSource="{Binding}" DockPanel.Dock="Top" SelectionChanged="TabChangeHandler">
 			<TabControl.ItemTemplate>
-				<DataTemplate x:DataType="vm:TabItemViewModel">
+				<DataTemplate x:DataType="vm:TabItem">
 					<TextBlock Classes="tabControlHeader" Text="{Binding Header}"/>
 				</DataTemplate>
 			</TabControl.ItemTemplate>
 			<TabControl.ContentTemplate>
-				<DataTemplate x:DataType="vm:TabItemViewModel">
+				<DataTemplate x:DataType="vm:TabItem">
 					<DockPanel LastChildFill="True">
-						<TextBlock x:Name="DataView" Text="{Binding Header}"/>
+						<local:Table x:Name="DataView" TabID="{Binding ID}"/>
 					</DockPanel>
 				</DataTemplate>
 			</TabControl.ContentTemplate>

@@ -16,13 +16,12 @@ namespace Inv.Models
 
         public TableModel() {}
 
-        static private readonly string getTabsQuery = "SELECT s.NAME FROM SPR s " +
+        static private readonly string getTabsQuery = "SELECT * FROM SPR s " +
             "LEFT JOIN SPR ss ON ss.id=s.id_up " +
             "WHERE ss.Name = 'Состояния'";
-        static public List<string> getTabs(FbConnection con)
+        static public DataTable getTabs()
         {
-            if (con == null || con.State != ConnectionState.Open)
-                return new List<string>();
+            var con = SQLConn.Instance.GetConnection();
 
             DataTable tabs_table = new DataTable();
             FbCommand _cmd = new(getTabsQuery, con);
@@ -32,12 +31,37 @@ namespace Inv.Models
             List<string> tabs = tabs_table.Rows.OfType<DataRow>()
                 .Select(dr => dr.Field<string>("Name")).OfType<string>().ToList();
 
-            return tabs;
+            return tabs_table;
         }
 
-        static private readonly string getTabContentQuery = "";
-        public DataTable getTabContent()
+        // TODO: добавить сортировку по столбцу (TMain_Form.SkladGridSort)
+        static private readonly string getSkladItemsQuery = "SELECT * FROM view_cm({0})";
+        public DataTable getSkladItems(string tabID)
         {
+            var con = SQLConn.Instance.GetConnection();
+
+            DataTable table = new DataTable();
+            FbCommand _cmd = new(string.Format(getSkladItemsQuery, tabID), con);
+            (new FbDataAdapter(_cmd)).Fill(table);
+
+            return table;
+        }
+
+        static private readonly string getRepairsQuery = "";
+        public DataTable getRepairs()
+        {
+            var con = SQLConn.Instance.GetConnection();
+
+            DataTable table = new DataTable();
+
+            return table;
+        }
+
+        static private readonly string getLogQuery = "";
+        public DataTable getLog()
+        {
+            var con = SQLConn.Instance.GetConnection();
+
             DataTable table = new DataTable();
 
             return table;

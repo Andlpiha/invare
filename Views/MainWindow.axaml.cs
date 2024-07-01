@@ -1,6 +1,8 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Inv.ViewModels;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,26 +18,10 @@ public partial class MainWindow : Window
         this.DataContext = new MainWindowViewModel();
 
         var viewModel = this.DataContext as MainWindowViewModel;
-        var tabControl = this.FindControl<TabControl>("Tabs");
-
-        // —оздаем массив значений дл€ отрисовки табов
-        if (tabControl != null && viewModel != null)
-        {
-            var tabItems = new TabItemViewModel[viewModel.TabHeaders.Length];
-
-            for (int i = 0; i < viewModel.TabHeaders.Length; i++)
-            {
-                tabItems[i] = new TabItemViewModel(
-                    viewModel.TabHeaders[i],
-                    viewModel.TabHeaders[i]
-                );
-            }
-
-            tabControl.DataContext = tabItems;
-        }
+        this.FindControl<TabControl>("TabControl").DataContext = viewModel.Tabs;
     }
 
-    // ≈сли пользователь кликает на другой таб
+    // ≈сли пользователь кликает на другую вкладку
     public void TabChangeHandler(object sender, SelectionChangedEventArgs e)
     {
         var viewModel = this.DataContext as MainWindowViewModel;
@@ -43,8 +29,5 @@ public partial class MainWindow : Window
 
         if (tabControl == null || viewModel == null) return;
         viewModel.SelectedIndex = tabControl.SelectedIndex;
-
-        //tabControl.FindControl<>
-
     }
 }

@@ -2,7 +2,185 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:Inv.ViewModels"
+			 xmlns:local="using:Inv"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Inv.Table">
-	<TextBox x:Name="Box">Hello world</TextBox>
+
+	<!--Устанавливаем столбцы для различных вкладок-->
+	<!--<Styles>
+		<Style Selector="DataGrid#MainGrid journal">
+			<Setter Property="Columns">
+				<Template>
+					<DataGridTemplateColumn Header="" Binding="{Binding icon}">
+						<DataGridTemplateColumn.CellTemplate>
+
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTemplateColumn Header="" Binding="{Binding code_op}">
+						<DataGridTemplateColumn.CellTemplate>
+
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTextColumn Header="Дата" Binding="{Binding date_do}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Склад" Binding="{Binding sklad}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Компл." Binding="{Binding compl_num}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Вн.№" Binding="{Binding vnutr_num}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Инв. №" Binding="{Binding inv_num}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Сер. №" Binding="{Binding ser_num}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Наименование" Binding="{Binding name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Пользователь" Binding="{Binding user_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Учетка" Binding="{Binding login_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Место" Binding="{Binding site_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Профил." Binding="{Binding Date_prof}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Дата созд." Binding="{Binding Date_create}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="МОЛ" Binding="{Binding MOL_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Описание" Binding="{Binding Description}">
+
+					</DataGridTextColumn>
+				</Template>
+			</Setter>
+		</Style>
+
+		<Style Selector="DataGrid#MainGrid repair">
+			<Setter Property="Columns">
+				<Template>
+					<DataGridTemplateColumn Header="" Binding="{Binding icon}">
+						<DataGridTemplateColumn.CellTemplate>
+
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTextColumn Header="Компл." Binding="{Binding compl_num}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Вн.№" Binding="{Binding vnutr_num}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Инв. №" Binding="{Binding inv_num}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Наименование" Binding="{Binding name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Наименование" Binding="{Binding dep_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Пользователь" Binding="{Binding user_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Ремонтник" Binding="{Binding pribor_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Жалоба" Binding="{Binding jaloba}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Диагноз" Binding="{Binding diagnos}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Мероприятия" Binding="{Binding repair}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Поступил" Binding="{Binding date_in}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Завершен" Binding="{Binding date_done}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Выдано" Binding="{Binding date_out}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Описание" Binding="{Binding Description}">
+
+					</DataGridTextColumn>
+				</Template>
+			</Setter>
+		</Style>
+
+		<Style Selector="DataGrid#MainGrid storage">
+			<Setter Property="Columns">
+				<Template>
+					<DataGridTemplateColumn Header="" Binding="{Binding icon}">
+						<DataGridTemplateColumn.CellTemplate>
+
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTextColumn Header="Компл." Binding="{Binding compl_num}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Вн.№" Binding="{Binding vnutr_num}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Инв. №" Binding="{Binding inv_num}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Наименование" Binding="{Binding name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Наименование" Binding="{Binding dep_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Пользователь" Binding="{Binding user_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Учетка" Binding="{Binding login_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Место" Binding="{Binding site_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Профил." Binding="{Binding Date_prof}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Дата созд." Binding="{Binding Date_create}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="МОЛ" Binding="{Binding MOL_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="МОЛ_пл" Binding="{Binding MOLpl_name}">
+
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="Описание" Binding="{Binding Description}">
+
+					</DataGridTextColumn>
+				</Template>
+			</Setter>
+		</Style>
+	</Styles>-->
+	
+	<!--Класс указывает, какие столбцы отображать-->
+	<!--<DataGrid x:Name="MainGrid" Classes="Journal" ItemsSource="{Binding TableRows}">
+		
+	</DataGrid>-->
+
+	<TextBox Text="{Binding $parent[local:Table].TabID}"/>
 </UserControl>

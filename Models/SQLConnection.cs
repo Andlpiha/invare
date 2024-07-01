@@ -40,6 +40,8 @@ public class SQLConn
     }
 
     public string GetConnectionString() => connString;
+
+    // TODO: сделать проверку на подключение
     public FbConnection GetConnection() => objConnect;
 
     public void OpenConnection() => objConnect.Open();

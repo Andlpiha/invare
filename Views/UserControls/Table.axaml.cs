@@ -1,37 +1,41 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Inv.ViewModels;
 using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace Inv;
 
 public partial class Table : UserControl
 {
-    private static readonly string pageTypeDefault = "Получено";
-    public static readonly StyledProperty<string> pageTypeProperty =
+    public static readonly StyledProperty<string> TabIDProperty =
         AvaloniaProperty.Register<Table, string>(
-            nameof(PageType),
-            defaultValue: pageTypeDefault,
-            defaultBindingMode: Avalonia.Data.BindingMode.OneWay
+            nameof(TabID),
+            defaultBindingMode: Avalonia.Data.BindingMode.TwoWay
         );
-    public string PageType
+
+    public string TabID
     {
-        get => GetValue(pageTypeProperty);
-        set 
-        {
-            SetValue(pageTypeProperty, value);
-            onPageTypeChange(value);
-        }
+        get => GetValue(TabIDProperty);
+        set => SetValue(TabIDProperty, value);
     }
 
     public Table()
     {
+        TabIDProperty.Changed.AddClassHandler<Table>(onPageTypeChange);
+
         InitializeComponent();
-        PageType = pageTypeDefault;
+        this.DataContext = new TableViewModel();
     }
 
-    private void onPageTypeChange(string newValue)
+    private void onPageTypeChange(Table sender, AvaloniaPropertyChangedEventArgs e)
     {
-        this.FindControl<TextBox>("Box").Text = newValue;
+        var viewModel = this.DataContext as TableViewModel;
+
+        return;
+
+        viewModel.updateTableRows((string)e.NewValue);
     }
 }
