@@ -16,11 +16,59 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-	<DockPanel HorizontalAlignment="Stretch" LastChildFill="false">
+	<Window.Styles>
+		<Style Selector="TabControl">
+			<Setter Property="Background" Value="#F0F0F0"/>
+			<Setter Property="Padding" Value="0 0"/>
+		</Style>
+		<Style Selector="TabControl WrapPanel">
+			<Setter Property="Background" Value="{DynamicResource LightGrayBrush}"/>
+		</Style>
+
+		<Style Selector="TabItem">
+			<Setter Property="FontSize" Value="12"/>
+			<Setter Property="Height" Value="34"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Background" Value="{DynamicResource LightGrayBrush}"/>
+			<Setter Property="Foreground" Value="{DynamicResource BlackBrush}"/>
+			<Setter Property="Margin" Value="0 0"/>
+			<Setter Property="Padding" Value="0 0"/>
+			<Setter Property="FontWeight" Value="800"/>
+		</Style>
+		<Style Selector="TabItem /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Padding" Value="10 0"/>
+		</Style>	
+		<Style Selector="TabItem:pointerover Panel">
+			<Setter Property="Background" Value="{DynamicResource DarkGrayBrush}"/>
+		</Style>
+		<Style Selector="TabItem:pointerover TextBlock">
+			<Setter Property="Foreground" Value="#E0E0E0"/>
+		</Style>
+		<Style Selector="TabItem:focus Panel">
+			<Setter Property="Background" Value="{DynamicResource GrayBrush}"/>
+		</Style>
+	</Window.Styles>
+
+	<DockPanel HorizontalAlignment="Stretch" LastChildFill="true">
 		<local:MenuBar DockPanel.Dock="Top" Height="25"/>
 		<Border x:Name="ToolbarBorder" DockPanel.Dock="Top">
 		    <local:Toolbar Height="35"/>
 		</Border>
+
+		<TabControl x:Name="Tabs" ItemsSource="{Binding}" DockPanel.Dock="Top" SelectionChanged="TabChangeHandler">
+			<TabControl.ItemTemplate>
+				<DataTemplate x:DataType="vm:TabItemViewModel">
+					<TextBlock Classes="tabControlHeader" Text="{Binding Header}"/>
+				</DataTemplate>
+			</TabControl.ItemTemplate>
+			<TabControl.ContentTemplate>
+				<DataTemplate x:DataType="vm:TabItemViewModel">
+					<DockPanel LastChildFill="True">
+						<TextBlock x:Name="DataView" Text="{Binding Header}"/>
+					</DockPanel>
+				</DataTemplate>
+			</TabControl.ContentTemplate>
+		</TabControl>
 	</DockPanel>
 
 </Window>

@@ -1,6 +1,9 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
+using Inv.Properties;
 using System.Data;
 using System.Drawing;
+using System.Linq;
+using System.Numerics;
 
 namespace Inv.Models
 {
@@ -13,7 +16,7 @@ namespace Inv.Models
             users = new DataTable();
         }
 
-        private string fetchUsersQuery = "select * from us";
+        private string fetchUsersQuery = "SELECT * FROM us";
         public bool FetchUsers(FbConnection con)
         {
             if (con == null || con.State != ConnectionState.Open)
@@ -23,6 +26,16 @@ namespace Inv.Models
             (new FbDataAdapter(_cmd)).Fill(users);
 
             return true;
+        }
+
+        public uint getTY(string login)
+        {
+            DataRow[] result = users.Select(string.Format("LOGIN = {0}", login));
+
+            if (result.Length == 0)
+                return uint.MaxValue;
+
+            return (uint)result.First()["TY"];
         }
     }
 }

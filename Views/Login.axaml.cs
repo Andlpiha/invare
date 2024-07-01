@@ -18,7 +18,6 @@ public partial class LoginWindow : Window
 
         viewModel = new LoginViewModel();
         DataContext = viewModel;
-
         viewModel.dbConnect();
     }
 
@@ -45,9 +44,7 @@ public partial class LoginWindow : Window
             Properties.Login.Default.Save();
         }
 
-        MainWindow mainWindow = new MainWindow();
-        mainWindow.DataContext = new MainWindowViewModel();
-
+        MainWindow mainWindow = new();
         mainWindow.Show();
 
         this.Close();
