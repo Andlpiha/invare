@@ -15,27 +15,38 @@ public partial class Table : UserControl
             nameof(TabID),
             defaultBindingMode: Avalonia.Data.BindingMode.TwoWay
         );
-
     public string TabID
     {
         get => GetValue(TabIDProperty);
         set => SetValue(TabIDProperty, value);
     }
 
+    private TableViewModel _viewModel;
+
     public Table()
     {
         TabIDProperty.Changed.AddClassHandler<Table>(onPageTypeChange);
+        _viewModel = new TableViewModel();
 
         InitializeComponent();
-        this.DataContext = new TableViewModel();
+
+        var _grid = this.FindControl<DataGrid>("MainGrid");
+        if (_grid == null)
+            throw new Exception("DataGrid#MainGrid not found");
+
+        TableWidth width = new();
+        _grid.Resources.Add("TableWidth", width);
+        _grid.DataContext = _viewModel.TableRows;
+    }
+
+    public void onSelectedRowChange(object sender, SelectionChangedEventArgs e)
+    {
+        var _selected = ((DataGrid)sender).SelectedItem as TableRow;
+        _viewModel.Compl_id = (int)_selected.compl_num;
     }
 
     private void onPageTypeChange(Table sender, AvaloniaPropertyChangedEventArgs e)
     {
-        var viewModel = this.DataContext as TableViewModel;
-
-        return;
-
-        viewModel.updateTableRows((string)e.NewValue);
+        _viewModel.updateTableRows((string)e.NewValue);
     }
 }

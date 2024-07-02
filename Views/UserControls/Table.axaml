@@ -178,9 +178,30 @@
 	</Styles>-->
 	
 	<!--Класс указывает, какие столбцы отображать-->
-	<!--<DataGrid x:Name="MainGrid" Classes="Journal" ItemsSource="{Binding TableRows}">
-		
-	</DataGrid>-->
+	<DataGrid x:Name="MainGrid" Classes="Journal"
+			  ItemsSource="{Binding}" x:DataType="vm:TableRow"
+			  IsReadOnly="True" CanUserReorderColumns="True" CanUserResizeColumns="True"
+			  SelectionChanged="onSelectedRowChange">
+		<DataGrid.Columns>
+			<!--<DataGridTemplateColumn Header="">
+				<DataGridTemplateColumn.CellTemplate>
 
-	<TextBox Text="{Binding $parent[local:Table].TabID}"/>
+				</DataGridTemplateColumn.CellTemplate>
+			</DataGridTemplateColumn>-->
+
+			<DataGridTextColumn Header="Компл."			Binding="{Binding compl_num}"		Width="{Binding Source={DynamicResource TableWidth.compl_num_width}}"/>
+			<DataGridTextColumn Header="Вн.№"			Binding="{Binding vnutr_num}"		Width="{Binding Source={DynamicResource TableWidth.vnutr_num_width}}"/>
+			<DataGridTextColumn Header="Инв. №"			Binding="{Binding inv_num}"			Width="{Binding Source={DynamicResource TableWidth.inv_num_width}}"/>
+			<DataGridTextColumn Header="Наименование"	Binding="{Binding name}"			Width="{Binding Source={DynamicResource TableWidth.name_width}}"/>
+			<DataGridTextColumn Header="Отдел"			Binding="{Binding dep_name}"		Width="{Binding Source={DynamicResource TableWidth.dep_name_width}}"/>
+			<DataGridTextColumn Header="Пользователь"	Binding="{Binding user_name}"		Width="{Binding Source={DynamicResource TableWidth.user_name_width}}"/>
+			<DataGridTextColumn Header="Учетка"			Binding="{Binding login_name}"		Width="{Binding Source={DynamicResource TableWidth.login_name_width}}"/>
+			<DataGridTextColumn Header="Место"			Binding="{Binding site_name}"		Width="{Binding Source={DynamicResource TableWidth.site_name_width}}"/>
+			<DataGridTextColumn Header="Профил."		Binding="{Binding Date_prof}"		Width="{Binding Source={DynamicResource TableWidth.Date_prof_width}}"/>
+			<DataGridTextColumn Header="Дата созд."		Binding="{Binding Date_create}"		Width="{Binding Source={DynamicResource TableWidth.Date_create_width}}"/>
+			<DataGridTextColumn Header="МОЛ"			Binding="{Binding MOL_name}"		Width="{Binding Source={DynamicResource TableWidth.MOL_name_width}}"/>
+			<DataGridTextColumn Header="МОЛ_пл"			Binding="{Binding MOLpl_name}"		Width="{Binding Source={DynamicResource TableWidth.MOLpl_name_width}}"/>
+			<DataGridTextColumn Header="Описание"		Binding="{Binding Description}"		Width="{Binding Source={DynamicResource TableWidth.Description_width}}"/>
+		</DataGrid.Columns>
+	</DataGrid>
 </UserControl>

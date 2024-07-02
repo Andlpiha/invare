@@ -1,5 +1,6 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
 using Inv.Properties;
+using System;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -30,12 +31,12 @@ namespace Inv.Models
 
         public uint getTY(string login)
         {
-            DataRow[] result = users.Select(string.Format("LOGIN = {0}", login));
+            DataRow[] result = users.Select(string.Format("LOGIN = '{0}'", login));
 
             if (result.Length == 0)
                 return uint.MaxValue;
 
-            return (uint)result.First()["TY"];
+            return Convert.ToUInt32(result.First()["TY"]);
         }
     }
 }

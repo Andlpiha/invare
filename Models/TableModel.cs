@@ -10,10 +10,6 @@ namespace Inv.Models
 {
     internal class TableModel
     {
-        public string? SortBy { get; set; }
-        public string? SortOrder { get; set; }
-        public List<string>? WhereClause { get; set; }
-
         public TableModel() {}
 
         static private readonly string getTabsQuery = "SELECT * FROM SPR s " +
@@ -35,13 +31,20 @@ namespace Inv.Models
         }
 
         // TODO: добавить сортировку по столбцу (TMain_Form.SkladGridSort)
-        static private readonly string getSkladItemsQuery = "SELECT * FROM view_cm({0})";
-        public DataTable getSkladItems(string tabID)
+        static private readonly string getSkladItemsQuery = "SELECT * FROM view_cm({0}) {1}";
+        public DataTable getSkladItems(string tabID, string compl_id = "")
         {
             var con = SQLConn.Instance.GetConnection();
 
             DataTable table = new DataTable();
-            FbCommand _cmd = new(string.Format(getSkladItemsQuery, tabID), con);
+
+            string query;
+            if (compl_id != "")
+                query = string.Format(getSkladItemsQuery, tabID, "WHERE Compl_id="+compl_id);
+            else
+                query = string.Format(getSkladItemsQuery, tabID, "");
+
+            FbCommand _cmd = new(query, con);
             (new FbDataAdapter(_cmd)).Fill(table);
 
             return table;

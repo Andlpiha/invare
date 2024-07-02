@@ -34,4 +34,17 @@
 		<Setter Property="Opacity" Value="0"/>
 		<Setter Property="Width" Value="-5"/>
 	</Style>
+
+	<Style Selector="DataGrid#MainGrid">
+		<Setter Property="FontSize" Value="11"/>
+	</Style>
+	<Style Selector="DataGrid#MainGrid DataGridCell">
+		<Setter Property="FontSize" Value="11"/>
+	</Style>
+	<Style Selector="DataGrid#MainGrid DataGridColumnHeader">
+		<Setter Property="FontSize" Value="11"/>
+	</Style>
+	<Style Selector="DataGrid#MainGrid.Journal /template/ ScrollBar#PART_VerticalScrollbar">
+		<Setter Property="AllowAutoHide" Value="false"/>
+	</Style>
 </Styles>

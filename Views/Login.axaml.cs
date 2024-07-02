@@ -17,7 +17,7 @@ public partial class LoginWindow : Window
         InitializeComponent();
 
         viewModel = new LoginViewModel();
-        DataContext = viewModel;
+        this.DataContext = viewModel;
         viewModel.dbConnect();
     }
 
@@ -34,6 +34,12 @@ public partial class LoginWindow : Window
         {
             bool connectionSuccess = await viewModel.dbConnect();
             if (!connectionSuccess) return;
+        }
+
+        if (!viewModel.setAccesRights())
+        {
+            await MessageBox.Show(this, "Логин не существует", "Ошибка", MessageBox.MessageBoxButtons.Ok);
+            return;
         }
 
         // Сохраняем значения полей при успешном входе

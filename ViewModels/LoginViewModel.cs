@@ -3,6 +3,7 @@ using MsgBox;
 using System.Threading.Tasks;
 using System;
 using Inv.Models;
+using System.Reactive;
 
 namespace Inv.ViewModels
 {
@@ -11,15 +12,18 @@ namespace Inv.ViewModels
         // Данные настройки будут сохранятся между сессиями
         public string DBLocation { get; set; }
         public string Login { get; set; }
+        public bool RW { get; set; }
+        public bool RO { get; set; }
+        public bool AU { get; set; }
 
-        private UserModel model;
+        private UserModel _model;
 
         public LoginViewModel()
         {
             // Initialize properties from settings
             DBLocation = Properties.Login.Default.DBLocation;
             Login = Properties.Login.Default.Name;
-            model = new UserModel();
+            _model = new UserModel();
         }
 
         public async Task<bool> dbConnect()
@@ -47,7 +51,21 @@ namespace Inv.ViewModels
                 }
             }
 
-            model.FetchUsers(_inst.GetConnection());
+            _model.FetchUsers(_inst.GetConnection());
+            return true;
+        }
+
+        public bool setAccesRights()
+        {
+            var ty = _model.getTY(this.Login);
+
+            if (ty == uint.MaxValue)
+                return false;
+
+            if (ty == 0) RW = true; else RW = false; // Write
+            if (ty == 1) RO = true; else RO = false; // Read
+            if (ty == 2) AU = true; else AU = false; // Author
+
             return true;
         }
     }
