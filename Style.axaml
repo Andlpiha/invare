@@ -35,9 +35,13 @@
 		<Setter Property="Width" Value="-5"/>
 	</Style>
 
-	<Style Selector="DataGrid#MainGrid">
-		<Setter Property="FontSize" Value="11"/>
+	<Style Selector="DataGridRow:nth-child(even)">
+		<Setter Property="Background" Value="{DynamicResource GridEven}"/>
 	</Style>
+	<!--<Style Selector="DataGridCell:nth-child(even)">
+		<Setter Property="Background" Value="{DynamicResource GridEven}"/>
+	</Style>-->
+	
 	<Style Selector="DataGrid#MainGrid DataGridCell">
 		<Setter Property="FontSize" Value="11"/>
 	</Style>
@@ -46,5 +50,14 @@
 	</Style>
 	<Style Selector="DataGrid#MainGrid.Journal /template/ ScrollBar#PART_VerticalScrollbar">
 		<Setter Property="AllowAutoHide" Value="false"/>
+	</Style>
+
+	<Style Selector="DataGridColumnHeader TextBlock">
+		<Setter Property="MinWidth" Value="{Binding $parent[Grid].Bounds.Width}"/>
+		<Setter Property="Padding" Value="10 0 0 0"/>
+	</Style>
+	<Style Selector="TextBlock#CellTextBlock">
+		<Setter Property="Margin" Value="0 0"/>
+		<Setter Property="Padding" Value="10 0"/>
 	</Style>
 </Styles>

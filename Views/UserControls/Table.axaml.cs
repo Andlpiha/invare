@@ -5,6 +5,8 @@ using Inv.ViewModels;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace Inv;
 
@@ -34,19 +36,55 @@ public partial class Table : UserControl
         if (_grid == null)
             throw new Exception("DataGrid#MainGrid not found");
 
-        TableWidth width = new();
-        _grid.Resources.Add("TableWidth", width);
-        _grid.DataContext = _viewModel.TableRows;
+        foreach (var column in _grid.Columns)
+        {
+            column.Width = _viewModel.column_width[column.Tag as string];
+        }
     }
 
     public void onSelectedRowChange(object sender, SelectionChangedEventArgs e)
     {
         var _selected = ((DataGrid)sender).SelectedItem as TableRow;
-        _viewModel.Compl_id = (int)_selected.compl_num;
+
+        if (_selected != null)
+            _viewModel.Compl_id = (int?)_selected.compl_num;
+        else
+            _viewModel.Compl_id = null;
     }
 
     private void onPageTypeChange(Table sender, AvaloniaPropertyChangedEventArgs e)
     {
-        _viewModel.updateTableRows((string)e.NewValue);
+        if (e.NewValue == null)
+            throw new Exception("PageType is null");
+
+        var new_id = (string)e.NewValue;
+        var _grid = this.FindControl<DataGrid>("MainGrid");
+        if (_grid == null)
+            throw new Exception("DataGrid#MainGrid not found");
+
+        _viewModel.Compl_id = null;
+
+        if (new_id == Global.RepairTab)
+            foreach (var column in _grid.Columns)
+                column.IsVisible = _viewModel.remont_column_visibility[column.Tag as string];
+        else if (new_id == Global.JournalTab)
+            foreach (var column in _grid.Columns)
+                column.IsVisible = _viewModel.journal_column_visibility[column.Tag as string];
+        else
+            foreach (var column in _grid.Columns)
+                column.IsVisible = _viewModel.sklad_column_visibility[column.Tag as string];
+
+        if (_viewModel.cachedCollections.ContainsKey(new_id))
+            _grid.DataContext = _viewModel.cachedCollections[new_id];
+        else
+        {
+            _viewModel.cachedCollections.Add(new_id, new ObservableCollection<TableRow>());
+            _grid.DataContext = _viewModel.cachedCollections[new_id];
+
+            // Исполняем метод асинхронно
+            Task.Run(() =>
+                _viewModel.updateTableRows(new_id)
+            );
+        }
     }
 }

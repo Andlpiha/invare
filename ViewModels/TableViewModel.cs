@@ -1,8 +1,15 @@
-﻿using Inv.Models;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
+using FirebirdSql.Data.FirebirdClient;
+using Inv.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +18,7 @@ namespace Inv.ViewModels
 {
     public class TableRow
     {
+        public int? number { get; set; }            = null;
         public int? icon { get; set; }              = null;
         public int? code_op { get; set; }           = null;
         public int? sklad { get; set; }             = null;
@@ -38,40 +46,13 @@ namespace Inv.ViewModels
         public string? Description { get; set; }    = null;
     }
 
-    public class TableWidth
+    public class TableViewModel : ReactiveObject
     {
-        // Setup width
-        public int icon_width { get; set; } = 18;
-        public int code_op_width { get; set; } = 20;
-        public int sklad_width { get; set; } = 100;
-        public int compl_num_width { get; set; } = 40;
-        public int vnutr_num_width { get; set; } = 40;
-        public int inv_num_width { get; set; } = 45;
-        public int ser_num_width { get; set; } = 45;
-        public int date_do_width { get; set; } = 105;
-        public int date_in_width { get; set; } = 105;
-        public int date_done_width { get; set; } = 105;
-        public int date_out_width { get; set; } = 105;
-        public int Date_prof_width { get; set; } = 60;
-        public int Date_create_width { get; set; } = 60;
-        public int name_width { get; set; } = 220;
-        public int user_name_width { get; set; } = 240;
-        public int login_name_width { get; set; } = 60;
-        public int dep_name_width { get; set; } = 200;
-        public int pribor_name_width { get; set; } = 100;
-        public int site_name_width { get; set; } = 90;
-        public int jaloba_width { get; set; } = 200;
-        public int diagnos_width { get; set; } = 200;
-        public int repair_width { get; set; } = 300;
-        public int MOL_name_width { get; set; } = 100;
-        public int MOLpl_name_width { get; set; } = 100;
-        public int Description_width { get; set; } = 320;
-    }
+        // Когда пользователь переходит на вкладку, все значения достаются из базы данных
+        // и сохраняются в оперативной памяти
+        public Dictionary<string, ObservableCollection<TableRow>> cachedCollections = new();
 
-    public class TableViewModel
-    {
-        public ObservableCollection<TableRow> TableRows { get; } = new();
-        public int Compl_id { get; set; }
+        public int? Compl_id { get; set; }
 
         private TableModel _model;
         public TableViewModel() 
@@ -85,6 +66,7 @@ namespace Inv.ViewModels
             if (new_tabID == Global.RepairTab)
             {
 
+
             }
             // Журнал
             else if (new_tabID == Global.JournalTab)
@@ -94,34 +76,164 @@ namespace Inv.ViewModels
             //Склад
             else
             {
-                var sklad = _model.getSkladItems(new_tabID);
-                TableRows.Clear();
+                TableModel.TransactionReader transaction = _model.getSkladReader(new_tabID);
+                if (!transaction.isOpen()) return;
 
-                foreach (DataRow row in sklad.Rows)
-                {
+                FbDataReader reader = transaction.getReader();
+
+                int it = 0;
+                while(reader.Read())
+                { 
                     var new_row = new TableRow();
 
-                    new_row.icon = row.Field<int?>("icon");
-                    new_row.compl_num = row.Field<int?>("compl_num");
-                    new_row.vnutr_num = row.Field<int?>("vnutr_num");
-                    new_row.inv_num = row.Field<string?>("inv_num");
+                    new_row.number = it;
+                    new_row.icon = reader["icon"] as int?;
+                    new_row.compl_num = reader["compl_num"] as int?;
+                    new_row.vnutr_num = reader["vnutr_num"] as int?;
+                    new_row.inv_num = reader["inv_num"] as string;
 
-                    new_row.name = row.Field<string?>("name");
-                    new_row.dep_name = row.Field<string?>("dep_name");
-                    new_row.user_name = row.Field<string?>("user_name");
-                    new_row.login_name = row.Field<string?>("login_name");
-                    new_row.site_name = row.Field<string?>("site_name");
+                    new_row.name = reader["name"] as string;
+                    new_row.dep_name = reader["dep_name"] as string;
+                    new_row.user_name = reader["user_name"] as string;
+                    new_row.login_name = reader["login_name"] as string;
+                    new_row.site_name = reader["site_name"] as string;
 
-                    new_row.Date_prof = row.Field<DateTime?>("Date_prof");
-                    new_row.Date_create = row.Field<DateTime?>("Date_create");
+                    new_row.Date_prof = reader["Date_prof"] as DateTime?;
+                    new_row.Date_create = reader["Date_create"] as DateTime?;
 
-                    new_row.MOL_name = row.Field<string?>("MOL_name");
-                    new_row.MOLpl_name = row.Field<string?>("MOLpl_name");
-                    new_row.Description = row.Field<string?>("Description");
+                    new_row.MOL_name = reader["MOL_name"] as string;
+                    new_row.MOLpl_name = reader["MOLpl_name"] as string;
+                    new_row.Description = reader["Description"] as string;
 
-                    TableRows.Add(new_row);
+                    // Все обновления графики должны выполнятся только из основного потока
+                    // так что передаем управление ему
+                    Dispatcher.UIThread.InvokeAsync(
+                        () => cachedCollections[new_tabID].Add(new_row),
+                        DispatcherPriority.Render
+                    );
+
+                    it++;
                 }
+
+                // Завершаем транзакцию
+                transaction.closeConnection();
             }
         }
+
+        public Dictionary<string, DataGridLength> column_width = new Dictionary<string, DataGridLength>()
+        {
+            { "icon", new DataGridLength(20, DataGridLengthUnitType.Pixel) },
+            { "code_op", new DataGridLength(20, DataGridLengthUnitType.Pixel) },
+            { "sklad", new DataGridLength(100, DataGridLengthUnitType.Pixel) },
+            { "compl_num", new DataGridLength(40, DataGridLengthUnitType.Pixel) },
+            { "vnutr_num", new DataGridLength(40, DataGridLengthUnitType.Pixel) },
+            { "inv_num", new DataGridLength(90, DataGridLengthUnitType.Pixel) },
+            { "ser_num", new DataGridLength(45, DataGridLengthUnitType.Pixel) },
+            { "date_do", new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "date_in", new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "date_done", new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "date_out", new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "Date_prof", new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "Date_create", new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "name", new DataGridLength(220, DataGridLengthUnitType.Pixel) },
+            { "login_name", new DataGridLength(60, DataGridLengthUnitType.Pixel) },
+            { "user_name", new DataGridLength(240, DataGridLengthUnitType.Pixel) },
+            { "dep_name", new DataGridLength(200, DataGridLengthUnitType.Pixel) },
+            { "pribor_name", new DataGridLength(100, DataGridLengthUnitType.Pixel) },
+            { "site_name", new DataGridLength(90, DataGridLengthUnitType.Pixel) },
+            { "jaloba", new DataGridLength(200, DataGridLengthUnitType.Pixel) },
+            { "diagnos", new DataGridLength(200, DataGridLengthUnitType.Pixel) },
+            { "repair", new DataGridLength(300, DataGridLengthUnitType.Pixel) },
+            { "MOL_name", new DataGridLength(100, DataGridLengthUnitType.Pixel) },
+            { "MOLpl_name", new DataGridLength(100, DataGridLengthUnitType.Pixel) },
+            { "Description", new DataGridLength(320, DataGridLengthUnitType.Pixel) },
+        };
+
+        public Dictionary<string, bool> journal_column_visibility = new Dictionary<string, bool>()
+        {
+            { "icon", true },
+            { "code_op", true },
+            { "sklad", true },
+            { "compl_num", true },
+            { "vnutr_num", true },
+            { "inv_num", true },
+            { "ser_num", true },
+            { "date_do", true },
+            { "date_in", false },
+            { "date_done", false },
+            { "date_out", false },
+            { "Date_prof", true },
+            { "Date_create", true },
+            { "name", true },
+            { "login_name", true },
+            { "user_name", true },
+            { "dep_name", false },
+            { "pribor_name", false },
+            { "site_name", true },
+            { "jaloba", false },
+            { "diagnos", false },
+            { "repair", false },
+            { "MOL_name", true },
+            { "MOLpl_name", false },
+            { "Description", true },
+        };
+
+        public Dictionary<string, bool> remont_column_visibility = new Dictionary<string, bool>()
+        {
+            { "icon", true },
+            { "code_op", false },
+            { "sklad", false },
+            { "compl_num", true },
+            { "vnutr_num", true },
+            { "inv_num", true },
+            { "ser_num", false },
+            { "date_do", false },
+            { "date_in", true },
+            { "date_done", true },
+            { "date_out", true },
+            { "Date_prof", false },
+            { "Date_create", false },
+            { "name", true },
+            { "login_name", false },
+            { "user_name", true },
+            { "dep_name", true },
+            { "pribor_name", true },
+            { "site_name", false },
+            { "jaloba", true },
+            { "diagnos", true },
+            { "repair", true },
+            { "MOL_name", false },
+            { "MOLpl_name", false },
+            { "Description", false },
+        };
+
+        public Dictionary<string, bool> sklad_column_visibility = new Dictionary<string, bool>()
+        {
+            { "icon", true },
+            { "code_op", false },
+            { "sklad", false },
+            { "compl_num", true },
+            { "vnutr_num", true },
+            { "inv_num", true },
+            { "ser_num", false },
+            { "date_do", false },
+            { "date_in", false },
+            { "date_done", false },
+            { "date_out", false },
+            { "Date_prof", false },
+            { "Date_create", false },
+            { "name", true },
+            { "login_name", true },
+            { "user_name", true },
+            { "dep_name", true },
+            { "pribor_name", false },
+            { "site_name", true },
+            { "jaloba", false },
+            { "diagnos", false },
+            { "repair", false },
+            { "MOL_name", true },
+            { "MOLpl_name", true },
+            { "Description", true },
+        };
     }
 }
