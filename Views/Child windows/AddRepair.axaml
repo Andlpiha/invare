@@ -1,0 +1,32 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Inv.AddRepair"
+        Title="Добавить ремонт">
+
+	<StackPanel>
+		<DockPanel LastChildFill="false">
+			<Button DockPanel.Dock="Right" Click="">
+				<StackPanel Orientation="Horizontal">
+					<Label Content="Cancel"/>
+				</StackPanel>
+			</Button>
+			<Button DockPanel.Dock="Right" Click="">
+				<StackPanel Orientation="Horizontal">
+					<Label Content="Ok"/>
+				</StackPanel>
+			</Button>
+		</DockPanel>
+
+		<Separator/>
+
+		<StackPanel Orientation="Horizontal">
+			<StackPanel>
+				<Label Content="Внутренний №"/>
+				<TextBox Text="" />
+			</StackPanel>
+		</StackPanel>
+	</StackPanel>
+</Window>

@@ -6,22 +6,25 @@
     </Border>
   </Design.PreviewWith>
 
-  <!-- Add Styles Here -->
-	<Style Selector="Border#ToolbarBorder">
-		<Setter Property="Background" Value="{DynamicResource LightGrayBrush}"/>
-		<Setter Property="BorderBrush" Value="{DynamicResource DarkGrayBrush}"/>
-		<Setter Property="BorderThickness" Value="0 2 0 2"/>
-		<Setter Property="BoxShadow" Value="inset 0 0 5 0 DarkGray"/>
-		<Setter Property="Padding" Value="5"/>
+  <!-- Глобальные стили, которые могут использоваться в нескольких файлах -->
+	<Style Selector="Button.ok">
+		<Setter Property="Background" Value="{DynamicResource LightGreen}"/>
+		<Setter Property="FontWeight" Value="400"/>
 	</Style>
-
-	<Style Selector="Button.Toolbar,ToggleButton.Toolbar">
-		<Setter Property="Background" Value="{DynamicResource LightGrayBrush}"/>
-		
-		<Setter Property="BorderBrush" Value="{DynamicResource DarkGrayBrush}"/>
-		<Setter Property="BorderThickness" Value="1"/>
+	<Style Selector="Button.cancel">
+		<Setter Property="Background" Value="{DynamicResource ImperialRed}"/>
+		<Setter Property="FontWeight" Value="400"/>
 	</Style>
-
+	<Style Selector="Button.accent">
+		<Setter Property="Background" Value="{DynamicResource SystemAccentColor}"/>
+		<Setter Property="FontWeight" Value="400"/>
+		<Setter Property="FontSize" Value="16"/>
+	</Style>
+	<Style Selector="Button.round, TextBox.round">
+		<Setter Property="Padding" Value="15"/>
+		<Setter Property="CornerRadius" Value="30"/>
+		<Setter Property="BorderThickness" Value="2"/>
+	</Style>
 	<Style Selector="Button.shadow">
 		<Setter Property="Effect">
 			<Setter.Value>
@@ -30,34 +33,30 @@
 		</Setter>
 	</Style>
 
-	<Style Selector="Separator.Toolbar">
-		<Setter Property="Opacity" Value="0"/>
-		<Setter Property="Width" Value="-5"/>
+	<Style Selector="TextBox.multiline">
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="AcceptsReturn" Value="True"/>
+		<Setter Property="Height" Value="100"/>
 	</Style>
-
-	<Style Selector="DataGridRow:nth-child(even)">
-		<Setter Property="Background" Value="{DynamicResource GridEven}"/>
-	</Style>
-	<!--<Style Selector="DataGridCell:nth-child(even)">
-		<Setter Property="Background" Value="{DynamicResource GridEven}"/>
-	</Style>-->
 	
-	<Style Selector="DataGrid#MainGrid DataGridCell">
-		<Setter Property="FontSize" Value="11"/>
-	</Style>
-	<Style Selector="DataGrid#MainGrid DataGridColumnHeader">
-		<Setter Property="FontSize" Value="11"/>
-	</Style>
-	<Style Selector="DataGrid#MainGrid.Journal /template/ ScrollBar#PART_VerticalScrollbar">
-		<Setter Property="AllowAutoHide" Value="false"/>
+	<Style Selector="Border#ToolbarBorder">
+		<Setter Property="Background" Value="{DynamicResource LightGrayBrush}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource DarkGrayBrush}"/>
+		<Setter Property="BorderThickness" Value="0 2 0 2"/>
+		<Setter Property="BoxShadow" Value="inset 0 0 5 0 DarkGray"/>
+		<Setter Property="Padding" Value="5"/>
 	</Style>
 
-	<Style Selector="DataGridColumnHeader TextBlock">
-		<Setter Property="MinWidth" Value="{Binding $parent[Grid].Bounds.Width}"/>
-		<Setter Property="Padding" Value="10 0 0 0"/>
+	<Style Selector="Separator.invisible">
+		<Setter Property="Opacity" Value="0"/>
 	</Style>
-	<Style Selector="TextBlock#CellTextBlock">
-		<Setter Property="Margin" Value="0 0"/>
-		<Setter Property="Padding" Value="10 0"/>
+	<Style Selector="Separator.thin">
+		<Setter Property="Margin" Value="0 10 0 10"/>
+		<Setter Property="Width" Value="{Binding $parent[TreeView].Presenter.Panel.Bounds.Width}"/>
+	</Style>
+	<Style Selector="Separator.normal">
+		<Setter Property="Margin" Value="0 10 0 10"/>
+		<Setter Property="Width" Value="{Binding $parent[TreeView].Presenter.Panel.Bounds.Width}"/>
+		<Setter Property="Height" Value="2"/>
 	</Style>
 </Styles>

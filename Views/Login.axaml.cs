@@ -36,7 +36,7 @@ public partial class LoginWindow : Window
             if (!connectionSuccess) return;
         }
 
-        if (!viewModel.setAccesRights())
+        if (!viewModel.log_In())
         {
             await MessageBox.Show(this, "Логин не существует", "Ошибка", MessageBox.MessageBoxButtons.Ok);
             return;

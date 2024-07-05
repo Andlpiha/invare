@@ -12,6 +12,8 @@ namespace Inv.Views;
 
 public partial class MainWindow : Window
 {
+    public static int? SelectedItemID { get; set; }
+
     public MainWindow()
     {
         InitializeComponent();

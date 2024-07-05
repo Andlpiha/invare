@@ -18,7 +18,6 @@ namespace Inv.ViewModels
 {
     public class TableRow
     {
-        public int? number { get; set; }            = null;
         public int? icon { get; set; }              = null;
         public int? code_op { get; set; }           = null;
         public int? sklad { get; set; }             = null;
@@ -65,8 +64,43 @@ namespace Inv.ViewModels
             // Ремонты
             if (new_tabID == Global.RepairTab)
             {
+                TableModel.TransactionReader transaction = _model.getRepairsReader();
+                if (!transaction.isOpen()) return;
 
+                FbDataReader reader = transaction.getReader();
 
+                while (reader.Read())
+                {
+                    var new_row = new TableRow();
+
+                    new_row.icon = reader["icon"] as int?;
+                    new_row.compl_num = reader["compl_num"] as int?;
+                    new_row.vnutr_num = reader["vnutr_num"] as int?;
+                    new_row.inv_num = reader["inv_num"] as string;
+
+                    new_row.name = reader["name"] as string;
+                    new_row.dep_name = reader["dep_name"] as string;
+                    new_row.user_name = reader["user_name"] as string;
+                    new_row.pribor_name = reader["pribor_name"] as string;
+
+                    new_row.jaloba = reader["jaloba"] as string;
+                    new_row.diagnos = reader["diagnos"] as string;
+                    new_row.repair = reader["repair"] as string;
+
+                    new_row.date_in = reader["date_in"] as DateTime?;
+                    new_row.date_done = reader["date_done"] as DateTime?;
+                    new_row.date_out = reader["date_out"] as DateTime?;
+
+                    // Все обновления графики должны выполнятся только из основного потока
+                    // так что передаем управление ему
+                    Dispatcher.UIThread.InvokeAsync(
+                        () => cachedCollections[new_tabID].Add(new_row),
+                        DispatcherPriority.Render
+                    );
+                }
+
+                // Завершаем транзакцию
+                transaction.closeConnection();
             }
             // Журнал
             else if (new_tabID == Global.JournalTab)
@@ -81,12 +115,10 @@ namespace Inv.ViewModels
 
                 FbDataReader reader = transaction.getReader();
 
-                int it = 0;
                 while(reader.Read())
                 { 
                     var new_row = new TableRow();
 
-                    new_row.number = it;
                     new_row.icon = reader["icon"] as int?;
                     new_row.compl_num = reader["compl_num"] as int?;
                     new_row.vnutr_num = reader["vnutr_num"] as int?;
@@ -111,8 +143,6 @@ namespace Inv.ViewModels
                         () => cachedCollections[new_tabID].Add(new_row),
                         DispatcherPriority.Render
                     );
-
-                    it++;
                 }
 
                 // Завершаем транзакцию
@@ -122,35 +152,37 @@ namespace Inv.ViewModels
 
         public Dictionary<string, DataGridLength> column_width = new Dictionary<string, DataGridLength>()
         {
-            { "icon", new DataGridLength(20, DataGridLengthUnitType.Pixel) },
-            { "code_op", new DataGridLength(20, DataGridLengthUnitType.Pixel) },
-            { "sklad", new DataGridLength(100, DataGridLengthUnitType.Pixel) },
-            { "compl_num", new DataGridLength(40, DataGridLengthUnitType.Pixel) },
-            { "vnutr_num", new DataGridLength(40, DataGridLengthUnitType.Pixel) },
-            { "inv_num", new DataGridLength(90, DataGridLengthUnitType.Pixel) },
-            { "ser_num", new DataGridLength(45, DataGridLengthUnitType.Pixel) },
-            { "date_do", new DataGridLength(105, DataGridLengthUnitType.Pixel) },
-            { "date_in", new DataGridLength(105, DataGridLengthUnitType.Pixel) },
-            { "date_done", new DataGridLength(105, DataGridLengthUnitType.Pixel) },
-            { "date_out", new DataGridLength(105, DataGridLengthUnitType.Pixel) },
-            { "Date_prof", new DataGridLength(105, DataGridLengthUnitType.Pixel) },
-            { "Date_create", new DataGridLength(105, DataGridLengthUnitType.Pixel) },
-            { "name", new DataGridLength(220, DataGridLengthUnitType.Pixel) },
-            { "login_name", new DataGridLength(60, DataGridLengthUnitType.Pixel) },
-            { "user_name", new DataGridLength(240, DataGridLengthUnitType.Pixel) },
-            { "dep_name", new DataGridLength(200, DataGridLengthUnitType.Pixel) },
-            { "pribor_name", new DataGridLength(100, DataGridLengthUnitType.Pixel) },
-            { "site_name", new DataGridLength(90, DataGridLengthUnitType.Pixel) },
-            { "jaloba", new DataGridLength(200, DataGridLengthUnitType.Pixel) },
-            { "diagnos", new DataGridLength(200, DataGridLengthUnitType.Pixel) },
-            { "repair", new DataGridLength(300, DataGridLengthUnitType.Pixel) },
-            { "MOL_name", new DataGridLength(100, DataGridLengthUnitType.Pixel) },
-            { "MOLpl_name", new DataGridLength(100, DataGridLengthUnitType.Pixel) },
-            { "Description", new DataGridLength(320, DataGridLengthUnitType.Pixel) },
+            { "number",         new DataGridLength(30, DataGridLengthUnitType.Pixel) },
+            { "icon",           new DataGridLength(30, DataGridLengthUnitType.Pixel) },
+            { "code_op",        new DataGridLength(30, DataGridLengthUnitType.Pixel) },
+            { "sklad",          new DataGridLength(100, DataGridLengthUnitType.Pixel) },
+            { "compl_num",      new DataGridLength(40, DataGridLengthUnitType.Pixel) },
+            { "vnutr_num",      new DataGridLength(40, DataGridLengthUnitType.Pixel) },
+            { "inv_num",        new DataGridLength(90, DataGridLengthUnitType.Pixel) },
+            { "ser_num",        new DataGridLength(45, DataGridLengthUnitType.Pixel) },
+            { "date_do",        new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "date_in",        new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "date_done",      new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "date_out",       new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "Date_prof",      new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "Date_create",    new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "name",           new DataGridLength(220, DataGridLengthUnitType.Pixel) },
+            { "login_name",     new DataGridLength(60, DataGridLengthUnitType.Pixel) },
+            { "user_name",      new DataGridLength(240, DataGridLengthUnitType.Pixel) },
+            { "dep_name",       new DataGridLength(200, DataGridLengthUnitType.Pixel) },
+            { "pribor_name",    new DataGridLength(100, DataGridLengthUnitType.Pixel) },
+            { "site_name",      new DataGridLength(90, DataGridLengthUnitType.Pixel) },
+            { "jaloba",         new DataGridLength(200, DataGridLengthUnitType.Pixel) },
+            { "diagnos",        new DataGridLength(200, DataGridLengthUnitType.Pixel) },
+            { "repair",         new DataGridLength(300, DataGridLengthUnitType.Pixel) },
+            { "MOL_name",       new DataGridLength(100, DataGridLengthUnitType.Pixel) },
+            { "MOLpl_name",     new DataGridLength(100, DataGridLengthUnitType.Pixel) },
+            { "Description",    new DataGridLength(320, DataGridLengthUnitType.Pixel) },
         };
 
         public Dictionary<string, bool> journal_column_visibility = new Dictionary<string, bool>()
         {
+            { "number", true },
             { "icon", true },
             { "code_op", true },
             { "sklad", true },
@@ -180,11 +212,12 @@ namespace Inv.ViewModels
 
         public Dictionary<string, bool> remont_column_visibility = new Dictionary<string, bool>()
         {
+            { "number", true },
             { "icon", true },
             { "code_op", false },
             { "sklad", false },
-            { "compl_num", true },
-            { "vnutr_num", true },
+            { "compl_num", false },
+            { "vnutr_num", false },
             { "inv_num", true },
             { "ser_num", false },
             { "date_do", false },
@@ -209,6 +242,7 @@ namespace Inv.ViewModels
 
         public Dictionary<string, bool> sklad_column_visibility = new Dictionary<string, bool>()
         {
+            { "number", true },
             { "icon", true },
             { "code_op", false },
             { "sklad", false },

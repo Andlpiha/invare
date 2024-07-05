@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Inv.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/InWare_Icon.ico"
         Title="Inv">
 
     <Design.DataContext>
@@ -52,7 +52,7 @@
 	<DockPanel HorizontalAlignment="Stretch" LastChildFill="true">
 		<local:MenuBar DockPanel.Dock="Top" Height="25"/>
 		<Border x:Name="ToolbarBorder" DockPanel.Dock="Top">
-		    <local:Toolbar Height="35"/>
+		    <local:Toolbar x:Name="Toolbar" Height="35"/>
 		</Border>
 
 		<TabControl x:Name="TabControl" ItemsSource="{Binding}" DockPanel.Dock="Top" SelectionChanged="TabChangeHandler">

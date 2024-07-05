@@ -21,6 +21,7 @@ namespace Inv.Models
 
             public TransactionReader(FbConnection con, string query)
             {
+                connection = con;
                 try
                 {
                     con.Open();
@@ -33,7 +34,6 @@ namespace Inv.Models
                     return;
                 }
 
-                connection = con;
                 transaction = connection.BeginTransaction();
                 command = new FbCommand(query, con, transaction);
                 reader = command.ExecuteReader();
@@ -76,45 +76,77 @@ namespace Inv.Models
             return tabs_table;
         }
 
-        // Не забыть сделать transaction.Commit после обработки всех столбцов
-        static private readonly string getSkladItemsQuery = "SELECT * FROM view_cm({0}) {1}";
         public TransactionReader getSkladReader(string tabID, string compl_id = "")
         {
-            // Эта модель использует отделюные подключение к базе данных, потому что
+            // Эта модель использует отдельное подключение к базе данных, потому что
             // в коде эти методы вызываются асинхронно, и использование одного подключения
             // для нескольких транзакций вызывает ошибку
             var con = new FbConnection();
             con.ConnectionString = SQLConn.Instance.GetConnectionString();
 
-            string query;
-            if (compl_id != "")
-                query = string.Format(getSkladItemsQuery, tabID, "WHERE Compl_id="+compl_id);
+            string query = "";
+            if (Global.BottomLevel)
+            {
+                query += string.Format("SELECT * FROM mat_s({0})", tabID);
+                if (Global.AU) // поиск с исполнителем (прибористом) и без даты выдачи
+                    query += string.Format("where compl_id in (select compl_id from rem where pribor_name=\"{0}\" and date_out is null)", Global.Login);
+                if (compl_id != "")
+                {
+                    if (Global.AU)
+                        query += "AND compl_id=" + compl_id;
+                    else
+                        query += "WHERE compl_id=" + compl_id;
+                }
+            }
             else
-                query = string.Format(getSkladItemsQuery, tabID, "");
+            {
+                query += string.Format("SELECT * FROM view_cm({0})", tabID);
+                if (Global.AU) // поиск с исполнителем (прибористом) и без даты выдачи
+                {
+                    query += string.Format("WHERE id IN (SELECT compl_id FROM rem WHERE pribor_name=\"{0}\" AND date_out IS NULL)" +
+                        "or id in (select mat_id from rem where pribor_name=\"{0}\" and date_out is null)", Global.Login);
+                }
+            }   
 
-            TransactionReader reader = new TransactionReader(con, query);
-
-            return reader;
+            return new TransactionReader(con, query);
         }
 
-        static private readonly string getRepairsQuery = "";
-        public DataTable getRepairs()
+        public TransactionReader getRepairsReader()
         {
-            var con = SQLConn.Instance.GetConnection();
+            // Эта модель использует отдельное подключение к базе данных, потому что
+            // в коде эти методы вызываются асинхронно, и использование одного подключения
+            // для нескольких транзакций вызывает ошибку
+            var con = new FbConnection();
+            con.ConnectionString = SQLConn.Instance.GetConnectionString();
 
-            DataTable table = new DataTable();
+            string query = "";
+            if (Global.AU)
+                query += "SELECT * FROM rem WHERE pribor_name IS NULL OR pribor_name=" + Global.Login;
+            else
+                query += "SELECT * FROM rem";
 
-            return table;
+            return new TransactionReader(con, query);
         }
 
-        static private readonly string getLogQuery = "";
-        public DataTable getLog()
+        public TransactionReader getLogReader()
         {
-            var con = SQLConn.Instance.GetConnection();
+            // Эта модель использует отдельное подключение к базе данных, потому что
+            // в коде эти методы вызываются асинхронно, и использование одного подключения
+            // для нескольких транзакций вызывает ошибку
+            var con = new FbConnection();
+            con.ConnectionString = SQLConn.Instance.GetConnectionString();
 
-            DataTable table = new DataTable();
+            //TODO: getLogReader
+            string query = "";
+            if (Global.BottomLevel)
+            {
 
-            return table;
+            }
+            else
+            {
+
+            }
+            return new TransactionReader(con, query);
         }
     }
 }

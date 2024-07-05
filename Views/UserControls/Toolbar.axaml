@@ -8,20 +8,23 @@
 			 x:DataType="vm:MainWindowViewModel"
              x:Class="Inv.Toolbar">
 
-	<Design.DataContext>
-		<!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-		<vm:ToolbarViewModel/>
-	</Design.DataContext>
+	<UserControl.Styles>
+		<Style Selector="Button.Toolbar,ToggleButton.Toolbar">
+			<Setter Property="Background" Value="{DynamicResource LightGrayBrush}"/>
+
+			<Setter Property="BorderBrush" Value="{DynamicResource DarkGrayBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+		</Style>
+	</UserControl.Styles>
 
 	<StackPanel x:Name="Toolbar_stack" Orientation="Horizontal" Spacing="5">
 		<Button Classes="Toolbar shadow" ToolTip.Tip="Обзор справочника" Click="">
 			<Svg Path="/Assets/toolbar-icons/book.svg"/>
 		</Button>
 
-		<Separator Classes="Toolbar"/>
+		<Separator Classes="invisible" Width="-5"/>
 		
-		<Button Classes="Toolbar shadow" ToolTip.Tip="Создать комплект" Click="">
+		<Button Classes="Toolbar shadow" ToolTip.Tip="Создать комплект" Click="createComponent">
 			<Svg Path="/Assets/toolbar-icons/desktop-tower.svg"/>
 		</Button>
 		<Button Classes="Toolbar shadow" ToolTip.Tip="Создать комплектующее" Click="">
@@ -31,13 +34,13 @@
 			<Svg Path="/Assets/toolbar-icons/tools.svg"/>
 		</Button>
 
-		<Separator Classes="Toolbar"/>
+		<Separator Classes="invisible" Width="-5"/>
 
 		<Button Classes="Toolbar shadow" ToolTip.Tip="Редактирование" Click="">
 			<Svg Path="/Assets/toolbar-icons/pencil.svg"/>
 		</Button>
 
-		<Separator Classes="Toolbar"/>
+		<Separator Classes="invisible" Width="-5"/>
 
 		<Button Classes="Toolbar shadow" ToolTip.Tip="Удалить" Click="">
 			<Svg Path="/Assets/toolbar-icons/delete-forever.svg"/>
@@ -55,7 +58,7 @@
 			<Svg Path="/Assets/toolbar-icons/wrench-clock.svg"/>
 		</Button>
 		
-		<Separator Classes="Toolbar"/>
+		<Separator Classes="invisible" Width="-5"/>
 
 		<Button Classes="Toolbar" ToolTip.Tip="Выгрузить в excel" Click="">
 			<Svg Path="/Assets/toolbar-icons/file-excel.svg"/>
@@ -69,5 +72,6 @@
 		</Button>
 		
 	</StackPanel>
+
 
 </UserControl>

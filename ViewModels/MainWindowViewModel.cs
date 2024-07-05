@@ -1,4 +1,5 @@
-﻿using Inv.Models;
+﻿using Avalonia.Controls;
+using Inv.Models;
 using System.Data;
 
 namespace Inv.ViewModels;
@@ -63,5 +64,5 @@ public class MainWindowViewModel : ViewModelBase
         // Добавить еще две вкладки в конец
         Tabs[^2] = new TabItem(Global.RepairTab, Global.RepairTab);
         Tabs[^1] = new TabItem(Global.JournalTab, Global.JournalTab);
-    }  
+    }
 }

@@ -8,7 +8,6 @@ namespace Inv.ViewModels
 {
     internal class MenuBarViewModel :ViewModelBase
     {
-        // Toolbar Actions
         public bool ExitApp()
         {
             System.Environment.Exit(0);

@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Inv.Views;
+using Avalonia.Interactivity;
 
 namespace Inv;
 
@@ -47,9 +49,9 @@ public partial class Table : UserControl
         var _selected = ((DataGrid)sender).SelectedItem as TableRow;
 
         if (_selected != null)
-            _viewModel.Compl_id = (int?)_selected.compl_num;
+            MainWindow.SelectedItemID = _selected.compl_num as int?;
         else
-            _viewModel.Compl_id = null;
+            MainWindow.SelectedItemID = null;
     }
 
     private void onPageTypeChange(Table sender, AvaloniaPropertyChangedEventArgs e)
@@ -64,6 +66,7 @@ public partial class Table : UserControl
 
         _viewModel.Compl_id = null;
 
+        // Изменяем отображаемые столбцы в зависимости от выбранной вкладки
         if (new_id == Global.RepairTab)
             foreach (var column in _grid.Columns)
                 column.IsVisible = _viewModel.remont_column_visibility[column.Tag as string];

@@ -7,182 +7,40 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Inv.Table">
 
-	<!--Устанавливаем столбцы для различных вкладок-->
-	<!--<Styles>
-		<Style Selector="DataGrid#MainGrid journal">
-			<Setter Property="Columns">
-				<Template>
-					<DataGridTemplateColumn Header="" Binding="{Binding icon}">
-						<DataGridTemplateColumn.CellTemplate>
+	<UserControl.Styles>
+		<Style Selector="DataGridRow:nth-child(even)">
+			<Setter Property="Background" Value="{DynamicResource GridEven}"/>
+		</Style>
+		<!--<Style Selector="DataGridCell:nth-child(even)">
+		<Setter Property="Background" Value="{DynamicResource GridEven}"/>
+	</Style>-->
 
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTemplateColumn Header="" Binding="{Binding code_op}">
-						<DataGridTemplateColumn.CellTemplate>
-
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-
-					<DataGridTextColumn Header="Дата" Binding="{Binding date_do}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Склад" Binding="{Binding sklad}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Компл." Binding="{Binding compl_num}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Вн.№" Binding="{Binding vnutr_num}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Инв. №" Binding="{Binding inv_num}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Сер. №" Binding="{Binding ser_num}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Наименование" Binding="{Binding name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Пользователь" Binding="{Binding user_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Учетка" Binding="{Binding login_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Место" Binding="{Binding site_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Профил." Binding="{Binding Date_prof}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Дата созд." Binding="{Binding Date_create}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="МОЛ" Binding="{Binding MOL_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Описание" Binding="{Binding Description}">
-
-					</DataGridTextColumn>
-				</Template>
-			</Setter>
+		<Style Selector="DataGrid#MainGrid DataGridCell">
+			<Setter Property="FontSize" Value="11"/>
+		</Style>
+		<Style Selector="DataGrid#MainGrid DataGridColumnHeader">
+			<Setter Property="FontSize" Value="11"/>
+		</Style>
+		<Style Selector="DataGrid#MainGrid.Journal /template/ ScrollBar#PART_VerticalScrollbar">
+			<Setter Property="AllowAutoHide" Value="false"/>
 		</Style>
 
-		<Style Selector="DataGrid#MainGrid repair">
-			<Setter Property="Columns">
-				<Template>
-					<DataGridTemplateColumn Header="" Binding="{Binding icon}">
-						<DataGridTemplateColumn.CellTemplate>
-
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-
-					<DataGridTextColumn Header="Компл." Binding="{Binding compl_num}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Вн.№" Binding="{Binding vnutr_num}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Инв. №" Binding="{Binding inv_num}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Наименование" Binding="{Binding name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Наименование" Binding="{Binding dep_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Пользователь" Binding="{Binding user_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Ремонтник" Binding="{Binding pribor_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Жалоба" Binding="{Binding jaloba}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Диагноз" Binding="{Binding diagnos}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Мероприятия" Binding="{Binding repair}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Поступил" Binding="{Binding date_in}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Завершен" Binding="{Binding date_done}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Выдано" Binding="{Binding date_out}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Описание" Binding="{Binding Description}">
-
-					</DataGridTextColumn>
-				</Template>
-			</Setter>
+		<Style Selector="DataGridColumnHeader TextBlock">
+			<Setter Property="MinWidth" Value="{Binding $parent[Grid].Bounds.Width}"/>
+			<Setter Property="Padding" Value="10 0 0 0"/>
 		</Style>
-
-		<Style Selector="DataGrid#MainGrid storage">
-			<Setter Property="Columns">
-				<Template>
-					<DataGridTemplateColumn Header="" Binding="{Binding icon}">
-						<DataGridTemplateColumn.CellTemplate>
-
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-
-					<DataGridTextColumn Header="Компл." Binding="{Binding compl_num}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Вн.№" Binding="{Binding vnutr_num}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Инв. №" Binding="{Binding inv_num}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Наименование" Binding="{Binding name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Наименование" Binding="{Binding dep_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Пользователь" Binding="{Binding user_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Учетка" Binding="{Binding login_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Место" Binding="{Binding site_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Профил." Binding="{Binding Date_prof}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Дата созд." Binding="{Binding Date_create}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="МОЛ" Binding="{Binding MOL_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="МОЛ_пл" Binding="{Binding MOLpl_name}">
-
-					</DataGridTextColumn>
-					<DataGridTextColumn Header="Описание" Binding="{Binding Description}">
-
-					</DataGridTextColumn>
-				</Template>
-			</Setter>
+		<Style Selector="TextBlock#CellTextBlock">
+			<Setter Property="Margin" Value="0 0"/>
+			<Setter Property="Padding" Value="10 0"/>
 		</Style>
-	</Styles>-->
-	
-	<!--Класс указывает, какие столбцы отображать-->
+	</UserControl.Styles>
+
 	<DataGrid x:Name="MainGrid" Classes="Journal"
 			  ItemsSource="{Binding}" x:DataType="vm:TableRow"
 			  IsReadOnly="True" CanUserReorderColumns="True" CanUserResizeColumns="True"
-			  SelectionChanged="onSelectedRowChange"
-			  GridLinesVisibility="Vertical" VerticalGridLinesBrush="{DynamicResource GridLinesBrush}">
+			  GridLinesVisibility="Vertical" VerticalGridLinesBrush="{DynamicResource GridLinesBrush}"
+			  SelectionChanged="onSelectedRowChange" SelectionMode="Single">
+
 		<DataGrid.Columns>
 			<!--<DataGridTemplateColumn Header="">
 				<DataGridTemplateColumn.CellTemplate>
@@ -190,14 +48,24 @@
 				</DataGridTemplateColumn.CellTemplate>
 			</DataGridTemplateColumn>-->
 
+			<DataGridTextColumn Header="Дата"			Binding="{Binding date_do}"		Tag="date_do"/>
+			<DataGridTextColumn Header="Склад"			Binding="{Binding sklad}"		Tag="sklad"/>
 			<DataGridTextColumn Header="Компл."			Binding="{Binding compl_num}"	Tag="compl_num"/>
 			<DataGridTextColumn Header="Вн.№"			Binding="{Binding vnutr_num}"	Tag="vnutr_num"/>
 			<DataGridTextColumn Header="Инв. №"			Binding="{Binding inv_num}"		Tag="inv_num"/>
+			<DataGridTextColumn Header="Сер. №"			Binding="{Binding ser_num}"		Tag="ser_num"/>
 			<DataGridTextColumn Header="Наименование"	Binding="{Binding name}"		Tag="name"/>
 			<DataGridTextColumn Header="Отдел"			Binding="{Binding dep_name}"	Tag="dep_name"/>
 			<DataGridTextColumn Header="Пользователь"	Binding="{Binding user_name}"	Tag="user_name"/>
 			<DataGridTextColumn Header="Учетка"			Binding="{Binding login_name}"	Tag="login_name"/>
 			<DataGridTextColumn Header="Место"			Binding="{Binding site_name}"	Tag="site_name"/>
+			<DataGridTextColumn Header="Ремонтник"		Binding="{Binding pribor_name}" Tag="pribor_name"/>
+			<DataGridTextColumn Header="Жалоба"			Binding="{Binding jaloba}"		Tag="jaloba"/>
+			<DataGridTextColumn Header="Диагноз"		Binding="{Binding diagnos}"		Tag="diagnos"/>
+			<DataGridTextColumn Header="Мероприятия"	Binding="{Binding repair}"		Tag="repair"/>
+			<DataGridTextColumn Header="Поступил"		Binding="{Binding date_in}"		Tag="date_in"/>
+			<DataGridTextColumn Header="Завершен"		Binding="{Binding date_done}"	Tag="date_done"/>
+			<DataGridTextColumn Header="Выдано"			Binding="{Binding date_out}"	Tag="date_out"/>
 			<DataGridTextColumn Header="Профил."		Binding="{Binding Date_prof}"	Tag="Date_prof"/>
 			<DataGridTextColumn Header="Дата созд."		Binding="{Binding Date_create}"	Tag="Date_create"/>
 			<DataGridTextColumn Header="МОЛ"			Binding="{Binding MOL_name}"	Tag="MOL_name"/>

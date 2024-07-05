@@ -1,0 +1,127 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vmf="using:Inv.ViewModels.Forms"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		Width="800" Height="550" MinHeight="520" MinWidth="500"
+		Background="{DynamicResource Ivory}"
+        x:Class="Inv.AddItemWindow"
+		x:DataType="vmf:ItemForm"
+        Title="Создать компонент">
+	<!--x:DataType="Inv.CreateComponentForm"-->
+
+	<Window.Styles>
+		<!--<Style Selector="Grid">
+			<Setter Property="Padding" Value="10"/>
+		</Style>-->
+		<Style Selector="Label.grid">
+			<Setter Property="Margin" Value="5"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+		</Style>
+		<Style Selector="TextBox.grid">
+			<Setter Property="Margin" Value="5"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		</Style>
+		<Style Selector="CalendarDatePicker.grid">
+			<Setter Property="Margin" Value="5 5 45 5"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		</Style>
+		<Style Selector="Button.grid">
+			<Setter Property="Margin" Value="0 5 5 5"/>
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+		</Style>
+
+		<Style Selector="TextBox.stack">
+			<Setter Property="Margin" Value="10 0 10 10"/>
+		</Style>
+		<Style Selector="Label.stack">
+			<Setter Property="Margin" Value="10 0 10 5"/>
+		</Style>
+
+		<Style Selector="TextBox">
+			<Setter Property="Background" Value="#FFFFFF"/>
+		</Style>
+	</Window.Styles>
+
+	<DockPanel HorizontalAlignment="Stretch" LastChildFill="false">
+		<DockPanel DockPanel.Dock="Top" LastChildFill="false" x:Name="ButtonPanel">
+			<Button Classes="accent" DockPanel.Dock="Right" Margin="10 10 20 0" Click="onCancelClick">
+				<StackPanel Orientation="Horizontal">
+					<Label Content="Cancel"/>
+				</StackPanel>
+			</Button>
+			<Button Classes="accent" DockPanel.Dock="Right" Margin="10 10 10 0" Click="onOkClick">
+				<StackPanel Orientation="Horizontal">
+					<Label Content="Ok"/>
+				</StackPanel>
+			</Button>
+		</DockPanel>
+
+		<Separator DockPanel.Dock="Top" Classes="normal"/>
+
+		<Grid DockPanel.Dock="Top" ShowGridLines="false" Margin="10 0 10 0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="40"></ColumnDefinition>
+
+				<ColumnDefinition Width="*"></ColumnDefinition>
+				<ColumnDefinition Width="40"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"></RowDefinition>
+				<RowDefinition Height="3*"></RowDefinition>
+				<RowDefinition Height="10"></RowDefinition>
+				<RowDefinition Height="*"></RowDefinition>
+				<RowDefinition Height="3*"></RowDefinition>
+			</Grid.RowDefinitions>
+
+			<Label Classes="grid" Content="Внутренний №:"		Grid.Row="0" Grid.Column="0"/>
+			<Label Classes="grid" Content="Серийный №:"			Grid.Row="0" Grid.Column="1"/>
+			<Label Classes="grid" Content="Учетная запись:"		Grid.Row="0" Grid.Column="2"/>
+			<Label Classes="grid" Content="МОЛ:"				Grid.Row="0" Grid.Column="4"/>
+
+			<TextBox Classes="grid" Text="{Binding vnutr_num}"	Grid.Row="1" Grid.Column="0" Margin="5 5 50 5"/>
+			<TextBox Classes="grid" Text="{Binding ser_num}"	Grid.Row="1" Grid.Column="1"/>
+			
+			<TextBox Classes="grid" Text="{Binding login_name}"	Grid.Row="1" Grid.Column="2"/>
+			<Button Classes="grid" Content="..." Click=""		Grid.Row="1" Grid.Column="3"/>
+			
+			<TextBox Classes="grid" Text="{Binding MOL_name}"	Grid.Row="1" Grid.Column="4"/>
+			<Button Classes="grid" Content="..." Click=""		Grid.Row="1" Grid.Column="5"/>
+
+			<Separator Margin="0" Opacity="0" Height="20"/>
+
+			<Label Classes="grid" Content="Инвертарный №:"		Grid.Row="3" Grid.Column="0"/>
+			<Label Classes="grid" Content="Дата профилактики:"	Grid.Row="3" Grid.Column="1"/>
+			<Label Classes="grid" Content="Место установки:"	Grid.Row="3" Grid.Column="2"/>
+			<Label Classes="grid" Content="МОЛ планируемый:"	Grid.Row="3" Grid.Column="4"/>
+ 
+			<TextBox Classes="grid" Text="{Binding inv_num}"	Grid.Row="4" Grid.Column="0"/>
+			<CalendarDatePicker
+				Classes="grid"
+				SelectedDate="{Binding Date_prof}"
+				CustomDateFormatString="dd-MM-yy" SelectedDateFormat="Custom"
+				Grid.Row="4" Grid.Column="1"/>
+
+			<TextBox Classes="grid" Text="{Binding site_id}"		Grid.Row="4" Grid.Column="2"/>
+			<Button Classes="grid" Content="..." Click=""		Grid.Row="4" Grid.Column="3"/>
+
+			<TextBox Classes="grid" Text="{Binding MOLpl_name}"	Grid.Row="4" Grid.Column="4"/>
+			<Button Classes="grid" Content="..." Click=""		Grid.Row="4" Grid.Column="5"/>
+		</Grid>
+		
+		<TextBox Classes="stack multiline" DockPanel.Dock="Bottom" Text="{Binding Description}"/>
+		<Label Classes="stack" DockPanel.Dock="Bottom" Content="Описание:"/>
+		
+		<TextBox Classes="stack" DockPanel.Dock="Bottom" Text="{Binding user_id}"/>
+		<Label Classes="stack"	DockPanel.Dock="Bottom" Content="Владелец (Пользователь):"/>
+
+		<TextBox Classes="stack" DockPanel.Dock="Bottom" Text="{Binding sp_id}"/>
+		<Label Classes="stack" DockPanel.Dock="Bottom" Content="Наименование:"/>
+	</DockPanel>
+</Window>

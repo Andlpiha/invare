@@ -54,6 +54,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Login.settings</DependentUpon>
     </Compile>
+    <Compile Update="Views\Child windows\AddItem.axaml.cs">
+      <DependentUpon>AddItem.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Child windows\AddRepair.axaml.cs">
+      <DependentUpon>AddRepair.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\UserControls\MenuBar.axaml.cs">
       <DependentUpon>MenuBar.axaml</DependentUpon>
     </Compile>
@@ -63,7 +69,7 @@
     <Compile Update="Views\Login.axaml.cs">
       <DependentUpon>Login.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\MessageBox.axaml.cs">
+    <Compile Update="Views\Child windows\MessageBox.axaml.cs">
       <DependentUpon>MessageBox.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\UserControls\Table.axaml.cs">
