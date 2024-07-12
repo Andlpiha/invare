@@ -1,8 +1,11 @@
 ﻿using Avalonia.Controls;
+using Avalonia.LogicalTree;
 using Inv.Models;
+using System;
+using System.Collections.Generic;
 using System.Data;
 
-namespace Inv.ViewModels;
+namespace Inv.ViewModels.MainWindow;
 
 public class TabItem
 {
@@ -19,32 +22,33 @@ public class TabItem
 public class MainWindowViewModel : ViewModelBase
 {
     public TabItem[] Tabs { get; set; }
+    public static TableViewModel tableVM { get; } = new();
 
     // Индекс выделенной вкладки
     private int _selected_index = -1;
-    public int SelectedIndex
-    { 
+    public int SelectedTabIndex
+    {
         get
         {
             return _selected_index;
         }
-        set 
-        { 
+        set
+        {
             _selected_index = value;
 
             // При обновлении индекса, также обновляем остальные значение,
             // индекс равен -1, если не выбрана ни одна вкладка
-            SelectedHeader = value != -1 ? Tabs[value].Header : "";
-            SelectedID = value != -1 ? Tabs[value].ID : "";
+            SelectedTabHeader = value != -1 ? Tabs[value].Header : "";
+            SelectedTabID = value != -1 ? Tabs[value].ID : "";
         }
     }
     // Название выделенной вкладки
-    public string SelectedHeader { get; set; }
-    public string SelectedID { get; set; }
+    public string SelectedTabHeader { get; set; }
+    public string SelectedTabID { get; set; }
 
-    public MainWindowViewModel() 
+    public MainWindowViewModel()
     {
-        SelectedIndex = -1;
+        SelectedTabIndex = -1;
         var tabs_table = TableModel.getTabs();
 
         Tabs = new TabItem[tabs_table.Rows.Count];
@@ -64,5 +68,11 @@ public class MainWindowViewModel : ViewModelBase
         // Добавить еще две вкладки в конец
         Tabs[^2] = new TabItem(Global.RepairTab, Global.RepairTab);
         Tabs[^1] = new TabItem(Global.JournalTab, Global.JournalTab);
+    }
+
+    public bool ExitApp()
+    {
+        Environment.Exit(0);
+        return true;
     }
 }

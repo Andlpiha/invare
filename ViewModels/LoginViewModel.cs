@@ -59,9 +59,9 @@ namespace Inv.ViewModels
             if (ty == uint.MaxValue)
                 return false;
 
-            if (ty == 0) Global.RW = true; else Global.RW = false; // Write
-            if (ty == 1) Global.RO = true; else Global.RO = false; // Read
-            if (ty == 2) Global.AU = true; else Global.AU = false; // Author
+            if (ty == 1) Global.RW = true; else Global.RW = false; // Write
+            if (ty == 2) Global.RO = true; else Global.RO = false; // Read
+            if (ty == 3) Global.AU = true; else Global.AU = false; // Author
 
             Global.Login = this.Login;
 

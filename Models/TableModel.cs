@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using FirebirdSql.Data.FirebirdClient;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MsgBox;
 using System;
 using System.Collections.Generic;
@@ -7,11 +8,13 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Inv.Models
 {
     public class TableModel
     {
+        // Открывает транзакцию м предоставляет методы по управлению ей
         public class TransactionReader
         {
             private FbConnection connection;
@@ -22,16 +25,18 @@ namespace Inv.Models
             public TransactionReader(FbConnection con, string query)
             {
                 connection = con;
-                try
-                {
-                    con.Open();
-                }
-                catch (Exception e)
-                {
-                    Dispatcher.UIThread.InvokeAsync(
-                        () => MessageBox.Show(null, "БД недоступна", "Ошибка", MessageBox.MessageBoxButtons.Ok)
-                    );
-                    return;
+                if (connection.State != ConnectionState.Open){
+                    try
+                    {
+                        connection.Open();
+                    }
+                    catch (Exception e)
+                    {
+                        Dispatcher.UIThread.InvokeAsync(
+                            () => MessageBox.Show(null, "БД недоступна", "Ошибка", MessageBox.MessageBoxButtons.Ok)
+                        );
+                        return;
+                    }
                 }
 
                 transaction = connection.BeginTransaction();
@@ -121,9 +126,10 @@ namespace Inv.Models
 
             string query = "";
             if (Global.AU)
-                query += "SELECT * FROM rem WHERE pribor_name IS NULL OR pribor_name=" + Global.Login;
+                query += $"SELECT * FROM rem WHERE pribor_name IS NULL OR pribor_name={Global.Login} AND " +
+                    $"date_done IS NULL OR date_out IS NULL";
             else
-                query += "SELECT * FROM rem";
+                query += "SELECT * FROM rem WHERE date_done IS NULL OR date_out IS NULL";
 
             return new TransactionReader(con, query);
         }
@@ -138,15 +144,45 @@ namespace Inv.Models
 
             //TODO: getLogReader
             string query = "";
-            if (Global.BottomLevel)
+            if (Global.TopLevel)
             {
-
+                query = "SELECT FIRST 50000 id, icon, date_do, user_do, code_op, mat_id, sklad," +
+                    $"compl_num, inv_num, ser_num, vnutr_num, name, user_name," +
+                    $"description, date_prof, date_create, MOL_name FROM view_log ORDER BY date_do DESCENDING";
             }
             else
             {
-
+                if (Global.CurCompl != null && Global.CurCompl.icon == Global.ComplectIcon)
+                {
+                    query = $"SELECT id, 1 icon, date_do, user_do, code_op, compl_id, Sklad," +
+                        $"vnutr_num compl_num, inv_num, ser_num, vnutr_num, name, user_name," +
+                        $"description, date_prof, date_create, MOL_name from compl_log" +
+                        $"WHERE compl_id={Global.CurCompl!.compl_num} ORDER BY date_do DESCENDING";
+                }
+                else
+                {
+                    query = $"SELECT id, 2 icon, date_do, user_do, code_op, mat_id, Sklad," +
+                        $"Compl_num, inv_num, ser_num, vnutr_num, sp_name, user_name," +
+                        $"description, date_prof, date_create, MOL_name from mat_log" +
+                        $"WHERE mat_id={Global.CurCompl!.mat_num} ORDER BY date_do DESCENDING";
+                }
             }
             return new TransactionReader(con, query);
+        }
+
+        public DataTable getComplectTable(string tabID, string compl_id = "")
+        {
+            var con = SQLConn.Instance.GetConnection();
+
+            var query = $"SELECT * FROM mat_s({tabID})";
+            if (compl_id != "")
+                query += $" WHERE Compl_id={compl_id}";
+
+            DataTable complect_table = new DataTable();
+            FbCommand _cmd = new(query, con);
+            (new FbDataAdapter(_cmd)).Fill(complect_table);
+
+            return complect_table;
         }
     }
 }

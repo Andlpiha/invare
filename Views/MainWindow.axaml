@@ -1,6 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:Inv.ViewModels"
+        xmlns:vm="using:Inv.ViewModels.MainWindow"
 		xmlns:local="using:Inv"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -50,7 +50,7 @@
 	</Window.Styles>
 
 	<DockPanel HorizontalAlignment="Stretch" LastChildFill="true">
-		<local:MenuBar DockPanel.Dock="Top" Height="25"/>
+		<local:MenuBar x:Name="MenuBar" DockPanel.Dock="Top" Height="25"/>
 		<Border x:Name="ToolbarBorder" DockPanel.Dock="Top">
 		    <local:Toolbar x:Name="Toolbar" Height="35"/>
 		</Border>
@@ -64,11 +64,10 @@
 			<TabControl.ContentTemplate>
 				<DataTemplate x:DataType="vm:TabItem">
 					<DockPanel LastChildFill="True">
-						<local:Table x:Name="DataView" TabID="{Binding ID}"/>
+						<local:Table x:Name="MainTable" TabID="{Binding ID}"/>
 					</DockPanel>
 				</DataTemplate>
 			</TabControl.ContentTemplate>
 		</TabControl>
 	</DockPanel>
-
 </Window>

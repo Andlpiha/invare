@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:vm="using:Inv.ViewModels"
+			 xmlns:vm="using:Inv.ViewModels.MainWindow"
 			 xmlns:local="using:Inv"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Inv.Table">
@@ -35,18 +35,30 @@
 		</Style>
 	</UserControl.Styles>
 
+	<UserControl.Resources>
+		<local:IconIndexConverter x:Key="IconIndexConverter"/>
+	</UserControl.Resources>
+
 	<DataGrid x:Name="MainGrid" Classes="Journal"
 			  ItemsSource="{Binding}" x:DataType="vm:TableRow"
 			  IsReadOnly="True" CanUserReorderColumns="True" CanUserResizeColumns="True"
 			  GridLinesVisibility="Vertical" VerticalGridLinesBrush="{DynamicResource GridLinesBrush}"
-			  SelectionChanged="onSelectedRowChange" SelectionMode="Single">
-
+			  SelectionMode="Single">
+		
 		<DataGrid.Columns>
-			<!--<DataGridTemplateColumn Header="">
+			<DataGridTemplateColumn Header="" CanUserSort="true" SortMemberPath="icon" Tag="icon">
 				<DataGridTemplateColumn.CellTemplate>
-
+					<DataTemplate x:DataType="vm:TableRow">
+						<Svg Margin="5" Path="{Binding icon, Converter={StaticResource IconIndexConverter}}"/>
+						<!--<Svg Classes="table_icon" Path="/Assets/toolbar-icons/package.svg"/>-->
+					</DataTemplate>
 				</DataGridTemplateColumn.CellTemplate>
-			</DataGridTemplateColumn>-->
+				<DataGridTemplateColumn.HeaderTemplate>
+					<DataTemplate>
+						<Button x:Name="headerReturn" />
+					</DataTemplate>
+				</DataGridTemplateColumn.HeaderTemplate>
+			</DataGridTemplateColumn>
 
 			<DataGridTextColumn Header="Дата"			Binding="{Binding date_do}"		Tag="date_do"/>
 			<DataGridTextColumn Header="Склад"			Binding="{Binding sklad}"		Tag="sklad"/>
@@ -66,8 +78,8 @@
 			<DataGridTextColumn Header="Поступил"		Binding="{Binding date_in}"		Tag="date_in"/>
 			<DataGridTextColumn Header="Завершен"		Binding="{Binding date_done}"	Tag="date_done"/>
 			<DataGridTextColumn Header="Выдано"			Binding="{Binding date_out}"	Tag="date_out"/>
-			<DataGridTextColumn Header="Профил."		Binding="{Binding Date_prof}"	Tag="Date_prof"/>
-			<DataGridTextColumn Header="Дата созд."		Binding="{Binding Date_create}"	Tag="Date_create"/>
+			<DataGridTextColumn Header="Профил."		Binding="{Binding date_prof}"	Tag="Date_prof"/>
+			<DataGridTextColumn Header="Дата созд."		Binding="{Binding date_create}"	Tag="Date_create"/>
 			<DataGridTextColumn Header="МОЛ"			Binding="{Binding MOL_name}"	Tag="MOL_name"/>
 			<DataGridTextColumn Header="МОЛ_пл"			Binding="{Binding MOLpl_name}"	Tag="MOLpl_name"/>
 			<DataGridTextColumn Header="Описание"		Binding="{Binding Description}"	Tag="Description"/>

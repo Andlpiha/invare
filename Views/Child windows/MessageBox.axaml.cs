@@ -28,12 +28,13 @@ namespace MsgBox
             AvaloniaXamlLoader.Load(this);
         }
 
-        public static Task<MessageBoxResult> Show(Window parent, string text, string title, MessageBoxButtons buttons)
+        public static Task<MessageBoxResult> Show(Window? parent, string text, string title, MessageBoxButtons buttons)
         {
             var msgbox = new MessageBox()
             {
                 Title = title
             };
+
             msgbox.FindControl<TextBlock>("Text").Text = text;
             var buttonPanel = msgbox.FindControl<StackPanel>("Buttons");
 
@@ -61,7 +62,6 @@ namespace MsgBox
 
             if (buttons == MessageBoxButtons.OkCancel || buttons == MessageBoxButtons.YesNoCancel)
                 AddButton("Cancel", MessageBoxResult.Cancel, true);
-
 
             var tcs = new TaskCompletionSource<MessageBoxResult>();
             msgbox.Closed += delegate { tcs.TrySetResult(res); };

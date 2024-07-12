@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>exe</OutputType>
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
@@ -22,9 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspose.Email" Version="24.6.0" />
     <PackageReference Include="Avalonia" Version="11.0.11" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.11" />
-    <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.10" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.11" />
     <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.18" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.11" />
@@ -54,8 +56,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Login.settings</DependentUpon>
     </Compile>
-    <Compile Update="Views\Child windows\AddItem.axaml.cs">
-      <DependentUpon>AddItem.axaml</DependentUpon>
+    <Compile Update="Views\Child windows\ItemWindow.axaml.cs">
+      <DependentUpon>ItemWindow.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Child windows\AddRepair.axaml.cs">
       <DependentUpon>AddRepair.axaml</DependentUpon>

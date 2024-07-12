@@ -18,7 +18,7 @@ public partial class LoginWindow : Window
 
         viewModel = new LoginViewModel();
         this.DataContext = viewModel;
-        viewModel.dbConnect();
+        _ = viewModel.dbConnect(); // Не ждем результата
     }
 
     public void Exit(object sender, RoutedEventArgs args)
