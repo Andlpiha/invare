@@ -1,15 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
-using CommunityToolkit.Mvvm.Input;
 using Inv.ViewModels.MainWindow;
-using ReactiveUI;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
 
@@ -80,6 +73,6 @@ public partial class MainWindow : Window
         if (tabControl == null || _viewModel == null) return;
         _viewModel.SelectedTabIndex = tabControl.SelectedIndex;
 
-        this.FindControl<Toolbar>("Toolbar")!.setButtonEnabled(_viewModel.SelectedTabID); 
+        this.FindControl<Toolbar>("Toolbar")!.setButtonEnabled(_viewModel.SelectedTabID);
     }
 }

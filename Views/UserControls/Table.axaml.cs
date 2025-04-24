@@ -82,7 +82,7 @@ public partial class Table : UserControl
         Global.CurCompl = null;
         deselectRows();
 
-        // Изменяем отображаемые столбцы в зависимости от выбранной вкладки
+        // РР·РјРµРЅСЏРµРј РѕС‚РѕР±СЂР°Р¶Р°РµРјС‹Рµ СЃС‚РѕР»Р±С†С‹ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РІС‹Р±СЂР°РЅРЅРѕР№ РІРєР»Р°РґРєРё
         if (new_id == Global.RepairTab)
             foreach (var column in _grid.Columns)
                 column.IsVisible = _viewModel.remont_column_visibility[column.Tag as string];
@@ -100,7 +100,7 @@ public partial class Table : UserControl
             _viewModel.cachedCollections.Add(new_id, new ObservableCollection<TableRow>());
             _grid.DataContext = _viewModel.cachedCollections[new_id];
 
-            // Исполняем метод асинхронно
+            // РСЃРїРѕР»РЅСЏРµРј РјРµС‚РѕРґ Р°СЃРёРЅС…СЂРѕРЅРЅРѕ
             Task.Run(() =>
                 _viewModel.updateTableRows(new_id)
             );
@@ -109,14 +109,14 @@ public partial class Table : UserControl
 
     private void onDoubleClick(object? sender, TappedEventArgs args)
     {
-        // Проверяем в какой части DataGrid было произведено нажатие
+        // РџСЂРѕРІРµСЂСЏРµРј РІ РєР°РєРѕР№ С‡Р°СЃС‚Рё DataGrid Р±С‹Р»Рѕ РїСЂРѕРёР·РІРµРґРµРЅРѕ РЅР°Р¶Р°С‚РёРµ
         Control element = args.Source as Control;
         while (element is not DataGrid)
         {
             element = element.Parent as Control;
 
-            // Если элемент или один из его родителей является DataGridRow, значит пользователь тыкнул на таблицу
-            // в противном случае пользователь тыкнул на header
+            // Р•СЃР»Рё СЌР»РµРјРµРЅС‚ РёР»Рё РѕРґРёРЅ РёР· РµРіРѕ СЂРѕРґРёС‚РµР»РµР№ СЏРІР»СЏРµС‚СЃСЏ DataGridRow, Р·РЅР°С‡РёС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ С‚С‹РєРЅСѓР» РЅР° С‚Р°Р±Р»РёС†Сѓ
+            // РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ С‚С‹РєРЅСѓР» РЅР° header
             if (element is DataGridRow)
             {
                 var row = (DataGridRow)element;
@@ -154,7 +154,7 @@ public partial class Table : UserControl
                 _viewModel.tempCollection.Clear();
                 _grid.DataContext = _viewModel.tempCollection;
 
-                // Потому что данные можно извлечь только из главного(UI) потока
+                // РџРѕС‚РѕРјСѓ С‡С‚Рѕ РґР°РЅРЅС‹Рµ РјРѕР¶РЅРѕ РёР·РІР»РµС‡СЊ С‚РѕР»СЊРєРѕ РёР· РіР»Р°РІРЅРѕРіРѕ(UI) РїРѕС‚РѕРєР°
                 var tabID = TabID;
                 Task.Run(() =>
                     _viewModel.updateRowsFromComplect(tabID, (int)row.id)

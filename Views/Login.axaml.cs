@@ -18,7 +18,7 @@ public partial class LoginWindow : Window
 
         viewModel = new LoginViewModel();
         this.DataContext = viewModel;
-        _ = viewModel.dbConnect(); // Не ждем результата
+        _ = viewModel.dbConnect(); // РќРµ Р¶РґРµРј СЂРµР·СѓР»СЊС‚Р°С‚
     }
 
     public void Exit(object sender, RoutedEventArgs args)
@@ -38,15 +38,16 @@ public partial class LoginWindow : Window
 
         if (!viewModel.log_In())
         {
-            await MessageBox.Show(this, "Логин не существует", "Ошибка", MessageBox.MessageBoxButtons.Ok);
+            await MessageBox.Show(this, "Р›РѕРіРёРЅ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚", "РћС€РёР±РєР°", MessageBox.MessageBoxButtons.Ok);
             return;
         }
 
-        // Сохраняем значения полей при успешном входе
+        // РЎРѕС…СЂР°РЅСЏРµРј Р·РЅР°С‡РµРЅРёСЏ РїРѕР»РµР№ РїСЂРё СѓСЃРїРµС€РЅРѕРј РІС…РѕРґРµ
         if (DataContext != null)
         {
-            Properties.Login.Default.DBLocation = viewModel.DBLocation;
-            Properties.Login.Default.Name = viewModel.Login;
+            Properties.Login.Default.ServerLocation = viewModel.ServerLocation;
+            Properties.Login.Default.DatabaseFile = viewModel.DatabaseFile;
+            Properties.Login.Default.UserLogin = viewModel.Login;
             Properties.Login.Default.Save();
         }
 

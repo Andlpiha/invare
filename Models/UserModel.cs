@@ -38,5 +38,11 @@ namespace Inv.Models
 
             return Convert.ToUInt32(result.First()["TY"]);
         }
+
+        public string getName(string login)
+        {
+            DataRow[] result = users.Select(string.Format("LOGIN = '{0}'", login));
+            return result.First()["Name"].ToString() ?? string.Empty;
+        }
     }
 }

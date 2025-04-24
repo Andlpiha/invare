@@ -6,6 +6,7 @@ using Inv.Models;
 using Inv.ViewModels;
 using Inv.ViewModels.Forms;
 using Inv.ViewModels.MainWindow;
+using Inv.Views;
 using MsgBox;
 using ReactiveUI;
 using Svg;
@@ -47,11 +48,18 @@ public partial class Toolbar : UserControl
                 throw new NotImplementedException();
         }
 
-        // Диалог привязан к MainWindow
+        // Р”РёР°Р»РѕРі РїСЂРёРІСЏР·Р°РЅ Рє MainWindow
         var result = await window.ShowDialog<TableRow>(this.VisualRoot as Window);
 
+        // Р”РѕР±Р°РІР»СЏРµРј СЃРѕР·РґР°РЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ РІ С‚Р°Р±Р»РёС†Сѓ
         if (result != null)
             MainWindowViewModel.tableVM.cachedCollections[_viewModel.SelectedTabID].Add(result);
+    }
+
+    public async void openSpr(object sender, RoutedEventArgs args)
+    {
+        SprWindow window = new SprWindow("Regular");
+        window.Show();
     }
 
     public async void deleteItem(object sender, RoutedEventArgs args)
@@ -61,12 +69,12 @@ public partial class Toolbar : UserControl
 
         if (!Global.RW)
         {
-            _ = MessageBox.Show(this.VisualRoot as Window, "У вас недостаточно прав для удаления", "Ошибка доступа", MessageBox.MessageBoxButtons.Ok);
+            _ = MessageBox.Show(this.VisualRoot as Window, "РЈ РІР°СЃ РЅРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РїСЂР°РІ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ", "РћС€РёР±РєР° РґРѕСЃС‚СѓРїР°", MessageBox.MessageBoxButtons.Ok);
             return;
         }
         if (MainWindowViewModel.tableVM.selectedRow == null)
         {
-            _ = MessageBox.Show(this.VisualRoot as Window, "Выберите строку для удаления", "Сообщение", MessageBox.MessageBoxButtons.Ok);
+            _ = MessageBox.Show(this.VisualRoot as Window, "Р’С‹Р±РµСЂРёС‚Рµ СЃС‚СЂРѕРєСѓ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ", "РЎРѕРѕР±С‰РµРЅРёРµ", MessageBox.MessageBoxButtons.Ok);
             return;
         }
 
@@ -74,7 +82,7 @@ public partial class Toolbar : UserControl
         switch (_viewModel!.SelectedTabID)
         {
             case Global.RepairTab:
-                user_responce = await MessageBox.Show(this.VisualRoot as Window, "Вы уверены, что хотите удалить этот ремонт?", "Сообщение", MessageBox.MessageBoxButtons.YesNo);
+                user_responce = await MessageBox.Show(this.VisualRoot as Window, "Р’С‹ СѓРІРµСЂРµРЅС‹, С‡С‚Рѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ СЌС‚РѕС‚ СЂРµРјРѕРЅС‚?", "РЎРѕРѕР±С‰РµРЅРёРµ", MessageBox.MessageBoxButtons.YesNo);
                 if (user_responce != MessageBox.MessageBoxResult.Yes) break;
 
                 ItemModel.DeleteRemontItem(_selectedRow!.id);
@@ -85,7 +93,7 @@ public partial class Toolbar : UserControl
             default:
                 if (_selectedRow!.icon == Global.ComplectIcon)
                 {
-                    user_responce = await MessageBox.Show(this.VisualRoot as Window, "Вы уверены, что хотите удалить этот комплект?", "Сообщение", MessageBox.MessageBoxButtons.YesNo);
+                    user_responce = await MessageBox.Show(this.VisualRoot as Window, "Р’С‹ СѓРІРµСЂРµРЅС‹, С‡С‚Рѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ СЌС‚РѕС‚ РєРѕРјРїР»РµРєС‚?", "РЎРѕРѕР±С‰РµРЅРёРµ", MessageBox.MessageBoxButtons.YesNo);
                     if (user_responce != MessageBox.MessageBoxResult.Yes) break;
 
                     ItemModel.DeleteComplectItem(_selectedRow!.id);
@@ -93,7 +101,7 @@ public partial class Toolbar : UserControl
                 }
                 else
                 {
-                    user_responce = await MessageBox.Show(this.VisualRoot as Window, "Вы уверены, что хотите удалить эту единицу?", "Сообщение", MessageBox.MessageBoxButtons.YesNo);
+                    user_responce = await MessageBox.Show(this.VisualRoot as Window, "Р’С‹ СѓРІРµСЂРµРЅС‹, С‡С‚Рѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ СЌС‚Сѓ РµРґРёРЅРёС†Сѓ?", "РЎРѕРѕР±С‰РµРЅРёРµ", MessageBox.MessageBoxButtons.YesNo);
                     if (user_responce != MessageBox.MessageBoxResult.Yes) break;
 
                     ItemModel.DeleteMatItem(_selectedRow!.id);
@@ -111,7 +119,6 @@ public partial class Toolbar : UserControl
             if (row == null) return;
         }
     }
-
 
 
     public void setButtonEnabled(string pageID)

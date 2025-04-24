@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Inv.App"
              xmlns:local="using:Inv"
+			 xmlns:vmc="using:Inv.ViewModels.Converters"
              RequestedThemeVariant="Light">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -13,9 +14,12 @@
         <FluentTheme />
 		<StyleInclude Source="Style.axaml"/>
 		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+		<StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
     </Application.Styles>
 
 	<Application.Resources>
+		<vmc:ArrowIconConverter x:Key="ArrowIconConverter"/>
+		
 		<SolidColorBrush x:Key="GridEven">#6696D4D4</SolidColorBrush>
 		<SolidColorBrush x:Key="GridLinesBrush">#66AAAAAA</SolidColorBrush>
 

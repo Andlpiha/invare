@@ -70,8 +70,6 @@ namespace MsgBox
             else msgbox.Show();
             return tcs.Task;
         }
-
-
     }
 
 }

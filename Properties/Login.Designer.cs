@@ -12,7 +12,7 @@ namespace Inv.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.12.0.0")]
     internal sealed partial class Login : global::System.Configuration.ApplicationSettingsBase {
         
         private static Login defaultInstance = ((Login)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Login())));
@@ -26,24 +26,36 @@ namespace Inv.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DBLocation {
+        public string ServerLocation {
             get {
-                return ((string)(this["DBLocation"]));
+                return ((string)(this["ServerLocation"]));
             }
             set {
-                this["DBLocation"] = value;
+                this["ServerLocation"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Name {
+        public string DatabaseFile {
             get {
-                return ((string)(this["Name"]));
+                return ((string)(this["DatabaseFile"]));
             }
             set {
-                this["Name"] = value;
+                this["DatabaseFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string UserLogin {
+            get {
+                return ((string)(this["UserLogin"]));
+            }
+            set {
+                this["UserLogin"] = value;
             }
         }
     }

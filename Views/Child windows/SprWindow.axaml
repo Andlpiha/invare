@@ -1,0 +1,140 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:i="using:Avalonia.Xaml.Interactivity"
+        xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+		xmlns:tdg="using:Avalonia.Controls.TreeDataGrid"
+		xmlns:vm="using:Inv.ViewModels"
+		xmlns:vmc="using:Inv.ViewModels.Converters"
+        x:DataType="vm:SprViewModel"
+		SizeToContent="WidthAndHeight"
+		WindowStartupLocation="CenterScreen"
+        CanResize="True"
+        x:Class="Inv.SprWindow"
+        Title="Справочник">
+
+	<Window.Styles>
+		<Style Selector="TreeDataGrid">
+			<Setter Property="Background" Value="{StaticResource Ivory}"/>
+			<Setter Property="Foreground" Value="{StaticResource BlackBrush}"/>
+
+			<Style Selector="^TreeDataGridRow">
+				<Setter Property="Foreground" Value="{DynamicResource BlackBrush}"/>
+				<Setter Property="Background" Value="{DynamicResource BlackBrush}"/>
+			</Style>
+		</Style>
+		
+		<Style Selector="TreeDataGrid.custom-expander TreeDataGridExpanderCell /template/ ToggleButton">
+			<Setter Property="Theme">
+				<ControlTheme TargetType="ToggleButton">
+					<Setter Property="Margin" Value="0" />
+					<Setter Property="Width" Value="25" />
+					<Setter Property="Height" Value="25" />
+					<Setter Property="Template">
+						<ControlTemplate>
+							<Border Background="Transparent"
+									Width="{TemplateBinding Width}"
+									Height="{TemplateBinding Height}"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center">
+								<Svg
+									Width="24"
+									Height="24"
+									Margin="10 0 10 0"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center">
+									<Svg.Path>
+										<MultiBinding Converter="{StaticResource ArrowIconConverter}">
+											<Binding Path="IsEnabled" RelativeSource="{RelativeSource TemplatedParent}"/>
+											<Binding Path="IsChecked" RelativeSource="{RelativeSource TemplatedParent}"/>
+										</MultiBinding>
+									</Svg.Path>
+								</Svg>
+							</Border>
+						</ControlTemplate>
+					</Setter>
+				</ControlTheme>
+			</Setter>
+			<Setter Property="IsVisible" Value="True"/>
+			<Setter Property="IsEnabled" Value="{TemplateBinding ShowExpander}"/>
+			<Setter Property="Width" Value="30" />
+		</Style>
+
+		<Style Selector="TreeDataGrid.custom-expander TreeDataGridExpanderCell /template/ #CellBorder Border">
+			<Setter Property="Width" Value="25" />
+		</Style>
+
+		<Style Selector="TreeDataGrid.custom-expander TreeDataGridExpanderCell">
+			<Setter Property="BorderThickness" Value="0 0 0 1"/>
+			<Setter Property="BorderBrush" Value="{StaticResource GridLinesBrush}"/>
+			<Setter Property="Margin" Value="0 0 0 0"/>
+		</Style>
+
+		<Style Selector="TreeDataGrid.custom-expander TreeDataGridColumnHeader">
+			<Setter Property="Background" Value="{StaticResource GrayBrush}"/>
+			<Setter Property="IsEnabled" Value="False"/>
+		</Style>
+
+		<Style Selector="Button.Toolbar,ToggleButton.Toolbar">
+			<Setter Property="Background" Value="{DynamicResource LightGrayBrush}"/>
+
+			<Setter Property="BorderBrush" Value="{DynamicResource DarkGrayBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+		</Style>
+
+		<Style Selector="Button.Toolbar">
+			<Setter Property="Height" Value="{Binding $parent[DockPanel].Height}" />
+			<Setter Property="Width" Value="{Binding $parent[DockPanel].Height}" />
+			<Setter Property="Padding" Value="5" />
+			<Setter Property="IsEnabled" Value="False"/>
+		</Style>
+	</Window.Styles>
+
+	<StackPanel Orientation="Vertical">
+		<Border BorderBrush="Black"
+				BorderThickness="0 0 0 1"
+				Background="{StaticResource LightGrayBrush}"
+				Padding="10 5">
+			<DockPanel Name="ToolbarPanel" Height="40" Width="{Binding $parent.Width}">
+				<StackPanel Orientation="Horizontal" DockPanel.Dock="Right"
+							Spacing="10">
+					<Button Name="OkButton" Classes="Toolbar shadow contentCenter" Width="100" IsEnabled="True">
+						<TextBlock Text="Ok" FontSize="16"/>
+					</Button>
+					<Button Name="CancelButton" Classes="Toolbar shadow contentCenter" Width="100" IsEnabled="True">
+						<TextBlock Text="Cancel" FontSize="16"/>
+					</Button>
+				</StackPanel>
+				
+				<StackPanel Orientation="Horizontal" DockPanel.Dock="Left"
+							Spacing="12">
+					<Button Name="CreateButton" Classes="Toolbar shadow" ToolTip.Tip="Создать в структуре">
+						<Svg Path="/Assets/other-icons/plus.svg"/>
+					</Button>
+					<Button Name="CreateInButton" Classes="Toolbar shadow" ToolTip.Tip="Создать в подструктуре">
+						<Svg Path="/Assets/other-icons/plus-box.svg"/>
+					</Button>
+					<Button Name="EditButton" Classes="Toolbar shadow" ToolTip.Tip="Редактировать">
+						<Svg Path="/Assets/toolbar-icons/delete-forever.svg"/>
+					</Button>
+					<Button Name="DeleteButton" Classes="Toolbar shadow" ToolTip.Tip="Удалить">
+						<Svg Path="/Assets/toolbar-icons/pencil.svg"/>
+					</Button>
+				</StackPanel>
+			</DockPanel>
+		</Border>
+		
+		<TreeDataGrid x:Name="SprTree" Classes="custom-expander"
+			  Source="{Binding DataGridSource}"
+			  MinWidth="600" Height="800">
+			<TreeDataGrid.Resources>
+				<DataTemplate x:Key="DefaultColumnTemplate" DataType="vm:SpRowData">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontSize="18"/>
+					</StackPanel>
+				</DataTemplate>
+			</TreeDataGrid.Resources>
+		</TreeDataGrid>
+	</StackPanel>
+</Window>

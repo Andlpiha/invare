@@ -2,31 +2,182 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="1024"
+		Background="{DynamicResource LightGrayBrush}"
         x:Class="Inv.AddRepair"
         Title="Добавить ремонт">
 
-	<StackPanel>
-		<DockPanel LastChildFill="false">
-			<Button DockPanel.Dock="Right" Click="">
-				<StackPanel Orientation="Horizontal">
-					<Label Content="Cancel"/>
-				</StackPanel>
-			</Button>
-			<Button DockPanel.Dock="Right" Click="">
-				<StackPanel Orientation="Horizontal">
-					<Label Content="Ok"/>
-				</StackPanel>
-			</Button>
-		</DockPanel>
+	<Window.Styles>
+		<!-- Base Styles -->
+		<Style Selector="Label.header">
+			<Setter Property="FontSize" Value="14"/>
+			<Setter Property="FontWeight" Value="Bold"/>
+			<Setter Property="Margin" Value="0 0 0 5"/>
+			<Setter Property="Foreground" Value="#FF444444"/>
+		</Style>
 
-		<Separator/>
+		<Style Selector="TextBox, CalendarDatePicker">
+			<Setter Property="Padding" Value="8"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderBrush" Value="#FFCCCCCC"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="4"/>
+		</Style>
 
-		<StackPanel Orientation="Horizontal">
-			<StackPanel>
-				<Label Content="Внутренний №"/>
-				<TextBox Text="" />
-			</StackPanel>
+		<Style Selector="Button.accent">
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="FontSize" Value="20"/>
+			<Setter Property="Height" Value="50" />
+		</Style>
+
+		<Style Selector="Separator.section">
+			<Setter Property="Background" Value="#FFE0E0E0"/>
+			<Setter Property="Margin" Value="0 15"/>
+			<Setter Property="Height" Value="2"/>
+		</Style>
+
+		<Style Selector="Border.section">
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderBrush" Value="#FFEEEEEE"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="6"/>
+			<Setter Property="Margin" Value="20 10"/>
+			<Setter Property="Padding" Value="15"/>
+		</Style>
+
+		<!-- Section Container -->
+		<Style Selector="Border.section">
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderBrush" Value="#FFEEEEEE"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="6"/>
+			<Setter Property="Margin" Value="20 10"/>
+			<Setter Property="Padding" Value="15"/>
+		</Style>
+
+		<!-- Header Text -->
+		<Style Selector="Label.header">
+			<Setter Property="FontSize" Value="14"/>
+			<Setter Property="FontWeight" Value="Bold"/>
+			<Setter Property="Margin" Value="0 0 0 5"/>
+			<Setter Property="Foreground" Value="#FF444444"/>
+		</Style>
+
+		<!-- Accent Buttons -->
+		<Style Selector="Button.accent">
+			<Setter Property="Background" Value="#FF0078D4"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Padding" Value="12 6"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Margin" Value="5"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+		</Style>
+	</Window.Styles>
+
+	<DockPanel Margin="15">
+		<!-- Action Buttons -->
+		<StackPanel DockPanel.Dock="Top"
+					Orientation="Horizontal" HorizontalAlignment="Right"
+					Margin="0 0 15 0" Spacing="10">
+			<Button Classes="accent" Content="OK" Width="100" HorizontalContentAlignment="Center"/>
+			<Button Classes="accent" Content="Отмена" Width="115" HorizontalContentAlignment="Center"/>
 		</StackPanel>
-	</StackPanel>
+
+		<Separator Classes="section"/>
+
+		<!-- Main Content -->
+		<ScrollViewer>
+			<StackPanel Spacing="10">
+				<!-- ID Section -->
+				<Border Classes="section">
+					<StackPanel Spacing="15">
+						<Label Content="Идентификационные номера" Classes="header"/>
+						<UniformGrid Columns="3" Margin="0 10">
+							<StackPanel Spacing="5" Margin="5 0">
+								<Label Content="Комплект №" Classes="header"/>
+								<TextBox/>
+							</StackPanel>
+							<StackPanel Spacing="5" Margin="5 0">
+								<Label Content="Внутренний №" Classes="header"/>
+								<TextBox/>
+							</StackPanel>
+							<StackPanel Spacing="5" Margin="5 0">
+								<Label Content="Инвентарный №" Classes="header"/>
+								<TextBox/>
+							</StackPanel>
+						</UniformGrid>
+					</StackPanel>
+				</Border >
+
+				<!-- Main Details -->
+				<Border Classes="section">
+					<Grid ColumnDefinitions="*,15,*" RowDefinitions="Auto,Auto,Auto,Auto">
+						<!-- Left Column -->
+						<StackPanel Grid.Column="0" Spacing="15">
+							<StackPanel Spacing="5">
+								<Label Content="Наименование" Classes="header"/>
+								<TextBox/>
+							</StackPanel>
+
+							<DockPanel>
+								<Label Content="Цех / Отдел" Classes="header" DockPanel.Dock="Top"/>
+								<Button Content="..." Width="30" DockPanel.Dock="Right" Margin="5 0 0 0"/>
+								<TextBox/>
+							</DockPanel>
+						</StackPanel>
+
+						<!-- Right Column -->
+						<StackPanel Grid.Column="2" Spacing="15">
+							<StackPanel Spacing="5">
+								<Label Content="Исполнитель" Classes="header"/>
+								<TextBox/>
+							</StackPanel>
+
+							<DockPanel>
+								<Label Content="Пользователь" Classes="header" DockPanel.Dock="Top"/>
+								<Button Content="..." Width="30" DockPanel.Dock="Right" Margin="5 0 0 0"/>
+								<TextBox/>
+							</DockPanel>
+						</StackPanel>
+
+						<!-- Full Width Fields -->
+						<StackPanel Grid.Row="1" Grid.ColumnSpan="3" Spacing="15" Margin="0 10">
+							<StackPanel Spacing="5">
+								<Label Content="Жалоба" Classes="header"/>
+								<TextBox Height="60" AcceptsReturn="True"/>
+							</StackPanel>
+
+							<StackPanel Spacing="5">
+								<Label Content="Диагноз" Classes="header"/>
+								<TextBox Height="80" AcceptsReturn="True"/>
+							</StackPanel>
+
+							<StackPanel Spacing="5">
+								<Label Content="Мероприятия" Classes="header"/>
+								<TextBox Height="100" AcceptsReturn="True"/>
+							</StackPanel>
+						</StackPanel>
+					</Grid>
+				</Border>
+
+				<!-- Dates Section -->
+				<Border Classes="section" HorizontalAlignment="Stretch">
+					<UniformGrid Columns="3" Margin="0 10" HorizontalAlignment="Stretch">
+						<StackPanel Spacing="5" HorizontalAlignment="Center">
+							<Label Content="Дата приёма" Classes="header"/>
+							<CalendarDatePicker Classes="customdpkr" Width="150" CustomDateFormatString="dd-MM-yy"/>
+						</StackPanel>
+						<StackPanel Spacing="5" HorizontalAlignment="Center">
+							<Label Content="Дата завершения" Classes="header"/>
+							<CalendarDatePicker Classes="customdpkr" Width="150" CustomDateFormatString="dd-MM-yy"/>
+						</StackPanel>
+						<StackPanel Spacing="5" HorizontalAlignment="Center">
+							<Label Content="Дата выдачи" Classes="header"/>
+							<CalendarDatePicker Classes="customdpkr" Width="150" CustomDateFormatString="dd-MM-yy"/>
+						</StackPanel>
+					</UniformGrid>
+				</Border>
+			</StackPanel>
+		</ScrollViewer>
+	</DockPanel>
 </Window>

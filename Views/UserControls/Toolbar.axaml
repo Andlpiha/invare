@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
 			 xmlns:vm="using:Inv.ViewModels.MainWindow"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:DataType="vm:MainWindowViewModel"
              x:Class="Inv.Toolbar">
 
@@ -21,11 +20,11 @@
 	</UserControl.Styles>
 
 	<StackPanel x:Name="ToolbarStack" Orientation="Horizontal" Spacing="5">
-		<Button Classes="Toolbar shadow" x:Name="book" ToolTip.Tip="Обзор справочника" Click="">
+		<Button Classes="Toolbar shadow" x:Name="book" ToolTip.Tip="Обзор справочника" Click="openSpr">
 			<Svg Path="/Assets/toolbar-icons/book.svg"/>
 		</Button>
 
-		<Separator Classes="invisible" Width="-5"/>
+		<Separator Classes="invisible" Width="0"/>
 		
 		<Button Classes="Toolbar shadow" x:Name="compl" ToolTip.Tip="Создать комплект" Click="createOrEdit">
 			<Svg Path="/Assets/toolbar-icons/desktop-tower.svg"/>
@@ -37,13 +36,13 @@
 			<Svg Path="/Assets/toolbar-icons/tools.svg"/>
 		</Button>
 
-		<Separator Classes="invisible" Width="-5"/>
+		<Separator Classes="invisible" Width="0"/>
 
 		<Button Classes="Toolbar shadow" x:Name="edit" ToolTip.Tip="Редактирование" Click="createOrEdit">
 			<Svg Path="/Assets/toolbar-icons/pencil.svg"/>
 		</Button>
 
-		<Separator Classes="invisible" Width="-5"/>
+		<Separator Classes="invisible" Width="0"/>
 
 		<Button Classes="Toolbar shadow" x:Name="delete" ToolTip.Tip="Удалить" Click="deleteItem">
 			<Svg Path="/Assets/toolbar-icons/delete-forever.svg"/>
@@ -61,7 +60,7 @@
 			<Svg Path="/Assets/toolbar-icons/wrench-clock.svg"/>
 		</Button>
 		
-		<Separator Classes="invisible" Width="-5"/>
+		<Separator Classes="invisible" Width="0"/>
 
 		<Button Classes="Toolbar" x:Name="excel" ToolTip.Tip="Выгрузить в excel" Click="">
 			<Svg Path="/Assets/toolbar-icons/file-excel.svg"/>
@@ -75,6 +74,4 @@
 		</Button>
 		
 	</StackPanel>
-
-
 </UserControl>

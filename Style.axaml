@@ -33,6 +33,10 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	<Style Selector="Button.contentCenter">
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
 
 	<Style Selector="TextBox.multiline">
 		<Setter Property="TextWrapping" Value="Wrap"/>
@@ -61,7 +65,53 @@
 		<Setter Property="Height" Value="2"/>
 	</Style>
 
-	<Style Selector="CalendarDatePicker Button#PART_Button">
+	<Style Selector="Button.SprButton">
+		<Setter Property="Margin" Value="5 0 0 0"/>
+		<Setter Property="Padding" Value="8 2"/>
+		<Setter Property="Width" Value="30"/>
+		<Setter Property="Height" Value="30"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Background" Value="#FFFFFFFF"/>
+		<Setter Property="BorderBrush" Value="#FF808080"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="Cursor" Value="Hand"/>
+
+		<!-- Курсор над кнопкой -->
+		<Style.Animations>
+			<Animation Duration="0:0:0.1">
+				<KeyFrame Cue="0%">
+					<Setter Property="Opacity" Value="0.9"/>
+				</KeyFrame>
+				<KeyFrame Cue="100%">
+					<Setter Property="Opacity" Value="1"/>
+				</KeyFrame>
+			</Animation>
+		</Style.Animations>
+
+		<!-- Нажатие на кнопку -->
+		<Style Selector="^:pointerover">
+			<Setter Property="Background" Value="#FFD3D3D3"/>
+			<Setter Property="BorderBrush" Value="#FF404040"/>
+		</Style>
+
+		<Style Selector="^:pressed">
+			<Setter Property="Background" Value="#FFA0A0A0"/>
+			<Setter Property="BorderBrush" Value="#FF202020"/>
+			<Setter Property="RenderTransform">
+				<TranslateTransform X="0" Y="1"/>
+			</Setter>
+		</Style>
+	</Style>
+
+	<Style Selector="DatePicker.customdpkr">
+		<Setter Property="Background" Value="#FFFFFF"/>
+	</Style>
+
+	<Style Selector="CalendarDatePicker.customdpkr /template/ Button#PART_Button">
 		<Setter Property="TextElement.Foreground" Value="{DynamicResource CalendarDatePickerCalendarGlyphForeground}" />
 		<Setter Property="Margin" Value="2,0,4,0" />
 		<Setter Property="Width" Value="20" />

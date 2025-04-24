@@ -2,10 +2,13 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Inv.Properties" GeneratedClassName="Login">
   <Profiles />
   <Settings>
-    <Setting Name="DBLocation" Type="System.String" Scope="User">
+    <Setting Name="ServerLocation" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Name" Type="System.String" Scope="User">
+    <Setting Name="DatabaseFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UserLogin" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

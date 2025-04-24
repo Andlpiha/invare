@@ -94,7 +94,7 @@ namespace Inv.Models
             {
                 query += string.Format("SELECT * FROM mat_s({0})", tabID);
                 if (Global.AU) // поиск с исполнителем (прибористом) и без даты выдачи
-                    query += string.Format("where compl_id in (select compl_id from rem where pribor_name=\"{0}\" and date_out is null)", Global.Login);
+                    query += string.Format("where compl_id in (select compl_id from rem WHERE pribor_name='{0}' and date_out is null)", Global.Name);
                 if (compl_id != "")
                 {
                     if (Global.AU)
@@ -108,8 +108,8 @@ namespace Inv.Models
                 query += string.Format("SELECT * FROM view_cm({0})", tabID);
                 if (Global.AU) // поиск с исполнителем (прибористом) и без даты выдачи
                 {
-                    query += string.Format("WHERE id IN (SELECT compl_id FROM rem WHERE pribor_name=\"{0}\" AND date_out IS NULL)" +
-                        "or id in (select mat_id from rem where pribor_name=\"{0}\" and date_out is null)", Global.Login);
+                    query += string.Format("WHERE id IN (SELECT compl_id FROM rem WHERE pribor_name='{0}' AND date_out IS NULL)" +
+                        "or id in (select mat_id from rem where pribor_name='{0}' and date_out is null)", Global.Name);
                 }
             }   
 
@@ -126,7 +126,7 @@ namespace Inv.Models
 
             string query = "";
             if (Global.AU)
-                query += $"SELECT * FROM rem WHERE pribor_name IS NULL OR pribor_name={Global.Login} AND " +
+                query += $"SELECT * FROM rem WHERE pribor_name IS NULL OR pribor_name='{Global.Name}' AND " +
                     $"date_done IS NULL OR date_out IS NULL";
             else
                 query += "SELECT * FROM rem WHERE date_done IS NULL OR date_out IS NULL";
@@ -146,7 +146,7 @@ namespace Inv.Models
             string query = "";
             if (Global.TopLevel)
             {
-                query = "SELECT FIRST 50000 id, icon, date_do, user_do, code_op, mat_id, sklad," +
+                query = "SELECT FIRST 500 id, icon, date_do, user_do, code_op, mat_id, sklad," +
                     $"compl_num, inv_num, ser_num, vnutr_num, name, user_name," +
                     $"description, date_prof, date_create, MOL_name FROM view_log ORDER BY date_do DESCENDING";
             }

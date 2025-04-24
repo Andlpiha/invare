@@ -1,16 +1,23 @@
-﻿using Avalonia.Controls;
-using MsgBox;
+﻿using MsgBox;
 using System.Threading.Tasks;
 using System;
 using Inv.Models;
-using System.Reactive;
+using ReactiveUI;
 
 namespace Inv.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
+        private bool _isDatabaseSectionExpanded = false;
+        public bool IsDatabaseSectionExpanded
+        {
+            get => _isDatabaseSectionExpanded;
+            set => this.RaiseAndSetIfChanged(ref _isDatabaseSectionExpanded, value);
+        }
+
         // Данные настройки будут сохранятся между сессиями
-        public string DBLocation { get; set; }
+        public string  ServerLocation { get; set; }
+        public string DatabaseFile { get; set; }
         public string Login { get; set; }
 
         private UserModel _model;
@@ -18,8 +25,10 @@ namespace Inv.ViewModels
         public LoginViewModel()
         {
             // Initialize properties from settings
-            DBLocation = Properties.Login.Default.DBLocation;
-            Login = Properties.Login.Default.Name;
+            ServerLocation = Properties.Login.Default.ServerLocation;
+            DatabaseFile = Properties.Login.Default.DatabaseFile;
+            Login = Properties.Login.Default.UserLogin;
+
             _model = new UserModel();
         }
 
@@ -27,10 +36,13 @@ namespace Inv.ViewModels
         {
             SQLConn _inst = SQLConn.Instance;
 
+            if (this.ServerLocation == "" || this.DatabaseFile == "")
+                return false;
+
             if (_inst.GetConnection().State == System.Data.ConnectionState.Open)
                 _inst.CloseConnection();
 
-            if (!_inst.setDatabase(this.DBLocation))
+            if (!_inst.setDatabase(this.ServerLocation, this.DatabaseFile))
             {
                 await MessageBox.Show(null, "Неверно набран адрес БД", "Ошибка", MessageBox.MessageBoxButtons.Ok);
                 return false;
@@ -64,6 +76,7 @@ namespace Inv.ViewModels
             if (ty == 3) Global.AU = true; else Global.AU = false; // Author
 
             Global.Login = this.Login;
+            Global.Name = _model.getName(this.Login);
 
             return true;
         }

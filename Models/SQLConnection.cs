@@ -3,14 +3,18 @@ using FirebirdSql.Data.FirebirdClient;
 using Inv.Views;
 using MsgBox;
 
-// Класс реализует паттерн Singleton. Одно соединение используется для всех классов
+// РљР»Р°СЃСЃ СЂРµР°Р»РёР·СѓРµС‚ РїР°С‚С‚РµСЂРЅ Singleton. РћРґРЅРѕ СЃРѕРµРґРёРЅРµРЅРёРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РІСЃРµС… РєР»Р°СЃСЃРѕРІ
 public class SQLConn 
 {
-    private static string connString = "" +
-        "Data Source={0};" +
-        "Database={1};" +
-        "User Id=SYSDBA;" +
-        "Password=redshr0v;";
+    private static FbConnectionStringBuilder connString = new FbConnectionStringBuilder
+    {
+        DataSource = "",
+        Port = 3050,
+        Database = "",
+        Password = "redsh0v",
+        UserID = "SYSDBA",
+        ServerType = FbServerType.Default,
+    };
     private readonly FbConnection objConnect = new();
 
     private readonly static SQLConn _instance;
@@ -25,23 +29,18 @@ public class SQLConn
         get { return _instance; } 
     }
 
-    public bool setDatabase(string database)
+    public bool setDatabase(string serverAddress, string databaseFile)
     {
-        // Разделяем строку на адрес сервера и адрес базы данных
-        string[] db = database.Split(":", 2);
+        connString.DataSource = serverAddress;
+        connString.Database = databaseFile;
 
-        if (db.Length != 2)
-            return false;
-
-        connString = string.Format(connString, db[0], db[1]);
-        objConnect.ConnectionString = connString;
-
+        objConnect.ConnectionString = connString.ToString();
         return true;
     }
 
-    public string GetConnectionString() => connString;
+    public string GetConnectionString() => connString.ToString();
 
-    // TODO: сделать проверку на подключение
+    // TODO: СЃРґРµР»Р°С‚СЊ РїСЂРѕРІРµСЂРєСѓ РЅР° РїРѕРґРєР»СЋС‡РµРЅРёРµ
     public FbConnection GetConnection() => objConnect;
 
     public void OpenConnection() => objConnect.Open();
