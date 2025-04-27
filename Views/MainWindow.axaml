@@ -64,7 +64,7 @@
 			<TabControl.ContentTemplate>
 				<DataTemplate x:DataType="vm:TabItem">
 					<DockPanel LastChildFill="True">
-						<local:Table x:Name="MainTable" TabID="{Binding ID}"/>
+						<local:Table x:Name="MainTable" TabID="{Binding ID}" SelectionChanged="SelectionChangeHandler"/>
 					</DockPanel>
 				</DataTemplate>
 			</TabControl.ContentTemplate>

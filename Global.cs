@@ -22,7 +22,7 @@ namespace Inv
         public static bool RO { get; set; } = false;
         public static bool AU { get; set; } = false;
 
-        public static TableRow? CurCompl { get; set; } = null;
+        public static TableRow? ComplUp { get; set; } = null;
 
         // Находимся ли на уровне отдельных компонентов
         public static bool TopLevel { get; set; } = true;

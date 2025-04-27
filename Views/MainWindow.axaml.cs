@@ -48,7 +48,7 @@ public partial class MainWindow : Window
     private Table? findMainTable()
     {
         var tabControl = this.FindControl<TabControl>("TabControl");
-        var content = tabControl
+        var content = tabControl!
             .GetLogicalChildren()
             .Where((child) => child is DockPanel)
             .FirstOrDefault();
@@ -74,5 +74,13 @@ public partial class MainWindow : Window
         _viewModel.SelectedTabIndex = tabControl.SelectedIndex;
 
         this.FindControl<Toolbar>("Toolbar")!.setButtonEnabled(_viewModel.SelectedTabID);
+    }
+
+    public void SelectionChangeHandler(object sender, SelectionChangedEventArgs args)
+    {
+        if (args.AddedItems.Count > 0 && args.AddedItems[0] is TableRow row)
+            _viewModel.SelectedRow = row;
+        else
+            _viewModel.SelectedRow = null;
     }
 }

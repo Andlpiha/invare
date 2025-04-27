@@ -152,19 +152,19 @@ namespace Inv.Models
             }
             else
             {
-                if (Global.CurCompl != null && Global.CurCompl.icon == Global.ComplectIcon)
+                if (Global.ComplUp != null && Global.ComplUp.icon == Global.ComplectIcon)
                 {
                     query = $"SELECT id, 1 icon, date_do, user_do, code_op, compl_id, Sklad," +
                         $"vnutr_num compl_num, inv_num, ser_num, vnutr_num, name, user_name," +
                         $"description, date_prof, date_create, MOL_name from compl_log" +
-                        $"WHERE compl_id={Global.CurCompl!.compl_num} ORDER BY date_do DESCENDING";
+                        $"WHERE compl_id={Global.ComplUp!.compl_num} ORDER BY date_do DESCENDING";
                 }
                 else
                 {
                     query = $"SELECT id, 2 icon, date_do, user_do, code_op, mat_id, Sklad," +
                         $"Compl_num, inv_num, ser_num, vnutr_num, sp_name, user_name," +
                         $"description, date_prof, date_create, MOL_name from mat_log" +
-                        $"WHERE mat_id={Global.CurCompl!.mat_num} ORDER BY date_do DESCENDING";
+                        $"WHERE mat_id={Global.ComplUp!.mat_num} ORDER BY date_do DESCENDING";
                 }
             }
             return new TransactionReader(con, query);

@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using Aspose.Email.Clients.Exchange.WebService.Schema_2016;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Inv.ViewModels;
 using Inv.ViewModels.MainWindow;
+using MsgBox;
 using ReactiveUI;
 
 namespace Inv;
@@ -59,12 +63,38 @@ public partial class SprWindow : Window
                 if (element is TreeDataGridRow)
                 {
                     var row = (TreeDataGridRow)element;
-                    var window = new SprEditWindow(row.DataContext as SpRowData);
-                    window.Show();
+                    SpRowData data = (SpRowData)row.DataContext!;
+                    
+                    if(_spr_type == "Edit")
+                    {
+                        var window = new SprEditWindow(row.DataContext as SpRowData);
+                        window.Show();
+                    }
+                    else
+                    {
+                        // Возвращаем елемент
+                        this.Close(data.Name);
+                    }
 
                     break;
                 }
             }
         };
+    }
+
+    public void okBtnClick(object sender, RoutedEventArgs args)
+    {
+        if (_selectedRow == null)
+        {
+            MessageBox.Show(this, "Пожалуйста выберете строку", "Предупреждение", MessageBox.MessageBoxButtons.Ok);
+            return;
+        }
+        var data = (SpRowData)_selectedRow;
+        this.Close(data.Name);
+    }
+
+    public void cancelBtnClick(object sender, RoutedEventArgs args)
+    {
+        this.Close(String.Empty);
     }
 }

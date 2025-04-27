@@ -7,6 +7,28 @@
     </Border>
   </Design.PreviewWith>
 
+	<Styles.Resources>
+		<SolidColorBrush x:Key="Primary">#3498db</SolidColorBrush>
+
+		<SolidColorBrush x:Key="GridEven">#6696D4D4</SolidColorBrush>
+		<SolidColorBrush x:Key="GridLinesBrush">#66AAAAAA</SolidColorBrush>
+
+		<SolidColorBrush x:Key="Ivory">#FFFFFD</SolidColorBrush>
+
+		<SolidColorBrush x:Key="LightGrayBrush">#F0F0F0</SolidColorBrush>
+		<SolidColorBrush x:Key="GrayBrush">#C0C0C0</SolidColorBrush>
+		<SolidColorBrush x:Key="DarkGrayBrush">#787878</SolidColorBrush>
+		<SolidColorBrush x:Key="BlackBrush">#000000</SolidColorBrush>
+
+		<SolidColorBrush x:Key="Iceberg">#74B3CE</SolidColorBrush>
+		<SolidColorBrush x:Key="DodgerBlue">#1E90FF</SolidColorBrush>
+
+		<SolidColorBrush x:Key="LightGreen">#5dBB63</SolidColorBrush>
+
+		<SolidColorBrush x:Key="PersianRed">#CA3433</SolidColorBrush>
+		<SolidColorBrush x:Key="ImperialRed">#ED2939</SolidColorBrush>
+	</Styles.Resources>
+
   <!-- Глобальные стили, которые могут использоваться в нескольких файлах -->
 	<Style Selector="Button.ok">
 		<Setter Property="Background" Value="{DynamicResource LightGreen}"/>
@@ -15,11 +37,6 @@
 	<Style Selector="Button.cancel">
 		<Setter Property="Background" Value="{DynamicResource ImperialRed}"/>
 		<Setter Property="FontWeight" Value="400"/>
-	</Style>
-	<Style Selector="Button.accent">
-		<Setter Property="Background" Value="{DynamicResource SystemAccentColor}"/>
-		<Setter Property="FontWeight" Value="400"/>
-		<Setter Property="FontSize" Value="16"/>
 	</Style>
 	<Style Selector="Button.round, TextBox.round">
 		<Setter Property="Padding" Value="15"/>
@@ -65,20 +82,21 @@
 		<Setter Property="Height" Value="2"/>
 	</Style>
 
-	<Style Selector="Button.SprButton">
+	<Style Selector="Button.sprButton">
 		<Setter Property="Margin" Value="5 0 0 0"/>
 		<Setter Property="Padding" Value="8 2"/>
 		<Setter Property="Width" Value="30"/>
 		<Setter Property="Height" Value="30"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Background" Value="#FFFFFFFF"/>
+		<Setter Property="Background" Value="{StaticResource LightGrayBrush}"/>
 		<Setter Property="BorderBrush" Value="#FF808080"/>
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="CornerRadius" Value="4"/>
 		<Setter Property="FontSize" Value="14"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="Cursor" Value="Hand"/>
+		<Setter Property="Content" Value="..."/>
 
 		<!-- Курсор над кнопкой -->
 		<Style.Animations>
@@ -159,5 +177,56 @@
 				</Grid>
 			</ControlTemplate>
 		</Setter>
+	</Style>
+
+	<Style Selector="Label.field_header">
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="Margin" Value="0 0 0 5"/>
+		<Setter Property="Foreground" Value="#FF444444"/>
+	</Style>
+
+	<Style Selector="Separator.section">
+		<Setter Property="Background" Value="#FFE0E0E0"/>
+		<Setter Property="Margin" Value="0 15"/>
+		<Setter Property="Height" Value="2"/>
+	</Style>
+
+	<Style Selector="Border.section">
+		<Setter Property="Background" Value="White"/>
+		<Setter Property="BorderBrush" Value="#FFEEEEEE"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="Margin" Value="20 10"/>
+		<Setter Property="Padding" Value="15"/>
+		<Setter Property="BoxShadow" Value="0 2 4 0 DarkGray"/>
+	</Style>
+
+	<Style Selector="Label.field_header">
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="Margin" Value="0 0 0 5"/>
+		<Setter Property="Foreground" Value="#FF444444"/>
+	</Style>
+	<Style Selector="Label.section_header">
+		<Setter Property="FontSize" Value="16"/>
+		<Setter Property="FontWeight" Value="DemiBold"/>
+		<Setter Property="Margin" Value="0 0 0 25"/>
+		<Setter Property="Foreground" Value="#FF2D2D2D"/>
+		<Setter Property="BorderBrush" Value="#FF0078D4"/>
+		<Setter Property="BorderThickness" Value="0 0 0 2"/>
+		<Setter Property="Padding" Value="0 0 0 5"/>
+	</Style>
+
+	<Style Selector="Button.prim">
+		<Setter Property="Background" Value="{StaticResource Primary}"/>
+		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="Padding" Value="12 6"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Margin" Value="5"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+		<Setter Property="FontSize" Value="20"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 	</Style>
 </Styles>

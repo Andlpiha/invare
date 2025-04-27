@@ -32,7 +32,7 @@
 		<Button Classes="Toolbar shadow" x:Name="mat" ToolTip.Tip="Создать комплектующее" Click="createOrEdit">
 			<Svg Path="/Assets/toolbar-icons/expansion-card-variant.svg"/>
 		</Button>
-		<Button Classes="Toolbar shadow" x:Name="repair" ToolTip.Tip="Ремонты" Click="">
+		<Button Classes="Toolbar shadow" x:Name="repair" ToolTip.Tip="Ремонты" Click="addRepair">
 			<Svg Path="/Assets/toolbar-icons/tools.svg"/>
 		</Button>
 

@@ -99,10 +99,14 @@
 			<DockPanel Name="ToolbarPanel" Height="40" Width="{Binding $parent.Width}">
 				<StackPanel Orientation="Horizontal" DockPanel.Dock="Right"
 							Spacing="10">
-					<Button Name="OkButton" Classes="Toolbar shadow contentCenter" Width="100" IsEnabled="True">
+					<Button Name="OkButton" Click="okBtnClick"
+							Classes="Toolbar shadow contentCenter" Width="100"
+							IsEnabled="True">
 						<TextBlock Text="Ok" FontSize="16"/>
 					</Button>
-					<Button Name="CancelButton" Classes="Toolbar shadow contentCenter" Width="100" IsEnabled="True">
+					<Button Name="CancelButton" Click="cancelBtnClick"
+							Classes="Toolbar shadow contentCenter" Width="100"
+							IsEnabled="True">
 						<TextBlock Text="Cancel" FontSize="16"/>
 					</Button>
 				</StackPanel>
@@ -131,7 +135,7 @@
 			<TreeDataGrid.Resources>
 				<DataTemplate x:Key="DefaultColumnTemplate" DataType="vm:SpRowData">
 					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontSize="18"/>
+						<TextBlock x:Name="name" Text="{Binding Name}" VerticalAlignment="Center" FontSize="18"/>
 					</StackPanel>
 				</DataTemplate>
 			</TreeDataGrid.Resources>

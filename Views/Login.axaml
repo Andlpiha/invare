@@ -42,7 +42,7 @@
 		</Style>
 
 		<Style Selector="TextBox:focus">
-			<Setter Property="BorderBrush" Value="#3498db"/>
+			<Setter Property="BorderBrush" Value="{StaticResource Primary}"/>
 		</Style>
 		
 		<Style Selector="Button">
@@ -54,7 +54,7 @@
 		</Style>
 
 		<Style Selector="Button.primary">
-			<Setter Property="Background" Value="#3498db"/>
+			<Setter Property="Background" Value="{StaticResource Primary}"/>
 			<Setter Property="Foreground" Value="White"/>
 		</Style>
 

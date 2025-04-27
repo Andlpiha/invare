@@ -2,21 +2,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="1024"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="700"
+		xmlns:vmf="using:Inv.ViewModels.Forms"
+		x:DataType="vmf:RepairForm"
+		Width="700" Height="800"
 		Background="{DynamicResource LightGrayBrush}"
         x:Class="Inv.AddRepair"
         Title="Добавить ремонт">
 
 	<Window.Styles>
-		<!-- Base Styles -->
-		<Style Selector="Label.header">
-			<Setter Property="FontSize" Value="14"/>
-			<Setter Property="FontWeight" Value="Bold"/>
-			<Setter Property="Margin" Value="0 0 0 5"/>
-			<Setter Property="Foreground" Value="#FF444444"/>
-		</Style>
-
-		<Style Selector="TextBox, CalendarDatePicker">
+		<Style Selector="TextBox,CalendarDatePicker,ComboBox">
 			<Setter Property="Padding" Value="8"/>
 			<Setter Property="Background" Value="White"/>
 			<Setter Property="BorderBrush" Value="#FFCCCCCC"/>
@@ -24,53 +19,8 @@
 			<Setter Property="CornerRadius" Value="4"/>
 		</Style>
 
-		<Style Selector="Button.accent">
-			<Setter Property="VerticalContentAlignment" Value="Center"/>
-			<Setter Property="FontSize" Value="20"/>
-			<Setter Property="Height" Value="50" />
-		</Style>
-
-		<Style Selector="Separator.section">
-			<Setter Property="Background" Value="#FFE0E0E0"/>
-			<Setter Property="Margin" Value="0 15"/>
-			<Setter Property="Height" Value="2"/>
-		</Style>
-
-		<Style Selector="Border.section">
-			<Setter Property="Background" Value="White"/>
-			<Setter Property="BorderBrush" Value="#FFEEEEEE"/>
-			<Setter Property="BorderThickness" Value="1"/>
-			<Setter Property="CornerRadius" Value="6"/>
-			<Setter Property="Margin" Value="20 10"/>
-			<Setter Property="Padding" Value="15"/>
-		</Style>
-
-		<!-- Section Container -->
-		<Style Selector="Border.section">
-			<Setter Property="Background" Value="White"/>
-			<Setter Property="BorderBrush" Value="#FFEEEEEE"/>
-			<Setter Property="BorderThickness" Value="1"/>
-			<Setter Property="CornerRadius" Value="6"/>
-			<Setter Property="Margin" Value="20 10"/>
-			<Setter Property="Padding" Value="15"/>
-		</Style>
-
-		<!-- Header Text -->
-		<Style Selector="Label.header">
-			<Setter Property="FontSize" Value="14"/>
-			<Setter Property="FontWeight" Value="Bold"/>
-			<Setter Property="Margin" Value="0 0 0 5"/>
-			<Setter Property="Foreground" Value="#FF444444"/>
-		</Style>
-
-		<!-- Accent Buttons -->
-		<Style Selector="Button.accent">
-			<Setter Property="Background" Value="#FF0078D4"/>
-			<Setter Property="Foreground" Value="White"/>
-			<Setter Property="Padding" Value="12 6"/>
-			<Setter Property="CornerRadius" Value="4"/>
-			<Setter Property="Margin" Value="5"/>
-			<Setter Property="FontWeight" Value="SemiBold"/>
+		<Style Selector="Button.prim">
+			<Setter Property="Height" Value="50"/>
 		</Style>
 	</Window.Styles>
 
@@ -78,104 +28,112 @@
 		<!-- Action Buttons -->
 		<StackPanel DockPanel.Dock="Top"
 					Orientation="Horizontal" HorizontalAlignment="Right"
-					Margin="0 0 15 0" Spacing="10">
-			<Button Classes="accent" Content="OK" Width="100" HorizontalContentAlignment="Center"/>
-			<Button Classes="accent" Content="Отмена" Width="115" HorizontalContentAlignment="Center"/>
+					Margin="0 0 15 10" Spacing="10">
+			<Button Classes="prim" Width="100" HorizontalContentAlignment="Center" Click="okBtnClick">ОК</Button>
+			<Button Classes="prim" Width="115" HorizontalContentAlignment="Center" Click="cancelBtnClick">Отмена</Button>
 		</StackPanel>
-
-		<Separator Classes="section"/>
 
 		<!-- Main Content -->
 		<ScrollViewer>
 			<StackPanel Spacing="10">
 				<!-- ID Section -->
 				<Border Classes="section">
-					<StackPanel Spacing="15">
-						<Label Content="Идентификационные номера" Classes="header"/>
-						<UniformGrid Columns="3" Margin="0 10">
+					<StackPanel Spacing="0">
+						<Label Content="Идентификационные номера" Classes="section_header"/>
+						<UniformGrid Columns="3" Margin="0 0 0 10">
 							<StackPanel Spacing="5" Margin="5 0">
-								<Label Content="Комплект №" Classes="header"/>
-								<TextBox/>
+								<Label Content="Комплект №" Classes="field_header"/>
+								<TextBox Text="{Binding compl_num}"/>
 							</StackPanel>
 							<StackPanel Spacing="5" Margin="5 0">
-								<Label Content="Внутренний №" Classes="header"/>
-								<TextBox/>
+								<Label Content="Внутренний №" Classes="field_header"/>
+								<TextBox Text="{Binding vnutr_num}"/>
 							</StackPanel>
 							<StackPanel Spacing="5" Margin="5 0">
-								<Label Content="Инвентарный №" Classes="header"/>
-								<TextBox/>
+								<Label Content="Инвентарный №" Classes="field_header"/>
+								<TextBox Text="{Binding inv_num}"/>
 							</StackPanel>
 						</UniformGrid>
 					</StackPanel>
 				</Border >
 
-				<!-- Main Details -->
 				<Border Classes="section">
-					<Grid ColumnDefinitions="*,15,*" RowDefinitions="Auto,Auto,Auto,Auto">
-						<!-- Left Column -->
-						<StackPanel Grid.Column="0" Spacing="15">
-							<StackPanel Spacing="5">
-								<Label Content="Наименование" Classes="header"/>
-								<TextBox/>
+					<StackPanel>
+						<Label Content="Информация о ремонте" Classes="section_header"/>
+						<Grid ColumnDefinitions="*,15,*" RowDefinitions="Auto,Auto,Auto,Auto">
+							<StackPanel Grid.Row="0" Grid.Column="0" Spacing="5">
+								<Label Content="Наименование" Classes="field_header"/>
+								<TextBox Text="{Binding name}"/>
 							</StackPanel>
 
-							<DockPanel>
-								<Label Content="Цех / Отдел" Classes="header" DockPanel.Dock="Top"/>
-								<Button Content="..." Width="30" DockPanel.Dock="Right" Margin="5 0 0 0"/>
-								<TextBox/>
+							<DockPanel Grid.Row="2" Grid.Column="0">
+								<Label Content="Цех / Отдел" Classes="field_header" DockPanel.Dock="Top"/>
+								<Button x:Name="depBtn" Classes="sprButton" DockPanel.Dock="Right" Click="sprBtnClick"/>
+								<TextBox Text="{Binding Department, Mode=TwoWay}" IsEnabled="False"/>
 							</DockPanel>
-						</StackPanel>
 
-						<!-- Right Column -->
-						<StackPanel Grid.Column="2" Spacing="15">
-							<StackPanel Spacing="5">
-								<Label Content="Исполнитель" Classes="header"/>
-								<TextBox/>
+							<StackPanel Grid.Row="0" Grid.Column="2" Spacing="5">
+								<Label Content="Исполнитель" Classes="field_header"/>
+								<ComboBox x:Name="executorsBox" ItemsSource="{Binding executors}"
+										  HorizontalAlignment="Stretch"/>
 							</StackPanel>
 
-							<DockPanel>
-								<Label Content="Пользователь" Classes="header" DockPanel.Dock="Top"/>
-								<Button Content="..." Width="30" DockPanel.Dock="Right" Margin="5 0 0 0"/>
-								<TextBox/>
+							<DockPanel Grid.Row="2" Grid.Column="2">
+								<Label Content="Пользователь" Classes="field_header" DockPanel.Dock="Top"/>
+								<Button x:Name="usrBtn" Classes="sprButton" DockPanel.Dock="Right" Click="sprBtnClick"/>
+								<TextBox Text="{Binding User, Mode=TwoWay}" IsEnabled="False"/>
 							</DockPanel>
-						</StackPanel>
-
-						<!-- Full Width Fields -->
-						<StackPanel Grid.Row="1" Grid.ColumnSpan="3" Spacing="15" Margin="0 10">
-							<StackPanel Spacing="5">
-								<Label Content="Жалоба" Classes="header"/>
-								<TextBox Height="60" AcceptsReturn="True"/>
-							</StackPanel>
-
-							<StackPanel Spacing="5">
-								<Label Content="Диагноз" Classes="header"/>
-								<TextBox Height="80" AcceptsReturn="True"/>
-							</StackPanel>
-
-							<StackPanel Spacing="5">
-								<Label Content="Мероприятия" Classes="header"/>
-								<TextBox Height="100" AcceptsReturn="True"/>
-							</StackPanel>
-						</StackPanel>
-					</Grid>
+						</Grid>
+					</StackPanel>
 				</Border>
 
-				<!-- Dates Section -->
+				<Border Classes="section">
+					<StackPanel Spacing="0">
+						<Label Content="Описание ремонта" Classes="section_header"/>
+
+						<Grid ColumnDefinitions="*,15,*" RowDefinitions="Auto,Auto,Auto,Auto">
+							<StackPanel Grid.Row="1" Grid.ColumnSpan="3" Spacing="15" Margin="0 10">
+								<StackPanel Spacing="5">
+									<Label Content="Жалоба" Classes="field_header"/>
+									<TextBox Height="60" AcceptsReturn="True" Text="{Binding complaint}"/>
+								</StackPanel>
+
+								<StackPanel Spacing="5">
+									<Label Content="Диагноз" Classes="field_header"/>
+									<TextBox Height="80" AcceptsReturn="True" Text="{Binding diagnosis}"/>
+								</StackPanel>
+
+								<StackPanel Spacing="5">
+									<Label Content="Мероприятия" Classes="field_header"/>
+									<TextBox Height="100" AcceptsReturn="True" Text="{Binding actions_taken}"/>
+								</StackPanel>
+							</StackPanel>
+						</Grid>
+					</StackPanel>
+				</Border>
+
 				<Border Classes="section" HorizontalAlignment="Stretch">
-					<UniformGrid Columns="3" Margin="0 10" HorizontalAlignment="Stretch">
+					<StackPanel>
+						<Label Content="Даты ремонта" Classes="section_header"/>
+
+						<UniformGrid Columns="3" Margin="0 10" HorizontalAlignment="Stretch">
 						<StackPanel Spacing="5" HorizontalAlignment="Center">
-							<Label Content="Дата приёма" Classes="header"/>
-							<CalendarDatePicker Classes="customdpkr" Width="150" CustomDateFormatString="dd-MM-yy"/>
+							<Label Content="Дата приёма" Classes="field_header"/>
+							<CalendarDatePicker Classes="customdpkr" Width="150"
+												CustomDateFormatString="dd-MM-yy" SelectedDate="{Binding acceptedTime}"/>
 						</StackPanel>
 						<StackPanel Spacing="5" HorizontalAlignment="Center">
-							<Label Content="Дата завершения" Classes="header"/>
-							<CalendarDatePicker Classes="customdpkr" Width="150" CustomDateFormatString="dd-MM-yy"/>
+							<Label Content="Дата завершения" Classes="field_header"/>
+							<CalendarDatePicker Classes="customdpkr" Width="150"
+												CustomDateFormatString="dd-MM-yy" SelectedDate="{Binding doneTime}"/>
 						</StackPanel>
 						<StackPanel Spacing="5" HorizontalAlignment="Center">
-							<Label Content="Дата выдачи" Classes="header"/>
-							<CalendarDatePicker Classes="customdpkr" Width="150" CustomDateFormatString="dd-MM-yy"/>
+							<Label Content="Дата выдачи" Classes="field_header"/>
+							<CalendarDatePicker Classes="customdpkr" Width="150"
+												CustomDateFormatString="dd-MM-yy" SelectedDate="{Binding returnedTime}"/>
 						</StackPanel>
 					</UniformGrid>
+					</StackPanel>
 				</Border>
 			</StackPanel>
 		</ScrollViewer>

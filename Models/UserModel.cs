@@ -1,4 +1,5 @@
-﻿using FirebirdSql.Data.FirebirdClient;
+﻿using Aspose.Email.Clients.Imap;
+using FirebirdSql.Data.FirebirdClient;
 using Inv.Properties;
 using System;
 using System.Data;
@@ -17,7 +18,7 @@ namespace Inv.Models
             users = new DataTable();
         }
 
-        private string fetchUsersQuery = "SELECT * FROM us";
+        private static string fetchUsersQuery = "SELECT * FROM us";
         public bool FetchUsers(FbConnection con)
         {
             if (con == null || con.State != ConnectionState.Open)

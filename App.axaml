@@ -4,7 +4,6 @@
              xmlns:local="using:Inv"
 			 xmlns:vmc="using:Inv.ViewModels.Converters"
              RequestedThemeVariant="Light">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
         <local:ViewLocator/>
@@ -19,23 +18,5 @@
 
 	<Application.Resources>
 		<vmc:ArrowIconConverter x:Key="ArrowIconConverter"/>
-		
-		<SolidColorBrush x:Key="GridEven">#6696D4D4</SolidColorBrush>
-		<SolidColorBrush x:Key="GridLinesBrush">#66AAAAAA</SolidColorBrush>
-
-		<SolidColorBrush x:Key="Ivory">#FFFFFD</SolidColorBrush>
-
-		<SolidColorBrush x:Key="LightGrayBrush">#F0F0F0</SolidColorBrush>
-		<SolidColorBrush x:Key="GrayBrush">#C0C0C0</SolidColorBrush>
-		<SolidColorBrush x:Key="DarkGrayBrush">#787878</SolidColorBrush>
-		<SolidColorBrush x:Key="BlackBrush">#000000</SolidColorBrush>
-
-		<SolidColorBrush x:Key="Iceberg">#74B3CE</SolidColorBrush>
-		<SolidColorBrush x:Key="DodgerBlue">#1E90FF</SolidColorBrush>
-
-		<SolidColorBrush x:Key="LightGreen">#5dBB63</SolidColorBrush>
-
-		<SolidColorBrush x:Key="PersianRed">#CA3433</SolidColorBrush>
-		<SolidColorBrush x:Key="ImperialRed">#ED2939</SolidColorBrush>
 	</Application.Resources>
 </Application>

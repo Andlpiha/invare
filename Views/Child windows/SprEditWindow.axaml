@@ -63,7 +63,7 @@
 
 	<DockPanel HorizontalAlignment="Stretch" LastChildFill="false">
 		<DockPanel DockPanel.Dock="Top" LastChildFill="false" x:Name="ButtonPanel">
-			<Button Classes="accent" DockPanel.Dock="Right"
+			<Button Classes="prim" DockPanel.Dock="Right"
 					Margin="0 10 10 0" Width="100"
 					HorizontalContentAlignment="Center"
 					Click="cancelBtnCLick">
@@ -71,7 +71,7 @@
 					<Label Content="Cancel"/>
 				</StackPanel>
 			</Button>
-			<Button Classes="accent" DockPanel.Dock="Right"
+			<Button Classes="prim" DockPanel.Dock="Right"
 					Margin="0 10 10 0" Width="85"
 					HorizontalContentAlignment="Center"
 					Click="okBtnCLick">

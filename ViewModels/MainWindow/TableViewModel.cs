@@ -291,7 +291,7 @@ namespace Inv.ViewModels.MainWindow
             { "jaloba",         new DataGridLength(200, DataGridLengthUnitType.Pixel) },
             { "diagnos",        new DataGridLength(200, DataGridLengthUnitType.Pixel) },
             { "repair",         new DataGridLength(300, DataGridLengthUnitType.Pixel) },
-            { "MOL_name",       new DataGridLength(100, DataGridLengthUnitType.Pixel) },
+            { "MOL_name",       new DataGridLength(175, DataGridLengthUnitType.Pixel) },
             { "MOLpl_name",     new DataGridLength(100, DataGridLengthUnitType.Pixel) },
             { "Description",    new DataGridLength(320, DataGridLengthUnitType.Pixel) },
         };

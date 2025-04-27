@@ -27,12 +27,28 @@ public partial class Table : UserControl
             nameof(TabID),
             defaultBindingMode: Avalonia.Data.BindingMode.TwoWay
         );
+    public static readonly RoutedEvent<SelectionChangedEventArgs> SelectionChangedEvent =
+        RoutedEvent.Register<Table, SelectionChangedEventArgs>(
+            nameof(SelectionChanged),
+            RoutingStrategies.Bubble
+        );
 
     public string TabID
     {
         get => GetValue(TabIDProperty);
         set => SetValue(TabIDProperty, value);
     }
+
+    public event EventHandler<SelectionChangedEventArgs> SelectionChanged
+    {
+        add => AddHandler(SelectionChangedEvent, value);
+        remove => RemoveHandler(SelectionChangedEvent, value);
+    }
+    protected virtual void OnGridSelectionChanged(object? sender, SelectionChangedEventArgs args)
+    {
+        SelectionChangedEventArgs new_args = new(SelectionChangedEvent, args.RemovedItems, args.AddedItems);
+        RaiseEvent(new_args);
+    }   
 
     public Table()
     {
@@ -45,7 +61,7 @@ public partial class Table : UserControl
 
         InitializeComponent();
 
-        _grid = this.FindControl<DataGrid>("MainGrid");
+        _grid = this.FindControl<DataGrid>("MainGrid")!;
         if (_grid == null)
             throw new Exception("DataGrid#MainGrid not found");
         
@@ -56,6 +72,7 @@ public partial class Table : UserControl
 
         _grid.SelectionChanged += _viewModel!.onSelectedRowChange;
         _grid.DoubleTapped += onDoubleClick;
+        _grid.SelectionChanged += OnGridSelectionChanged;
     }
     public void deselectRows()
     {
@@ -79,7 +96,7 @@ public partial class Table : UserControl
             throw new Exception("DataGrid#MainGrid not found");
 
         Global.TopLevel = true;
-        Global.CurCompl = null;
+        Global.ComplUp = null;
         deselectRows();
 
         // Изменяем отображаемые столбцы в зависимости от выбранной вкладки
@@ -165,38 +182,9 @@ public partial class Table : UserControl
         }
 
         Global.TopLevel = false;
-        Global.CurCompl = row;
+        Global.ComplUp = row;
     }
 
     private TableViewModel _viewModel;
     private DataGrid _grid;
-}
-
-public class IconIndexConverter : IValueConverter
-{
-    public static readonly IconIndexConverter Instance = new();
-
-    public object? Convert(object? value, Type targetType, object? parameter,
-                                                            CultureInfo culture)
-    {
-        if (value is int)
-        {
-            switch ((int)value)
-            {
-                case Global.ComplectIcon:
-                    return "/Assets/toolbar-icons/desktop-tower.svg";
-                default:
-                    return "/Assets/toolbar-icons/expansion-card-variant.svg";
-            }
-        }
-        // converter used for the wrong type
-        return new BindingNotification(new InvalidCastException(),
-                                                BindingErrorType.Error);
-    }
-
-    public object ConvertBack(object? value, Type targetType,
-                                object? parameter, CultureInfo culture)
-    {
-        throw new NotSupportedException();
-    }
 }

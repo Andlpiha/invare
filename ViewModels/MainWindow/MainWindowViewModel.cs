@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Inv.Models;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -25,16 +26,16 @@ public class MainWindowViewModel : ViewModelBase
     public static TableViewModel tableVM { get; } = new();
 
     // Индекс выделенной вкладки
-    private int _selected_index = -1;
+    private int _selected_tab_index = -1;
     public int SelectedTabIndex
     {
         get
         {
-            return _selected_index;
+            return _selected_tab_index;
         }
         set
         {
-            _selected_index = value;
+            _selected_tab_index = value;
 
             // При обновлении индекса, также обновляем остальные значение,
             // индекс равен -1, если не выбрана ни одна вкладка
@@ -43,8 +44,15 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
     // Название выделенной вкладки
-    public string SelectedTabHeader { get; set; }
-    public string SelectedTabID { get; set; }
+    public string SelectedTabHeader { get; set; } = "";
+    public string SelectedTabID { get; set; } = "-1";
+
+    private TableRow? _selectedRow = null;
+    public TableRow? SelectedRow
+    {
+        get => _selectedRow;
+        set => this.RaiseAndSetIfChanged(ref _selectedRow, value);
+    }
 
     public MainWindowViewModel()
     {
@@ -56,7 +64,6 @@ public class MainWindowViewModel : ViewModelBase
         for (int i = 0; i < tabs_table.Rows.Count; i++)
         {
             var _row = tabs_table.Rows[i];
-
             var _name = _row.Field<string>("Name");
             var _id = _row.Field<int>("ID").ToString();
 

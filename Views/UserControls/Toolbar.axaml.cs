@@ -20,6 +20,11 @@ public partial class Toolbar : UserControl
     {
         InitializeComponent();
     }
+    public void openSpr(object sender, RoutedEventArgs args)
+    {
+        SprWindow window = new SprWindow("Regular");
+        window.Show();
+    }
 
     public async void createOrEdit(object sender, RoutedEventArgs args)
     {
@@ -35,12 +40,12 @@ public partial class Toolbar : UserControl
         switch(button!.Name)
         {
             case "compl":
-                if (Global.CurCompl != null) return;
+                if (Global.ComplUp != null) return;
                 window.DataContext = new CreateComplectViewModel(tabID);
                 break;
             case "mat":
-                if (Global.CurCompl != null)
-                    window.DataContext = new CreateComponentViewModel(tabID, Global.CurCompl.vnutr_num);
+                if (Global.ComplUp != null)
+                    window.DataContext = new CreateComponentViewModel(tabID, Global.ComplUp.vnutr_num);
                 else
                     window.DataContext = new CreateComponentViewModel(tabID);
                 break;
@@ -56,23 +61,40 @@ public partial class Toolbar : UserControl
             MainWindowViewModel.tableVM.cachedCollections[_viewModel.SelectedTabID].Add(result);
     }
 
-    public async void openSpr(object sender, RoutedEventArgs args)
+    public void addRepair(object sender, RoutedEventArgs args)
     {
-        SprWindow window = new SprWindow("Regular");
+        RepairForm form = new RepairForm();
+
+        var _viewModel = this.DataContext as MainWindowViewModel;
+        if (_viewModel!.SelectedTabID != Global.RepairTab && _viewModel.SelectedRow != null)
+        {
+            form.compl_num  = _viewModel.SelectedRow!.compl_num.ToString()  ?? String.Empty;
+            form.vnutr_num  = _viewModel.SelectedRow!.vnutr_num.ToString()  ?? String.Empty;
+            form.inv_num    = _viewModel.SelectedRow!.inv_num               ?? String.Empty;
+
+            form.name       = _viewModel.SelectedRow!.name                  ?? String.Empty;
+            form.Department = _viewModel.SelectedRow!.dep_name              ?? String.Empty;
+            form.User       = _viewModel.SelectedRow!.user_name             ?? String.Empty;
+        }
+
+        AddRepair window = new AddRepair()
+        {
+            ViewModel = form
+        };
         window.Show();
     }
 
     public async void deleteItem(object sender, RoutedEventArgs args)
     {
         var _viewModel = this.DataContext as MainWindowViewModel;
-        var _selectedRow = MainWindowViewModel.tableVM.selectedRow;
+        var _selectedRow = _viewModel!.SelectedRow;
 
         if (!Global.RW)
         {
             _ = MessageBox.Show(this.VisualRoot as Window, "У вас недостаточно прав для удаления", "Ошибка доступа", MessageBox.MessageBoxButtons.Ok);
             return;
         }
-        if (MainWindowViewModel.tableVM.selectedRow == null)
+        if (_viewModel.SelectedRow == null)
         {
             _ = MessageBox.Show(this.VisualRoot as Window, "Выберите строку для удаления", "Сообщение", MessageBox.MessageBoxButtons.Ok);
             return;
@@ -111,13 +133,9 @@ public partial class Toolbar : UserControl
         }
     }
 
-    public static void editItem(TableRow? row = null)
+    public static void editItem(TableRow row)
     {
-        if (row == null)
-        {
-            row = MainWindowViewModel.tableVM.selectedRow;
-            if (row == null) return;
-        }
+        if()
     }
 
 

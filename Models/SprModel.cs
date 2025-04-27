@@ -36,6 +36,19 @@ namespace Inv.Models
             return children;
         }
 
+        private static string getTechniciansQuery = "SELECT name FROM spr WHERE id_up IN (SELECT id FROM spr WHERE name='Ремонтники')";
+        public static DataTable? getTechnicians(FbConnection con)
+        {
+            if (con == null || con.State != ConnectionState.Open)
+                return null;
+
+            DataTable technicians = new DataTable();
+            FbCommand _cmd = new(getTechniciansQuery, con);
+            (new FbDataAdapter(_cmd)).Fill(technicians);
+
+            return technicians;
+        }
+
         // Последний созданный ID в таблице SPR (без инкремента)
         static public int getSprGen()
         {
