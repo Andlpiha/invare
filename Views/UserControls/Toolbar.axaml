@@ -65,7 +65,11 @@
 		<Button Classes="Toolbar" x:Name="excel" ToolTip.Tip="Выгрузить в excel" Click="">
 			<Svg Path="/Assets/toolbar-icons/file-excel.svg"/>
 		</Button>
-		<TextBox Width="105" Margin="0 2 0 2"/>
+		<TextBox Width="205" Margin="0 2 0 2">
+			<TextBox.InnerLeftContent>
+				<Svg Path="/Assets/toolbar-icons/search.svg"/>
+			</TextBox.InnerLeftContent>
+		</TextBox>
 		<ToggleButton Classes="Toolbar" ToolTip.Tip="Примерный поиск" Click="" Margin="-2 2 0 1">
 			<TextBlock FontSize="14" FontWeight="1000">Fz</TextBlock>
 		</ToggleButton>

@@ -6,6 +6,8 @@ using Inv.Views;
 using MsgBox;
 using System.Threading.Tasks;
 using System;
+using Avalonia.Controls.ApplicationLifetimes;
+using Inv.ViewModels.Forms;
 
 namespace Inv;
 
@@ -52,6 +54,8 @@ public partial class LoginWindow : Window
         }
 
         MainWindow mainWindow = new();
+        if (Avalonia.Application.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            desktop.MainWindow = mainWindow;
         mainWindow.Show();
 
         this.Close();

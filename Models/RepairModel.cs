@@ -14,8 +14,8 @@ namespace Inv.Models
         private const string DuplicateQuery =
             "SELECT 1 FROM rdb$database WHERE EXISTS(SELECT 1 FROM rem " +
             "WHERE (@compl_num = '' OR compl_id = @compl_num) " +
-            "AND (@mat_id = '' OR mat_id = @mat_id) " +
-            "AND date_out IS NULL)";
+                "AND (@mat_id = '' OR mat_id = @mat_id) " +
+                "AND date_out IS NULL)";
         public static bool CheckDuplicate(RepairForm form, FbConnection conn)
         {
             var cmd = new FbCommand(DuplicateQuery, conn);
@@ -28,10 +28,10 @@ namespace Inv.Models
 
         private const string AddRepairQuery =
             "INSERT VALUES INTO REM(ICON, COMPL_ID, MAT_ID, COMPL_NUM, " +
-            "VNUTR_NUM, INV_NUM, NAME, DEP_NAME, USER_NAME, PRIBOR_NAME, " +
-            "JALOBA, DIAGNOS, REPAIR, DATE_IN, DATE_DONE, DATE_OUT) VALUES" +
+                "VNUTR_NUM, INV_NUM, NAME, DEP_NAME, USER_NAME, PRIBOR_NAME, " +
+                "JALOBA, DIAGNOS, REPAIR, DATE_IN, DATE_DONE, DATE_OUT) VALUES" +
             "(@icon, @c_id, @m_id, @c_num, @v_num, @i_num, @name, @d_name, " +
-            "@u_name, @p_name, @jal, @diag, @rep, @d_in, @d_done, @d_out)";
+                "@u_name, @p_name, @jal, @diag, @rep, @d_in, @d_done, @d_out)";
         public static bool AddRepair(RepairForm form, FbConnection conn)
         {
             var cmd = new FbCommand(AddRepairQuery, conn);
@@ -67,11 +67,11 @@ namespace Inv.Models
         public static bool EditRepair(RepairForm new_form, RepairForm old_form, FbConnection conn)
         {
             if (old_form.id == null)
-                throw new ArgumentException("Please provide an id to change");
+                throw new ArgumentException("Id is null, cannot edit repair");
             if(new_form == old_form)
                 return false;
 
-            var cmd = new FbCommand(AddRepairQuery, conn);
+            var cmd = new FbCommand(EditRepairQuery, conn);
 
             cmd.Parameters.Add("@id", SqlDbType.Int).Value = old_form.id;
 

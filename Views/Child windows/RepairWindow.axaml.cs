@@ -8,15 +8,16 @@ using System.ComponentModel;
 using Inv.Models;
 using DynamicData.Binding;
 using ReactiveUI;
+using System.Data.Entity.Core.Mapping;
 
 namespace Inv;
 
-public partial class AddRepair : ReactiveWindow<RepairForm>
+public partial class RepairWindow : ReactiveWindow<RepairForm>
 {
-    private RepairForm? _old_value { get; }
+    private RepairForm? _old_value { get; set; }
     public bool edit { get; }
 
-    public AddRepair(bool edit = false)
+    public RepairWindow(bool edit = false)
     {
         InitializeComponent();
 
@@ -29,10 +30,17 @@ public partial class AddRepair : ReactiveWindow<RepairForm>
         };
 
         this.edit = edit;
-        if (edit)
-            this._old_value = new RepairForm(this.ViewModel as RepairForm);
-        else
-            this._old_value = null;
+
+        this.WhenActivated(disposables =>
+        {
+            if (this.ViewModel is null)
+                return;
+
+            if (edit)
+                this._old_value = new RepairForm(this.ViewModel as RepairForm);
+            else
+                this._old_value = null;
+        });
     }
 
     public void okBtnClick(object sender, RoutedEventArgs args)

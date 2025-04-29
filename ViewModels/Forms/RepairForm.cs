@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Inv.Models;
+using Inv.ViewModels.MainWindow;
 using ReactiveUI;
 
 namespace Inv.ViewModels.Forms
@@ -52,9 +53,8 @@ namespace Inv.ViewModels.Forms
             getExecutors.Start();
         }
 
-        public RepairForm(RepairForm other)
+        public RepairForm(RepairForm other) : this()
         {
-            // Copy primitive type properties
             compl_num = other.compl_num;
             vnutr_num = other.vnutr_num;
             inv_num = other.inv_num;
@@ -71,6 +71,26 @@ namespace Inv.ViewModels.Forms
             acceptedTime = other.acceptedTime;
             doneTime = other.doneTime;
             returnedTime = other.returnedTime;
+        }
+
+        public RepairForm(TableRow tableRow) : this ()
+        {
+            id = tableRow.id;
+            compl_num = tableRow.compl_num.ToString() ?? "";
+            vnutr_num = tableRow.vnutr_num.ToString() ?? "";
+            inv_num = tableRow.inv_num ?? "";
+            name = tableRow.name ?? "";
+            executor = tableRow.pribor_name;
+            complaint = tableRow.jaloba ?? "";
+            diagnosis = tableRow.diagnos ?? "";
+            actions_taken = tableRow.repair ?? "";
+
+            _department = tableRow.dep_name ?? "";
+            _user = tableRow.user_name ?? "";
+
+            acceptedTime = tableRow.date_in;
+            doneTime = tableRow.date_done;
+            returnedTime = tableRow.date_out;
         }
 
         public string validate()

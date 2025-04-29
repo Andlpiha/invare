@@ -11,6 +11,9 @@ namespace Inv.Views;
 public partial class MainWindow : Window
 {
     private MainWindowViewModel _viewModel;
+    private TabControl _tabControl;
+    private MenuBar _menu_bar;
+    private Toolbar _toolbar;
 
     public MainWindow()
     {
@@ -19,9 +22,15 @@ public partial class MainWindow : Window
 
         InitializeComponent();
 
-        this.FindControl<TabControl>("TabControl")!.DataContext = _viewModel.Tabs;
-        this.FindControl<MenuBar>("MenuBar")!.DataContext = _viewModel;
-        this.FindControl<Toolbar>("Toolbar")!.DataContext = _viewModel;
+        _tabControl = this.FindControl<TabControl>("TabControl")!;
+        _menu_bar = this.FindControl<MenuBar>("MenuBar")!;
+        _toolbar = this.FindControl<Toolbar>("Toolbar")!;
+
+        _tabControl.DataContext = _viewModel.Tabs;
+        _menu_bar.DataContext = _viewModel;
+        _toolbar.DataContext = _viewModel;
+
+        _toolbar.setButtonEnabled(_viewModel.SelectedTabID);
 
         this.KeyUp += handleKeyUp;
     }
@@ -70,10 +79,10 @@ public partial class MainWindow : Window
     {
         var tabControl = sender as TabControl;
 
-        if (tabControl == null || _viewModel == null) return;
+        if (tabControl == null || _viewModel == null || _toolbar == null) return;
         _viewModel.SelectedTabIndex = tabControl.SelectedIndex;
 
-        this.FindControl<Toolbar>("Toolbar")!.setButtonEnabled(_viewModel.SelectedTabID);
+        _toolbar.setButtonEnabled(_viewModel.SelectedTabID);
     }
 
     public void SelectionChangeHandler(object sender, SelectionChangedEventArgs args)

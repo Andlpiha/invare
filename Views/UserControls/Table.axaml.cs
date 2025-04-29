@@ -148,22 +148,9 @@ public partial class Table : UserControl
     {
         if (!Global.TopLevel)
             if (Global.RW)
-                Toolbar.editItem(row);
-        if (TabID == Global.RepairTab)
-            Toolbar.editItem(row);
-        else if (TabID == Global.JournalTab)
-        {
-            if (row.icon == Global.ComplectIcon)
-            {
-                //TODO
-                return;
-            }
-            else 
-            {
-                //TODO
-                return;
-            }
-        }
+                Toolbar.editItem(row, TabID);
+        if (TabID == Global.RepairTab || TabID == Global.JournalTab)
+            Toolbar.editItem(row, TabID);
         else
         {
             if (row.icon == Global.ComplectIcon)
@@ -178,7 +165,7 @@ public partial class Table : UserControl
                 );
             }
             else
-                Toolbar.editItem(row);
+                Toolbar.editItem(row, TabID);
         }
 
         Global.TopLevel = false;

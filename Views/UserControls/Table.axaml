@@ -11,9 +11,6 @@
 		<Style Selector="DataGridRow:nth-child(even)">
 			<Setter Property="Background" Value="{DynamicResource GridEven}"/>
 		</Style>
-		<!--<Style Selector="DataGridCell:nth-child(even)">
-		<Setter Property="Background" Value="{DynamicResource GridEven}"/>
-	</Style>-->
 
 		<Style Selector="DataGrid#MainGrid DataGridCell">
 			<Setter Property="FontSize" Value="11"/>
@@ -27,7 +24,8 @@
 
 		<Style Selector="DataGridColumnHeader TextBlock">
 			<Setter Property="MinWidth" Value="{Binding $parent[Grid].Bounds.Width}"/>
-			<Setter Property="Padding" Value="10 0 0 0"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="Padding" Value="0 0 0 0"/>
 		</Style>
 		<Style Selector="TextBlock#CellTextBlock">
 			<Setter Property="Margin" Value="0 0"/>
@@ -50,7 +48,6 @@
 				<DataGridTemplateColumn.CellTemplate>
 					<DataTemplate x:DataType="vm:TableRow">
 						<Svg Margin="5" Path="{Binding icon, Converter={StaticResource IconIndexConverter}}"/>
-						<!--<Svg Classes="table_icon" Path="/Assets/toolbar-icons/package.svg"/>-->
 					</DataTemplate>
 				</DataGridTemplateColumn.CellTemplate>
 				<DataGridTemplateColumn.HeaderTemplate>

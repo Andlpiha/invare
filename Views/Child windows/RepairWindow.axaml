@@ -7,7 +7,7 @@
 		x:DataType="vmf:RepairForm"
 		Width="700" Height="800"
 		Background="{DynamicResource LightGrayBrush}"
-        x:Class="Inv.AddRepair"
+        x:Class="Inv.RepairWindow"
         Title="Добавить ремонт">
 
 	<Window.Styles>

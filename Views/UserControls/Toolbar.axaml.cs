@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using Inv.Models;
@@ -77,7 +78,7 @@ public partial class Toolbar : UserControl
             form.User       = _viewModel.SelectedRow!.user_name             ?? String.Empty;
         }
 
-        AddRepair window = new AddRepair()
+        RepairWindow window = new RepairWindow()
         {
             ViewModel = form
         };
@@ -133,9 +134,30 @@ public partial class Toolbar : UserControl
         }
     }
 
-    public static void editItem(TableRow row)
+    public static async void editItem(TableRow row, string tabID)
     {
-        if()
+        if (tabID == Global.RepairTab)
+        {
+            RepairForm form = new RepairForm(row);
+            RepairWindow window = new(true)
+            {
+                ViewModel = form,
+            };
+            
+            if (Avalonia.Application.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var updated_row = await window.ShowDialog<RepairForm>(desktop.MainWindow!);
+            }
+
+        }
+        else if (tabID == Global.JournalTab)
+        {
+            //TODO
+        }
+        else
+        {
+            // Иначе редактируем комплекты
+        }
     }
 
 
