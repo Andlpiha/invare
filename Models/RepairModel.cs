@@ -58,7 +58,7 @@ namespace Inv.Models
         }
 
         private const string EditRepairQuery =
-            "UPDATE REM" +
+            "UPDATE REM " +
             "SET ICON=@icon, COMPL_ID=@c_id, MAT_ID=@m_id, COMPL_NUM=@c_num, " +
                 "VNUTR_NUM=@v_num, INV_NUM=@i_num, NAME=@name, DEP_NAME=@d_name, USER_NAME=@u_name, " +
                 "PRIBOR_NAME=@p_name, JALOBA=@jal, DIAGNOS=@diag, REPAIR=@rep, DATE_IN=@d_in, " +
@@ -68,7 +68,7 @@ namespace Inv.Models
         {
             if (old_form.id == null)
                 throw new ArgumentException("Id is null, cannot edit repair");
-            if(new_form == old_form)
+            if(new_form.Equals(old_form))
                 return false;
 
             var cmd = new FbCommand(EditRepairQuery, conn);

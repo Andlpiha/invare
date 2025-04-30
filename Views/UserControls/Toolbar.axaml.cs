@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using DynamicData;
 using Inv.Models;
 using Inv.ViewModels;
 using Inv.ViewModels.Forms;
@@ -59,7 +60,7 @@ public partial class Toolbar : UserControl
 
         // Добавляем созданную строку в таблицу
         if (result != null)
-            MainWindowViewModel.tableVM.cachedCollections[_viewModel.SelectedTabID].Add(result);
+            MainWindowViewModel.tableVM.cachedCollection.AddOrUpdate(result);
     }
 
     public void addRepair(object sender, RoutedEventArgs args)
@@ -109,7 +110,7 @@ public partial class Toolbar : UserControl
                 if (user_responce != MessageBox.MessageBoxResult.Yes) break;
 
                 ItemModel.DeleteRemontItem(_selectedRow!.id);
-                MainWindowViewModel.tableVM.cachedCollections[_viewModel.SelectedTabID].Remove(_selectedRow);
+                MainWindowViewModel.tableVM.cachedCollection.Remove(_selectedRow);
                 break;
             case Global.JournalTab:
                 throw new ApplicationException("Cannot delete journal entry");
@@ -120,7 +121,7 @@ public partial class Toolbar : UserControl
                     if (user_responce != MessageBox.MessageBoxResult.Yes) break;
 
                     ItemModel.DeleteComplectItem(_selectedRow!.id);
-                    MainWindowViewModel.tableVM.cachedCollections[_viewModel.SelectedTabID].Remove(_selectedRow);
+                    MainWindowViewModel.tableVM.cachedCollection.Remove(_selectedRow);
                 }
                 else
                 {
@@ -128,7 +129,7 @@ public partial class Toolbar : UserControl
                     if (user_responce != MessageBox.MessageBoxResult.Yes) break;
 
                     ItemModel.DeleteMatItem(_selectedRow!.id);
-                    MainWindowViewModel.tableVM.cachedCollections[_viewModel.SelectedTabID].Remove(_selectedRow);
+                    MainWindowViewModel.tableVM.cachedCollection.Remove(_selectedRow);
                 }
                 break;
         }
@@ -147,6 +148,14 @@ public partial class Toolbar : UserControl
             if (Avalonia.Application.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 var updated_row = await window.ShowDialog<RepairForm>(desktop.MainWindow!);
+                if (updated_row is null)
+                    return; // Ничего не поменяли
+
+                if (updated_row.id is null)
+                    throw new ArgumentException("Edited repair ID is null");
+
+                updateTableRowFromRepair(row, updated_row);
+                MainWindowViewModel.tableVM.cachedCollection.AddOrUpdate(row);
             }
 
         }
@@ -160,6 +169,22 @@ public partial class Toolbar : UserControl
         }
     }
 
+    private static void updateTableRowFromRepair(TableRow row, RepairForm updated)
+    {
+        row.compl_num = int.Parse(updated.compl_num);
+        row.vnutr_num = int.Parse(updated.vnutr_num);
+        row.inv_num = updated.inv_num;
+        row.name = updated.name;
+        row.pribor_name = updated.executor;
+        row.dep_name = updated.Department;
+        row.user_name = updated.User;
+        row.jaloba = updated.complaint;
+        row.diagnos = updated.diagnosis;
+        row.repair = updated.actions_taken;
+        row.date_in = updated.acceptedTime;
+        row.date_done = updated.doneTime;
+        row.date_out = updated.returnedTime;
+    }
 
     public void setButtonEnabled(string pageID)
     {

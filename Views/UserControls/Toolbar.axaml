@@ -65,7 +65,8 @@
 		<Button Classes="Toolbar" x:Name="excel" ToolTip.Tip="Выгрузить в excel" Click="">
 			<Svg Path="/Assets/toolbar-icons/file-excel.svg"/>
 		</Button>
-		<TextBox Width="205" Margin="0 2 0 2">
+		<TextBox Width="205" Margin="0 2 0 2" Text="{Binding SearchString}"
+				 Padding="5" CornerRadius="6" Background="White">
 			<TextBox.InnerLeftContent>
 				<Svg Path="/Assets/toolbar-icons/search.svg"/>
 			</TextBox.InnerLeftContent>

@@ -13,7 +13,7 @@ namespace Inv.ViewModels.Forms
 {
     public partial class RepairForm : ObservableObject
 	{
-        public int? id { get; set; } = null;
+        public long? id { get; set; } = null;
 
 		public string compl_num { get; set; } = String.Empty;
 		public string vnutr_num { get; set; } = String.Empty;
@@ -55,6 +55,7 @@ namespace Inv.ViewModels.Forms
 
         public RepairForm(RepairForm other) : this()
         {
+            id = other.id;
             compl_num = other.compl_num;
             vnutr_num = other.vnutr_num;
             inv_num = other.inv_num;
@@ -76,6 +77,8 @@ namespace Inv.ViewModels.Forms
         public RepairForm(TableRow tableRow) : this ()
         {
             id = tableRow.id;
+            compl_id = tableRow.compl_id;
+            mat_id = tableRow.mat_id;
             compl_num = tableRow.compl_num.ToString() ?? "";
             vnutr_num = tableRow.vnutr_num.ToString() ?? "";
             inv_num = tableRow.inv_num ?? "";
@@ -99,12 +102,12 @@ namespace Inv.ViewModels.Forms
             {
                 Int32.Parse(this.compl_num);
                 Int32.Parse(this.vnutr_num);
-                Int32.Parse(this.inv_num);
             }
             catch 
             {
                 return "Неправильно набран номер комплекта, внутренний номер или инвентарный номер";
             }
+            //TODO: обработать даты
 
             return String.Empty;
 		}
@@ -138,8 +141,8 @@ namespace Inv.ViewModels.Forms
                    x.mat_id == y.mat_id &&
                    x.name == y.name &&
                    x.executor == y.executor &&
-                   x.Department == y.Department &&      // From [ObservableProperty]
-                   x.User == y.User &&                  // From [ObservableProperty]
+                   x.Department == y.Department &&      
+                   x.User == y.User &&                  
                    x.complaint == y.complaint &&
                    x.diagnosis == y.diagnosis &&
                    x.actions_taken == y.actions_taken &&

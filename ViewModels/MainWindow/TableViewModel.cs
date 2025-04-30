@@ -1,9 +1,13 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
+using DynamicData.Binding;
 using FirebirdSql.Data.FirebirdClient;
 using Inv.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Primitives;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -11,7 +15,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using System.Globalization;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,9 +26,13 @@ namespace Inv.ViewModels.MainWindow
     public class TableRow
     {
         public int id { get; set; }
+        public string tabId { get; set; }
+
         public int? icon { get; set; } = null;
         public int? code_op { get; set; } = null;
         public int? sklad { get; set; } = null;
+        public int? compl_id { get; set; } = null;
+        public int? mat_id { get; set; } = null;
         public int? compl_num { get; set; } = null;
         public int? mat_num { get; set; } = null;
         public int? vnutr_num { get; set; } = null;
@@ -47,22 +57,84 @@ namespace Inv.ViewModels.MainWindow
         public string? MOL_name { get; set; } = null;
         public string? MOLpl_name { get; set; } = null;
         public string? Description { get; set; } = null;
+
+        public TableRow() { }
+        public TableRow(TableRow other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            this.id = other.id;
+            this.icon = other.icon;
+            this.code_op = other.code_op;
+            this.sklad = other.sklad;
+            this.compl_num = other.compl_num;
+            this.mat_num = other.mat_num;
+            this.vnutr_num = other.vnutr_num;
+            this.inv_num = other.inv_num;
+            this.ser_num = other.ser_num;
+            this.date_do = other.date_do;
+            this.user_do = other.user_do;
+            this.date_in = other.date_in;
+            this.date_done = other.date_done;
+            this.date_out = other.date_out;
+            this.date_prof = other.date_prof;
+            this.date_create = other.date_create;
+            this.name = other.name;
+            this.login_name = other.login_name;
+            this.user_name = other.user_name;
+            this.dep_name = other.dep_name;
+            this.pribor_name = other.pribor_name;
+            this.site_name = other.site_name;
+            this.jaloba = other.jaloba;
+            this.diagnos = other.diagnos;
+            this.repair = other.repair;
+            this.MOL_name = other.MOL_name;
+            this.MOLpl_name = other.MOLpl_name;
+            this.Description = other.Description;
+        }
     }
 
     public class TableViewModel : ReactiveObject
     {
-        // Когда пользователь переходит на вкладку, все значения достаются из базы данных
-        // и сохраняются в оперативной памяти
-        public Dictionary<string, ObservableCollection<TableRow>> cachedCollections = new();
-        public ObservableCollection<TableRow> tempCollection = new();
+        public List<String> addedIds = new();
+        private string _currentId = String.Empty;
+        public string CurrentTabId
+        {
+            get => _currentId;
+            set => this.RaiseAndSetIfChanged(ref _currentId, value);
+        }
+
+        // Данные, хранимые в памяти
+        public SourceCache<TableRow, long> cachedCollection = new(row => row.id);
+        // Объект, к которому привязана таблица
+        public ReadOnlyObservableCollection<TableRow> item_source;
+        public IDisposable filterRule;
 
         public TableRow? selectedRow { get; set; }
         public bool bottomLevel = false;
+
+        public bool fuzzySearchEnabled = false;
+        private string _searchString = string.Empty;
+        public string SearchString
+        {
+            get => _searchString;
+            set => this.RaiseAndSetIfChanged(ref _searchString, value);
+        }
 
         private TableModel _model;
         public TableViewModel()
         {
             _model = new TableModel();
+
+            var filterObservable = GetFilterObservable(); // Определяем, когда нужно заново применять фильтр
+            filterRule = cachedCollection
+                .Connect()
+                .Filter(filterObservable, (state,row) => shouldFilter(row))
+                .ObserveOn(new AvaloniaSynchronizationContext(Dispatcher.UIThread, DispatcherPriority.Render)) // Обрабатываем изменения только на основном потоке
+                .Bind(out item_source)
+                .DisposeMany()
+                .Subscribe();
         }
 
         public void onSelectedRowChange(object? sender, SelectionChangedEventArgs args)
@@ -92,7 +164,7 @@ namespace Inv.ViewModels.MainWindow
                     // Все обновления графики должны выполнятся только из основного потока
                     // так что передаем управление ему
                     Dispatcher.UIThread.InvokeAsync(
-                        () => cachedCollections[new_tabID].Add(new_row),
+                        () => cachedCollection.AddOrUpdate(new_row),
                         DispatcherPriority.Render
                     );
                 }
@@ -115,7 +187,7 @@ namespace Inv.ViewModels.MainWindow
                     // Все обновления графики должны выполнятся только из основного потока
                     // так что передаем управление ему
                     Dispatcher.UIThread.InvokeAsync(
-                        () => cachedCollections[new_tabID].Add(new_row),
+                        () => cachedCollection.AddOrUpdate(new_row),
                         DispatcherPriority.ApplicationIdle
                     );
                 }
@@ -138,7 +210,7 @@ namespace Inv.ViewModels.MainWindow
                     // Все обновления графики должны выполнятся только из основного потока
                     // так что передаем управление ему
                     Dispatcher.UIThread.InvokeAsync(
-                        () => cachedCollections[new_tabID].Add(new_row),
+                        () => cachedCollection.AddOrUpdate(new_row),
                         DispatcherPriority.Render
                     );
                 }
@@ -146,6 +218,70 @@ namespace Inv.ViewModels.MainWindow
                 // Завершаем транзакцию
                 transaction.closeConnection();
             }
+        }
+
+        private IObservable<(string CurrentId, string SearchString)> GetFilterObservable()
+        {
+            var currentIdObservable = this.WhenAnyValue(x => x.CurrentTabId)
+                                  .DistinctUntilChanged();
+
+            var searchStringObservable = this.WhenAnyValue(x => x.SearchString)
+                                            .Throttle(TimeSpan.FromMilliseconds(200))
+                                            .DistinctUntilChanged();
+
+            // Combine them but keep their individual throttling behaviors
+            return Observable.CombineLatest(
+                currentIdObservable,
+                searchStringObservable,
+                (id, search) => (id, search)
+            );
+        }
+
+        // Решаем, нужно ли отображать элемент в таблице
+        private bool shouldFilter(TableRow row)
+        {
+            if(row.tabId != CurrentTabId)
+                return false;
+
+            if (SearchString == String.Empty) return true;
+            if (row == null || string.IsNullOrWhiteSpace(SearchString))
+                return false;
+
+            // Фильтруем по каждому столбцу
+            foreach (var prop in typeof(TableRow).GetProperties())
+            {
+                if (!should_search_row[prop.Name])
+                    continue;
+
+                object? value = prop.GetValue(row);
+                if (value == null) continue;
+                string stringValue;
+                Type propType = prop.PropertyType;
+
+                if (propType == typeof(int?))
+                {
+                    int? intVal = (int?)value;
+                    stringValue = intVal.Value.ToString(CultureInfo.InvariantCulture);
+                }
+                else if (propType == typeof(DateTime?))
+                {
+                    DateTime? dateVal = (DateTime?)value;
+                    stringValue = dateVal.Value.ToString("o", CultureInfo.InvariantCulture);
+                }
+                else if (propType == typeof(string))
+                {
+                    stringValue = (string)value;
+                }
+                else
+                {
+                    continue; // Пропускаем неподдерживаемые типы
+                }
+
+                if (stringValue.IndexOf(SearchString, StringComparison.OrdinalIgnoreCase) >= 0)
+                    return true;
+            }
+
+            return false;
         }
 
         //Отображение комплекта
@@ -159,6 +295,7 @@ namespace Inv.ViewModels.MainWindow
                 var new_row = new TableRow();
 
                 new_row.id = (int)reader["id"];
+                new_row.tabId = reader["sklad"].ToString()!;
                 new_row.icon = reader["icon"] as int?;
                 new_row.compl_num = reader["compl_num"] as int?;
                 new_row.vnutr_num = reader["vnutr_num"] as int?;
@@ -180,7 +317,7 @@ namespace Inv.ViewModels.MainWindow
                 // Все обновления графики должны выполнятся только из основного потока
                 // так что передаем управление ему
                 Dispatcher.UIThread.InvokeAsync(
-                    () => tempCollection.Add(new_row),
+                    () => cachedCollection.AddOrUpdate(new_row),
                     DispatcherPriority.Render
                 );
             }
@@ -191,9 +328,13 @@ namespace Inv.ViewModels.MainWindow
             var new_row = new TableRow();
 
             new_row.id = (int)reader["id"];
+            new_row.tabId = Global.RepairTab;
             new_row.icon = reader["icon"] as int?;
-            new_row.compl_num = reader["compl_num"] as int?;
-            new_row.vnutr_num = reader["vnutr_num"] as int?;
+            new_row.compl_id = reader["compl_id"] as int?;
+            new_row.mat_id = reader["mat_id"] as int?;
+
+            new_row.compl_num = !reader.IsDBNull("compl_num") ? reader.GetInt32("compl_num"): (int?)null;
+            new_row.vnutr_num = !reader.IsDBNull("vnutr_num") ? reader.GetInt32("vnutr_num") : (int?)null;
             new_row.inv_num = reader["inv_num"] as string;
 
             new_row.name = reader["name"] as string;
@@ -245,6 +386,7 @@ namespace Inv.ViewModels.MainWindow
             var new_row = new TableRow();
 
             new_row.id = (int)reader["id"];
+            new_row.tabId = reader["sklad"].ToString()!;
             new_row.icon = reader["icon"] as int?;
             new_row.compl_num = reader["compl_num"] as int?;
             new_row.vnutr_num = reader["vnutr_num"] as int?;
@@ -384,6 +526,41 @@ namespace Inv.ViewModels.MainWindow
             { "MOL_name",       true },
             { "MOLpl_name",     true },
             { "Description",    true },
+        };
+
+        private Dictionary<string, bool> should_search_row = new Dictionary<string, bool>()
+        {
+			{ "id", 		false },
+			{ "tabId", 		false },
+            { "icon", 		false },
+			{ "code_op", 	false },
+			{ "sklad",      false },
+			{ "compl_id",      false },
+			{ "mat_id",      false },
+            { "compl_num",  false },
+			{ "mat_num",    false },
+			{ "vnutr_num",  true },
+			{ "inv_num",    true },
+			{ "ser_num",    true },
+			{ "date_do",    false },
+			{ "user_do",    false },
+			{ "date_in",    true },
+			{ "date_done",  true },
+			{ "date_out",   true },
+			{ "date_prof",  false },
+			{ "date_create", false },
+			{ "name",       true },
+			{ "login_name", true },
+			{ "user_name",  true },
+			{ "dep_name",   true },
+			{ "pribor_name", true },
+			{ "site_name",  false },
+			{ "jaloba",     false },
+			{ "diagnos",    false },
+			{ "repair",     false },
+			{ "MOL_name",   true },
+			{ "MOLpl_name", true },
+			{ "Description", true }
         };
     }
 }

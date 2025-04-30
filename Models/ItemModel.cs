@@ -87,7 +87,7 @@ namespace Inv.Models
             return true;
         }
 
-        public static void DeleteRemontItem(int id)
+        public static void DeleteRemontItem(long id)
         {
             var query = $"DELETE FROM rem WHERE id={id}";
 
@@ -99,7 +99,7 @@ namespace Inv.Models
             _cmd.ExecuteNonQueryAsync();
         }
 
-        public static void DeleteComplectItem(int id)
+        public static void DeleteComplectItem(long id)
         {
             var query = $"DELETE FROM compl WHERE id={id}";
 
@@ -111,7 +111,7 @@ namespace Inv.Models
             _cmd.ExecuteNonQueryAsync();
         }
 
-        public static void DeleteMatItem(int id)
+        public static void DeleteMatItem(long id)
         {
             var query = $"DELETE FROM mat WHERE id={id}";
 

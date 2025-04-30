@@ -29,10 +29,7 @@ public class MainWindowViewModel : ViewModelBase
     private int _selected_tab_index = -1;
     public int SelectedTabIndex
     {
-        get
-        {
-            return _selected_tab_index;
-        }
+        get => _selected_tab_index;
         set
         {
             _selected_tab_index = value;
@@ -52,6 +49,13 @@ public class MainWindowViewModel : ViewModelBase
     {
         get => _selectedRow;
         set => this.RaiseAndSetIfChanged(ref _selectedRow, value);
+    }
+
+    private string _searchString = String.Empty;
+    public string SearchString
+    {
+        get => _searchString;
+        set => this.RaiseAndSetIfChanged(ref _searchString, value);
     }
 
     public MainWindowViewModel()
@@ -75,6 +79,9 @@ public class MainWindowViewModel : ViewModelBase
         // Добавить еще две вкладки в конец
         Tabs[^2] = new TabItem(Global.RepairTab, Global.RepairTab);
         Tabs[^1] = new TabItem(Global.JournalTab, Global.JournalTab);
+
+        this.WhenAnyValue(x => x.SearchString)
+            .Subscribe(x => tableVM.SearchString = x);
     }
 
     public bool ExitApp()

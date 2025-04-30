@@ -17,6 +17,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Data;
 using System.Globalization;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using DynamicData;
 
 namespace Inv;
 
@@ -64,7 +65,8 @@ public partial class Table : UserControl
         _grid = this.FindControl<DataGrid>("MainGrid")!;
         if (_grid == null)
             throw new Exception("DataGrid#MainGrid not found");
-        
+        _grid.DataContext = _viewModel!.item_source;
+
         foreach (var column in _grid.Columns)
         {
             column.Width = _viewModel!.column_width[column.Tag as string];
@@ -110,12 +112,10 @@ public partial class Table : UserControl
             foreach (var column in _grid.Columns)
                 column.IsVisible = _viewModel.sklad_column_visibility[column.Tag as string];
 
-        if (_viewModel.cachedCollections.ContainsKey(new_id))
-            _grid.DataContext = _viewModel.cachedCollections[new_id];
-        else
+        _viewModel.CurrentTabId = new_id;
+        if (!_viewModel.addedIds.Contains(new_id))
         {
-            _viewModel.cachedCollections.Add(new_id, new ObservableCollection<TableRow>());
-            _grid.DataContext = _viewModel.cachedCollections[new_id];
+            _viewModel.addedIds.Add(new_id);
 
             // Исполняем метод асинхронно
             Task.Run(() =>
@@ -147,29 +147,30 @@ public partial class Table : UserControl
     private void handleRowDoubleClick(TableRow row)
     {
         if (!Global.TopLevel)
+        {
             if (Global.RW)
                 Toolbar.editItem(row, TabID);
-        if (TabID == Global.RepairTab || TabID == Global.JournalTab)
+        }
+        else if (TabID == Global.RepairTab || TabID == Global.JournalTab)
+        {
             Toolbar.editItem(row, TabID);
+        }
         else
         {
             if (row.icon == Global.ComplectIcon)
             {
-                _viewModel.tempCollection.Clear();
-                _grid.DataContext = _viewModel.tempCollection;
-
                 // Потому что данные можно извлечь только из главного(UI) потока
                 var tabID = TabID;
                 Task.Run(() =>
                     _viewModel.updateRowsFromComplect(tabID, (int)row.id)
                 );
+
+                Global.TopLevel = false;
+                Global.ComplUp = row;
             }
             else
                 Toolbar.editItem(row, TabID);
         }
-
-        Global.TopLevel = false;
-        Global.ComplUp = row;
     }
 
     private TableViewModel _viewModel;
