@@ -9,10 +9,12 @@ using Inv.ViewModels;
 using Inv.ViewModels.Forms;
 using Inv.ViewModels.MainWindow;
 using Inv.Views;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MsgBox;
 using ReactiveUI;
 using Svg;
 using System;
+using System.ComponentModel;
 
 namespace Inv;
 
@@ -103,35 +105,35 @@ public partial class Toolbar : UserControl
         }
 
         MessageBox.MessageBoxResult user_responce;
+        System.Action<long> deleteFunction;
+        string message;
+
         switch (_viewModel!.SelectedTabID)
         {
-            case Global.RepairTab:
-                user_responce = await MessageBox.Show(this.VisualRoot as Window, "Вы уверены, что хотите удалить этот ремонт?", "Сообщение", MessageBox.MessageBoxButtons.YesNo);
-                if (user_responce != MessageBox.MessageBoxResult.Yes) break;
-
-                ItemModel.DeleteRemontItem(_selectedRow!.id);
-                MainWindowViewModel.tableVM.cachedCollection.Remove(_selectedRow);
-                break;
             case Global.JournalTab:
                 throw new ApplicationException("Cannot delete journal entry");
+            case Global.RepairTab:
+                message = "этот ремонт";
+                deleteFunction = ItemModel.DeleteRemontItem;
+                break;
             default:
                 if (_selectedRow!.icon == Global.ComplectIcon)
                 {
-                    user_responce = await MessageBox.Show(this.VisualRoot as Window, "Вы уверены, что хотите удалить этот комплект?", "Сообщение", MessageBox.MessageBoxButtons.YesNo);
-                    if (user_responce != MessageBox.MessageBoxResult.Yes) break;
-
-                    ItemModel.DeleteComplectItem(_selectedRow!.id);
-                    MainWindowViewModel.tableVM.cachedCollection.Remove(_selectedRow);
+                    message = "этот комплект";
+                    deleteFunction = ItemModel.DeleteComplectItem;
                 }
                 else
                 {
-                    user_responce = await MessageBox.Show(this.VisualRoot as Window, "Вы уверены, что хотите удалить эту единицу?", "Сообщение", MessageBox.MessageBoxButtons.YesNo);
-                    if (user_responce != MessageBox.MessageBoxResult.Yes) break;
-
-                    ItemModel.DeleteMatItem(_selectedRow!.id);
-                    MainWindowViewModel.tableVM.cachedCollection.Remove(_selectedRow);
+                    message = "эту единицу";
+                    deleteFunction = ItemModel.DeleteMatItem;
                 }
                 break;
+        }
+        user_responce = await MessageBox.Show(this.VisualRoot as Window, $"Вы уверены, что хотите удалить {message}?", "Сообщение", MessageBox.MessageBoxButtons.YesNo);
+        if (user_responce == MessageBox.MessageBoxResult.Yes)
+        {
+            deleteFunction(_selectedRow!.id);
+            MainWindowViewModel.tableVM.cachedCollection.Remove(_selectedRow);
         }
     }
 

@@ -30,7 +30,7 @@ namespace Inv.Models
                     {
                         connection.Open();
                     }
-                    catch (Exception e)
+                    catch
                     {
                         Dispatcher.UIThread.InvokeAsync(
                             () => MessageBox.Show(null, "БД недоступна", "Ошибка", MessageBox.MessageBoxButtons.Ok)

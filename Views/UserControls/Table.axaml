@@ -42,7 +42,7 @@
 			  IsReadOnly="True" CanUserReorderColumns="True" CanUserResizeColumns="True"
 			  GridLinesVisibility="Vertical" VerticalGridLinesBrush="{DynamicResource GridLinesBrush}"
 			  SelectionMode="Single">
-		
+
 		<DataGrid.Columns>
 			<DataGridTemplateColumn Header="" CanUserSort="true" SortMemberPath="icon" Tag="icon">
 				<DataGridTemplateColumn.CellTemplate>
