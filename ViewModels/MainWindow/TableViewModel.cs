@@ -44,6 +44,7 @@ namespace Inv.ViewModels.MainWindow
         public DateTime? date_done { get; set; } = null;
         public DateTime? date_out { get; set; } = null;
         public DateTime? date_prof { get; set; } = null;
+        public int? prof_interval { get; set; } = null;
         public DateTime? date_create { get; set; } = null;
         public string? name { get; set; } = null;
         public string? login_name { get; set; } = null;
@@ -111,6 +112,8 @@ namespace Inv.ViewModels.MainWindow
         public ReadOnlyObservableCollection<TableRow> item_source;
         public IDisposable filterRule;
 
+        // Временная коллекция, в которой храняться данные определенных запросов
+        public ObservableCollection<TableRow> temp_collection = new();
         public TableRow? selectedRow { get; set; }
         public bool bottomLevel = false;
 
@@ -250,7 +253,7 @@ namespace Inv.ViewModels.MainWindow
             // Фильтруем по каждому столбцу
             foreach (var prop in typeof(TableRow).GetProperties())
             {
-                if (!should_search_row[prop.Name])
+                if (!should_search_column[prop.Name])
                     continue;
 
                 object? value = prop.GetValue(row);
@@ -290,6 +293,10 @@ namespace Inv.ViewModels.MainWindow
             DataTable table = _model.getComplectTable(tabID, compl_id.ToString());
             DataTableReader reader = table.CreateDataReader();
 
+            Dispatcher.UIThread.InvokeAsync(
+                () => temp_collection.Clear(),
+                DispatcherPriority.Render
+            );
             while (reader.Read())
             {
                 var new_row = new TableRow();
@@ -317,7 +324,7 @@ namespace Inv.ViewModels.MainWindow
                 // Все обновления графики должны выполнятся только из основного потока
                 // так что передаем управление ему
                 Dispatcher.UIThread.InvokeAsync(
-                    () => cachedCollection.AddOrUpdate(new_row),
+                    () => temp_collection.Add(new_row),
                     DispatcherPriority.Render
                 );
             }
@@ -399,6 +406,7 @@ namespace Inv.ViewModels.MainWindow
             new_row.site_name = reader["site_name"] as string;
 
             new_row.date_prof = reader["Date_prof"] as DateTime?;
+            new_row.prof_interval = reader["prof_interval"] as int?;
             new_row.date_create = reader["Date_create"] as DateTime?;
 
             new_row.MOL_name = reader["MOL_name"] as string;
@@ -418,12 +426,12 @@ namespace Inv.ViewModels.MainWindow
             { "vnutr_num",      new DataGridLength(60, DataGridLengthUnitType.Pixel) },
             { "inv_num",        new DataGridLength(90, DataGridLengthUnitType.Pixel) },
             { "ser_num",        new DataGridLength(45, DataGridLengthUnitType.Pixel) },
-            { "date_do",        new DataGridLength(105, DataGridLengthUnitType.Pixel) },
-            { "date_in",        new DataGridLength(105, DataGridLengthUnitType.Pixel) },
-            { "date_done",      new DataGridLength(105, DataGridLengthUnitType.Pixel) },
-            { "date_out",       new DataGridLength(105, DataGridLengthUnitType.Pixel) },
-            { "Date_prof",      new DataGridLength(105, DataGridLengthUnitType.Pixel) },
-            { "Date_create",    new DataGridLength(105, DataGridLengthUnitType.Pixel) },
+            { "date_do",        new DataGridLength(75, DataGridLengthUnitType.Pixel) },
+            { "date_in",        new DataGridLength(75, DataGridLengthUnitType.Pixel) },
+            { "date_done",      new DataGridLength(75, DataGridLengthUnitType.Pixel) },
+            { "date_out",       new DataGridLength(75, DataGridLengthUnitType.Pixel) },
+            { "Date_prof",      new DataGridLength(75, DataGridLengthUnitType.Pixel) },
+            { "Date_create",    new DataGridLength(75, DataGridLengthUnitType.Pixel) },
             { "name",           new DataGridLength(220, DataGridLengthUnitType.Pixel) },
             { "login_name",     new DataGridLength(60, DataGridLengthUnitType.Pixel) },
             { "user_name",      new DataGridLength(240, DataGridLengthUnitType.Pixel) },
@@ -512,7 +520,7 @@ namespace Inv.ViewModels.MainWindow
             { "date_in",        false },
             { "date_done",      false },
             { "date_out",       false },
-            { "Date_prof",      false },
+            { "Date_prof",      true },
             { "Date_create",    false },
             { "name",           true },
             { "login_name",     true },
@@ -528,7 +536,7 @@ namespace Inv.ViewModels.MainWindow
             { "Description",    true },
         };
 
-        private Dictionary<string, bool> should_search_row = new Dictionary<string, bool>()
+        private Dictionary<string, bool> should_search_column = new Dictionary<string, bool>()
         {
 			{ "id", 		false },
 			{ "tabId", 		false },
@@ -548,7 +556,8 @@ namespace Inv.ViewModels.MainWindow
 			{ "date_done",  true },
 			{ "date_out",   true },
 			{ "date_prof",  false },
-			{ "date_create", false },
+			{ "prof_interval",  false },
+            { "date_create", false },
 			{ "name",       true },
 			{ "login_name", true },
 			{ "user_name",  true },

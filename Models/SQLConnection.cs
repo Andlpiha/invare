@@ -11,8 +11,8 @@ public class SQLConn
         DataSource = "",
         Port = 3050,
         Database = "",
-        Password = "redsh0v",
-        UserID = "SYSDBA",
+        Password = "TPeyFYN6SGRuu5eH",
+        UserID = "Initial",
         ServerType = FbServerType.Default,
     };
     private readonly FbConnection objConnect = new();
@@ -34,13 +34,27 @@ public class SQLConn
         connString.DataSource = serverAddress;
         connString.Database = databaseFile;
 
+        objConnect.Close();
         objConnect.ConnectionString = connString.ToString();
+
+        return true;
+    }
+
+    public bool setUser(string userName, string password)
+    {
+        connString.UserID = userName;
+        connString.Password = password;
+
+        objConnect.Close();
+        objConnect.ConnectionString = connString.ToString();
+
         return true;
     }
 
     public string GetConnectionString() => connString.ToString();
 
-    // TODO: сделать проверку на подключение
+    public bool isOpen() => objConnect.State == System.Data.ConnectionState.Open;
+
     public FbConnection GetConnection() => objConnect;
 
     public void OpenConnection() => objConnect.Open();

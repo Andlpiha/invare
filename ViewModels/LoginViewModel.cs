@@ -19,6 +19,7 @@ namespace Inv.ViewModels
         public string  ServerLocation { get; set; }
         public string DatabaseFile { get; set; }
         public string Login { get; set; }
+        public string Password { get; set; }
 
         private UserModel _model;
 
@@ -28,6 +29,7 @@ namespace Inv.ViewModels
             ServerLocation = Properties.Login.Default.ServerLocation;
             DatabaseFile = Properties.Login.Default.DatabaseFile;
             Login = Properties.Login.Default.UserLogin;
+            Password = "";
 
             _model = new UserModel();
         }
@@ -60,23 +62,36 @@ namespace Inv.ViewModels
                 }
             }
 
-            _model.FetchUsers(_inst.GetConnection());
             return true;
         }
 
         public bool log_In()
         {
-            var ty = _model.getTY(this.Login);
+            SQLConn _inst = SQLConn.Instance;
+            var result = _model.doAuth(Login, Password, _inst.GetConnection());
 
-            if (ty == uint.MaxValue)
+            if(!result)
                 return false;
 
-            if (ty == 1) Global.RW = true; else Global.RW = false; // Write
-            if (ty == 2) Global.RO = true; else Global.RO = false; // Read
+            _inst.setUser(_model.dbLogin!, _model.dbPassword!);
+            try
+            {
+                _inst.OpenConnection();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(null, "БД недоступна", "Ошибка", MessageBox.MessageBoxButtons.Ok);
+                return false;
+            }
+
+            var ty = _model.userTy;
+
+            if (ty == 1) Global.RW = true; else Global.RW = false; // ReadWrite
+            if (ty == 2) Global.RO = true; else Global.RO = false; // ReadOnly
             if (ty == 3) Global.AU = true; else Global.AU = false; // Author
 
             Global.Login = this.Login;
-            Global.Name = _model.getName(this.Login);
+            Global.Name = _model.userName!;
 
             return true;
         }

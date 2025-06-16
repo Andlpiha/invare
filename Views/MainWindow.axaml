@@ -54,6 +54,8 @@
 		<Border x:Name="ToolbarBorder" DockPanel.Dock="Top">
 		    <local:Toolbar x:Name="Toolbar" Height="35"/>
 		</Border>
+		
+		<local:ChatSidebar Width="400" DockPanel.Dock="Right"/>
 
 		<TabControl x:Name="TabControl" ItemsSource="{Binding}" DockPanel.Dock="Top" SelectionChanged="TabChangeHandler">
 			<TabControl.ItemTemplate>

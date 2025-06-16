@@ -35,12 +35,16 @@ public partial class LoginWindow : Window
         if (SQLConn.Instance.GetConnection().State != System.Data.ConnectionState.Open)
         {
             bool connectionSuccess = await viewModel.dbConnect();
-            if (!connectionSuccess) return;
+            if (!connectionSuccess)
+            {
+                await MessageBox.Show(this, "Неверно набран адрес базы данных, либо база данных недоступна", "Ошибка", MessageBox.MessageBoxButtons.Ok);
+                return;
+            }
         }
 
         if (!viewModel.log_In())
         {
-            await MessageBox.Show(this, "Логин не существует", "Ошибка", MessageBox.MessageBoxButtons.Ok);
+            await MessageBox.Show(this, "Неверно набран логин или пароль", "Ошибка", MessageBox.MessageBoxButtons.Ok);
             return;
         }
 

@@ -43,15 +43,15 @@
 						<UniformGrid Columns="3" Margin="0 0 0 10">
 							<StackPanel Spacing="5" Margin="5 0">
 								<Label Content="Комплект №" Classes="field_header"/>
-								<TextBox Text="{Binding compl_num}"/>
+								<TextBox Text="{Binding compl_num}" Name="ComplNum"/>
 							</StackPanel>
 							<StackPanel Spacing="5" Margin="5 0">
 								<Label Content="Внутренний №" Classes="field_header"/>
-								<TextBox Text="{Binding vnutr_num}"/>
+								<TextBox Text="{Binding vnutr_num}" Name="VnutrNum"/>
 							</StackPanel>
 							<StackPanel Spacing="5" Margin="5 0">
 								<Label Content="Инвентарный №" Classes="field_header"/>
-								<TextBox Text="{Binding inv_num}"/>
+								<TextBox Text="{Binding inv_num}" Name="InvNum"/>
 							</StackPanel>
 						</UniformGrid>
 					</StackPanel>
@@ -75,7 +75,7 @@
 							<StackPanel Grid.Row="0" Grid.Column="2" Spacing="5">
 								<Label Content="Исполнитель" Classes="field_header"/>
 								<ComboBox x:Name="executorsBox" ItemsSource="{Binding executors}"
-										  HorizontalAlignment="Stretch"/>
+										  HorizontalAlignment="Stretch" Name="Executor"/>
 							</StackPanel>
 
 							<DockPanel Grid.Row="2" Grid.Column="2">
@@ -95,17 +95,17 @@
 							<StackPanel Grid.Row="1" Grid.ColumnSpan="3" Spacing="15" Margin="0 10">
 								<StackPanel Spacing="5">
 									<Label Content="Жалоба" Classes="field_header"/>
-									<TextBox Height="60" AcceptsReturn="True" Text="{Binding complaint}"/>
+									<TextBox Height="60" AcceptsReturn="True" Text="{Binding complaint}" Name="Complaint"/>
 								</StackPanel>
 
 								<StackPanel Spacing="5">
 									<Label Content="Диагноз" Classes="field_header"/>
-									<TextBox Height="80" AcceptsReturn="True" Text="{Binding diagnosis}"/>
+									<TextBox Height="80" AcceptsReturn="True" Text="{Binding diagnosis}" Name="Diagnosis"/>
 								</StackPanel>
 
 								<StackPanel Spacing="5">
 									<Label Content="Мероприятия" Classes="field_header"/>
-									<TextBox Height="100" AcceptsReturn="True" Text="{Binding actions_taken}"/>
+									<TextBox Height="100" AcceptsReturn="True" Text="{Binding actions_taken}" Name="ActionsTaken"/>
 								</StackPanel>
 							</StackPanel>
 						</Grid>
@@ -120,17 +120,17 @@
 						<StackPanel Spacing="5" HorizontalAlignment="Center">
 							<Label Content="Дата приёма" Classes="field_header"/>
 							<CalendarDatePicker Classes="customdpkr" Width="150"
-												CustomDateFormatString="dd-MM-yy" SelectedDate="{Binding acceptedTime}"/>
+												CustomDateFormatString="dd-MM-yy" SelectedDate="{Binding acceptedTime}" Name="AcceptedTime"/>
 						</StackPanel>
 						<StackPanel Spacing="5" HorizontalAlignment="Center">
 							<Label Content="Дата завершения" Classes="field_header"/>
 							<CalendarDatePicker Classes="customdpkr" Width="150"
-												CustomDateFormatString="dd-MM-yy" SelectedDate="{Binding doneTime}"/>
+												CustomDateFormatString="dd-MM-yy" SelectedDate="{Binding doneTime}" Name="DoneTime"/>
 						</StackPanel>
 						<StackPanel Spacing="5" HorizontalAlignment="Center">
 							<Label Content="Дата выдачи" Classes="field_header"/>
 							<CalendarDatePicker Classes="customdpkr" Width="150"
-												CustomDateFormatString="dd-MM-yy" SelectedDate="{Binding returnedTime}"/>
+												CustomDateFormatString="dd-MM-yy" SelectedDate="{Binding returnedTime}" Name="ReturnedTime"/>
 						</StackPanel>
 					</UniformGrid>
 					</StackPanel>

@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:Inv"
+             mc:Ignorable="d" 
+             d:DesignWidth="300" 
+             d:DesignHeight="100"
+             x:Class="Inv.MessageView"
+             x:DataType="local:MessageView">
+
+    <Grid>
+        <Grid HorizontalAlignment="{Binding Alignment, RelativeSource={RelativeSource AncestorType=local:MessageView}}"
+              MaxWidth="300"
+              Margin="0,6">
+            
+            <Border CornerRadius="14"
+                    Padding="12"
+                    Background="{Binding MessageBackground, RelativeSource={RelativeSource AncestorType=local:MessageView}}">
+                
+                <StackPanel>
+                    <TextBlock Text="{Binding Sender, RelativeSource={RelativeSource AncestorType=local:MessageView}}"
+                               FontWeight="SemiBold"
+                               Foreground="Gray"
+                               FontSize="12"
+                               Margin="0,0,0,4"/>
+                    
+                    <TextBlock Text="{Binding Text, RelativeSource={RelativeSource AncestorType=local:MessageView}}"
+                               TextWrapping="Wrap"
+                               FontSize="14"/>
+                    
+                    <TextBlock Text="{Binding Timestamp, StringFormat='{}{0:HH:mm}', RelativeSource={RelativeSource AncestorType=local:MessageView}}"
+                               FontSize="10"
+                               HorizontalAlignment="Right"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+            
+            <Canvas HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,4,-6"
+                    IsVisible="{Binding IsSent, RelativeSource={RelativeSource AncestorType=local:MessageView}}">
+                <Path Data="M3,9 L6,12 L12,6" 
+                      StrokeThickness="1.5"
+                      IsVisible="{Binding IsRead, RelativeSource={RelativeSource AncestorType=local:MessageView}}"/>
+            </Canvas>
+        </Grid>
+    </Grid>
+</UserControl>

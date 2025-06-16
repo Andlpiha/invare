@@ -56,7 +56,7 @@
 		<Button Classes="Toolbar shadow" x:Name="ret" ToolTip.Tip="Возврат владельцу" Click="">
 			<Svg Path="/Assets/toolbar-icons/arrow-u-down-right.svg"/>
 		</Button>
-		<Button Classes="Toolbar shadow" x:Name="maintenance" ToolTip.Tip="Профилактика" Click="">
+		<Button Classes="Toolbar shadow" x:Name="maintenance" ToolTip.Tip="Профилактика" Click="addProf">
 			<Svg Path="/Assets/toolbar-icons/wrench-clock.svg"/>
 		</Button>
 		

@@ -1,0 +1,86 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:local="clr-namespace:Inv"
+			 xmlns:vm="using:Inv.ViewModels.MainWindow"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="800"
+             x:Class="Inv.ChatSidebar"
+			 x:DataType="vm:ChatSidebarViewModel">
+
+	<UserControl.Styles>
+		<Style Selector="Label.hint">
+			<Setter Property="Background" Value="AliceBlue"/>
+		</Style>
+		
+		<Style Selector="TextBox.messageField">
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="HorizontalContentAlignment" Value="Left"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+		</Style>
+		<Style Selector="TextBox.messageField:focus-within">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+		</Style>
+		<Style Selector="TextBox.messageField:focus">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+		</Style>
+	</UserControl.Styles>
+	
+	<UserControl.DataTemplates>
+		<vm:ChatTemplatesSelector>
+			<DataTemplate x:Key="MessagesNotEmpty" x:DataType="vm:ChatSidebarViewModel">
+				<ScrollViewer VerticalScrollBarVisibility="Auto">
+					<ItemsControl ItemsSource="{Binding Messages}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate DataType="vm:Message">
+								<local:MessageView Sender="{Binding Sender}"
+												   Text="{Binding MessageText}"
+												   IsSent="{Binding IsSent}"
+												   IsRead="True"
+												   Timestamp="2023-08-15 14:31"/>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+			</DataTemplate>
+			<DataTemplate x:Key="NoMessages">
+				<Label Classes="hint">
+					Пока что нет сообщений 
+				</Label>
+			</DataTemplate>
+			<DataTemplate x:Key="RepairNotSelected">
+				<Label Classes="hint">
+					Выберите ремонт чтобы начать диалог
+				</Label>
+			</DataTemplate>
+		</vm:ChatTemplatesSelector>
+	</UserControl.DataTemplates>
+
+	<DockPanel Background="AliceBlue">
+		<Border DockPanel.Dock="Bottom"
+				HorizontalAlignment="Stretch"
+				Padding="5" Background="#e6f3ff"
+				BorderThickness="0 1 0 0" BorderBrush="LightGray">
+			<DockPanel DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" MinHeight="40">
+				<Button DockPanel.Dock="Right"
+						Margin="10 0 5 0" Background="Transparent"
+						Height="40" Width="40" VerticalAlignment="Bottom">
+					<Svg Path="/Assets/other-icons/send.svg" Width="30"/>
+				</Button>
+				<TextBox Classes="messageField"
+						 AcceptsReturn="True" HorizontalAlignment="Stretch"
+						 VerticalContentAlignment="Center"
+						 BorderBrush="Transparent" Watermark="Напишите сообщение..."
+						 Background="Transparent"/>
+			</DockPanel>
+		</Border>
+		
+		<Border Padding="12" DockPanel.Dock="Top">
+			<ContentControl Content="{Binding}"
+				ContentTemplate="{StaticResource ChatTemplateSelector}"/>
+		</Border>
+	</DockPanel>
+</UserControl>

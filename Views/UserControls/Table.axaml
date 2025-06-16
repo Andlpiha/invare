@@ -29,12 +29,14 @@
 		</Style>
 		<Style Selector="TextBlock#CellTextBlock">
 			<Setter Property="Margin" Value="0 0"/>
-			<Setter Property="Padding" Value="10 0"/>
+			<Setter Property="Padding" Value="10 10"/>
 		</Style>
 	</UserControl.Styles>
 
 	<UserControl.Resources>
 		<local:IconIndexConverter x:Key="IconIndexConverter"/>
+		<local:DateProfConverter x:Key="DateProfConverter"/>
+		<local:NullableDateConverter x:Key="DateConverter"/>
 	</UserControl.Resources>
 
 	<DataGrid x:Name="MainGrid" Classes="Journal"
@@ -64,6 +66,22 @@
 			<DataGridTextColumn Header="Инв. №"			Binding="{Binding inv_num}"		Tag="inv_num"/>
 			<DataGridTextColumn Header="Сер. №"			Binding="{Binding ser_num}"		Tag="ser_num"/>
 			<DataGridTextColumn Header="Наименование"	Binding="{Binding name}"		Tag="name"/>
+
+			<DataGridTemplateColumn Header="Профил." Tag="Date_prof">
+				<DataGridTemplateColumn.CellTemplate>
+					<DataTemplate x:DataType="vm:TableRow">
+						<TextBlock Text="{Binding date_prof, Converter={StaticResource DateConverter}}" Name="CellTextBlock">
+							<TextBlock.Background>
+								<MultiBinding Converter="{StaticResource DateProfConverter}">
+									<Binding Path="date_prof"/>
+									<Binding Path="prof_interval"/>
+								</MultiBinding>
+							</TextBlock.Background>
+						</TextBlock>
+					</DataTemplate>
+				</DataGridTemplateColumn.CellTemplate>
+			</DataGridTemplateColumn>
+			
 			<DataGridTextColumn Header="Отдел"			Binding="{Binding dep_name}"	Tag="dep_name"/>
 			<DataGridTextColumn Header="Пользователь"	Binding="{Binding user_name}"	Tag="user_name"/>
 			<DataGridTextColumn Header="Учетка"			Binding="{Binding login_name}"	Tag="login_name"/>
@@ -72,11 +90,10 @@
 			<DataGridTextColumn Header="Жалоба"			Binding="{Binding jaloba}"		Tag="jaloba"/>
 			<DataGridTextColumn Header="Диагноз"		Binding="{Binding diagnos}"		Tag="diagnos"/>
 			<DataGridTextColumn Header="Мероприятия"	Binding="{Binding repair}"		Tag="repair"/>
-			<DataGridTextColumn Header="Поступил"		Binding="{Binding date_in}"		Tag="date_in"/>
-			<DataGridTextColumn Header="Завершен"		Binding="{Binding date_done}"	Tag="date_done"/>
-			<DataGridTextColumn Header="Выдано"			Binding="{Binding date_out}"	Tag="date_out"/>
-			<DataGridTextColumn Header="Профил."		Binding="{Binding date_prof}"	Tag="Date_prof"/>
-			<DataGridTextColumn Header="Дата созд."		Binding="{Binding date_create}"	Tag="Date_create"/>
+			<DataGridTextColumn Header="Поступил"		Binding="{Binding date_in,		Converter={StaticResource DateConverter}}"	Tag="date_in"/>
+			<DataGridTextColumn Header="Завершен"		Binding="{Binding date_done,	Converter={StaticResource DateConverter}}"	Tag="date_done"/>
+			<DataGridTextColumn Header="Выдано"			Binding="{Binding date_out,		Converter={StaticResource DateConverter}}"	Tag="date_out"/>
+			<DataGridTextColumn Header="Дата созд."		Binding="{Binding date_create,	Converter={StaticResource DateConverter}}"	Tag="Date_create"/>
 			<DataGridTextColumn Header="МОЛ"			Binding="{Binding MOL_name}"	Tag="MOL_name"/>
 			<DataGridTextColumn Header="МОЛ_пл"			Binding="{Binding MOLpl_name}"	Tag="MOLpl_name"/>
 			<DataGridTextColumn Header="Описание"		Binding="{Binding Description}"	Tag="Description"/>

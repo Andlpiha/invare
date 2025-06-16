@@ -11,39 +11,33 @@ namespace Inv.Models
 {
     internal class UserModel
     {
-        DataTable users;
+        public string? dbLogin {  get; set; }
+        public string? dbPassword {  get; set; }
+        public string? userName {  get; set; }
+        public int? userTy {  get; set; }
 
-        public UserModel() 
-        {
-            users = new DataTable();
-        }
 
-        private static string fetchUsersQuery = "SELECT * FROM us";
-        public bool FetchUsers(FbConnection con)
-        {
-            if (con == null || con.State != ConnectionState.Open)
+        private static readonly string authQuery = "SELECT * FROM auth_proc(@login, @password)";
+        public bool doAuth(string login, string password, FbConnection conn)
+        { 
+            var cmd = new FbCommand(authQuery, conn);
+
+            cmd.Parameters.Add("@login", SqlDbType.VarChar).Value = login;
+            cmd.Parameters.Add("@password", SqlDbType.VarChar).Value = password;
+
+            DataTable userData = new();
+            (new FbDataAdapter(cmd)).Fill(userData);
+
+            DataRow firstRow = userData.Rows[0];
+
+            dbLogin = firstRow.Field<string>("db_user_login");
+            dbPassword = firstRow.Field<string>("db_user_password");
+            userName = firstRow.Field<string>("user_name");
+            userTy = firstRow.Field<int?>("ty");
+
+            if(dbLogin == null || dbPassword == null || userName == null || userTy == null)
                 return false;
-
-            FbCommand _cmd = new(fetchUsersQuery, con);
-            (new FbDataAdapter(_cmd)).Fill(users);
-
             return true;
-        }
-
-        public uint getTY(string login)
-        {
-            DataRow[] result = users.Select(string.Format("LOGIN = '{0}'", login));
-
-            if (result.Length == 0)
-                return uint.MaxValue;
-
-            return Convert.ToUInt32(result.First()["TY"]);
-        }
-
-        public string getName(string login)
-        {
-            DataRow[] result = users.Select(string.Format("LOGIN = '{0}'", login));
-            return result.First()["Name"].ToString() ?? string.Empty;
         }
     }
 }

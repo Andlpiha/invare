@@ -18,6 +18,7 @@ using Avalonia.Data;
 using System.Globalization;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using DynamicData;
+using Avalonia.Controls.Metadata;
 
 namespace Inv;
 
@@ -33,6 +34,9 @@ public partial class Table : UserControl
             nameof(SelectionChanged),
             RoutingStrategies.Bubble
         );
+
+    private TableViewModel _viewModel;
+    private DataGrid _grid;
 
     public string TabID
     {
@@ -97,8 +101,13 @@ public partial class Table : UserControl
         if (_grid == null)
             throw new Exception("DataGrid#MainGrid not found");
 
-        Global.TopLevel = true;
-        Global.ComplUp = null;
+        if (!Global.TopLevel)
+        {
+            _grid.DataContext = _viewModel!.item_source;
+            Global.TopLevel = true;
+            Global.ComplUp = null;
+        }
+
         deselectRows();
 
         // Изменяем отображаемые столбцы в зависимости от выбранной вкладки
@@ -164,6 +173,7 @@ public partial class Table : UserControl
                 Task.Run(() =>
                     _viewModel.updateRowsFromComplect(tabID, (int)row.id)
                 );
+                _grid.DataContext = _viewModel.temp_collection;
 
                 Global.TopLevel = false;
                 Global.ComplUp = row;
@@ -172,7 +182,4 @@ public partial class Table : UserControl
                 Toolbar.editItem(row, TabID);
         }
     }
-
-    private TableViewModel _viewModel;
-    private DataGrid _grid;
 }

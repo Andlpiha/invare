@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FirebirdSql.Data.FirebirdClient;
 using Inv.ViewModels.Forms;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Inv.Models
 {
@@ -13,21 +14,22 @@ namespace Inv.Models
     {
         private const string DuplicateQuery =
             "SELECT 1 FROM rdb$database WHERE EXISTS(SELECT 1 FROM rem " +
-            "WHERE (@compl_num = '' OR compl_id = @compl_num) " +
-                "AND (@mat_id = '' OR mat_id = @mat_id) " +
+            "WHERE (@compl_num = 0 OR compl_id = @compl_num) " +
+                "AND (@mat_id = 0 OR mat_id = @mat_id) " +
                 "AND date_out IS NULL)";
         public static bool CheckDuplicate(RepairForm form, FbConnection conn)
         {
             var cmd = new FbCommand(DuplicateQuery, conn);
 
-            cmd.Parameters.Add("@compl_num", SqlDbType.VarChar).Value = form.compl_num; 
-            cmd.Parameters.Add("@mat_id", SqlDbType.VarChar).Value = form.mat_id;
+            cmd.Parameters.Add("@compl_num", SqlDbType.Int).Value = form.compl_num == "" ? 0 : form.compl_num ; 
+            cmd.Parameters.Add("@mat_id", SqlDbType.Int).Value = form.mat_id ?? 0;
 
-            return (bool)cmd.ExecuteScalar();
+            var result = cmd.ExecuteScalar();
+            return result != null && Convert.ToInt32(result) == 1;
         }
 
         private const string AddRepairQuery =
-            "INSERT VALUES INTO REM(ICON, COMPL_ID, MAT_ID, COMPL_NUM, " +
+            "INSERT INTO REM(ICON, COMPL_ID, MAT_ID, COMPL_NUM, " +
                 "VNUTR_NUM, INV_NUM, NAME, DEP_NAME, USER_NAME, PRIBOR_NAME, " +
                 "JALOBA, DIAGNOS, REPAIR, DATE_IN, DATE_DONE, DATE_OUT) VALUES" +
             "(@icon, @c_id, @m_id, @c_num, @v_num, @i_num, @name, @d_name, " +
@@ -94,6 +96,37 @@ namespace Inv.Models
 
             var rows_affected = cmd.ExecuteNonQuery();
             return rows_affected > 0;
+        }
+
+        private const string UpdateProfQuery = "UPDATE COMPL SET date_prof = @date_prof WHERE id = @id";
+        public static bool UpdateProfDate(RepairForm form, FbConnection conn)
+        {
+            var cmd = new FbCommand(UpdateProfQuery, conn);
+
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = form.id;
+            cmd.Parameters.Add("@date_prof", SqlDbType.DateTime).Value = form.doneTime;
+
+            var rows_affected = cmd.ExecuteNonQuery();
+            return rows_affected > 0;
+        }
+
+        public static DataTable GetRepairssForCompl(int vnutr_num, FbConnection conn)
+        {
+            string query;
+
+            if (Global.AU)
+                query = $"SELECT * FROM rem WHERE pribor_name IS NULL OR pribor_name='{Global.Name}' AND " +
+                    $"vnutr_num = @vnutr_num";
+            else
+                query = "SELECT * FROM rem WHERE vnutr_num = @vnutr_num";
+
+            var cmd = new FbCommand(query, conn);
+            cmd.Parameters.AddWithValue("@vnutr_num", vnutr_num);
+
+            DataTable repairData = new();
+            (new FbDataAdapter(cmd)).Fill(repairData);
+
+            return repairData;
         }
     }
 }

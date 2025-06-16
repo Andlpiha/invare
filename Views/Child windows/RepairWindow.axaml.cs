@@ -12,12 +12,19 @@ using System.Data.Entity.Core.Mapping;
 
 namespace Inv;
 
+public enum RepairWindowType
+{
+    Create,
+    Edit,
+    Prof
+}
+
 public partial class RepairWindow : ReactiveWindow<RepairForm>
 {
     private RepairForm? _old_value { get; set; }
-    public bool edit { get; }
+    public RepairWindowType type { get; }
 
-    public RepairWindow(bool edit = false)
+    public RepairWindow(RepairWindowType type = RepairWindowType.Create)
     {
         InitializeComponent();
 
@@ -28,18 +35,35 @@ public partial class RepairWindow : ReactiveWindow<RepairForm>
                 this.ViewModel!.executor = null;
             this.ViewModel!.executor = args.AddedItems[0].ToString();
         };
-
-        this.edit = edit;
+        this.type = type;
 
         this.WhenActivated(disposables =>
         {
             if (this.ViewModel is null)
                 return;
 
-            if (edit)
+            if (type == RepairWindowType.Edit)
                 this._old_value = new RepairForm(this.ViewModel as RepairForm);
             else
+            {
                 this._old_value = null;
+
+                this.FindControl<TextBox>("ComplNum")!.IsEnabled = false;
+                this.FindControl<TextBox>("VnutrNum")!.IsEnabled = false;
+                this.FindControl<TextBox>("InvNum")!.IsEnabled = false;
+            }
+
+            if (this.type == RepairWindowType.Prof)
+            {
+                this.FindControl<TextBox>("Complaint")!.IsEnabled = false;
+                this.FindControl<TextBox>("Complaint")!.Text = "Профилактика";
+
+                this.FindControl<TextBox>("Diagnosis")!.IsEnabled = false;
+                this.FindControl<CalendarDatePicker>("AcceptedTime")!.IsEnabled = false;
+                this.FindControl<CalendarDatePicker>("ReturnedTime")!.IsEnabled = false;
+
+                this.FindControl<CalendarDatePicker>("DoneTime")!.SelectedDate = DateTime.Now;
+            }
         });
     }
 
@@ -47,7 +71,10 @@ public partial class RepairWindow : ReactiveWindow<RepairForm>
     {
         string message = string.Empty;
 
-        if (!edit && RepairModel.CheckDuplicate(
+        if (type == RepairWindowType.Prof)
+            this.ViewModel.returnedTime = this.ViewModel.doneTime;
+
+        if (type != RepairWindowType.Edit && RepairModel.CheckDuplicate(
             this.ViewModel as RepairForm, SQLConn.Instance.GetConnection()
         ))
             message = "Этот предмет уже в ремонте";
@@ -61,7 +88,7 @@ public partial class RepairWindow : ReactiveWindow<RepairForm>
         }
 
         var conn = SQLConn.Instance.GetConnection();
-        if (edit)
+        if (this.type == RepairWindowType.Edit)
             RepairModel.EditRepair(this.ViewModel as RepairForm, _old_value, conn);
         else
             RepairModel.AddRepair(this.ViewModel as RepairForm, conn);

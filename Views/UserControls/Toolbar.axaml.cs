@@ -72,6 +72,8 @@ public partial class Toolbar : UserControl
         var _viewModel = this.DataContext as MainWindowViewModel;
         if (_viewModel!.SelectedTabID != Global.RepairTab && _viewModel.SelectedRow != null)
         {
+            form.id = _viewModel.SelectedRow!.id;
+
             form.compl_num  = _viewModel.SelectedRow!.compl_num.ToString()  ?? String.Empty;
             form.vnutr_num  = _viewModel.SelectedRow!.vnutr_num.ToString()  ?? String.Empty;
             form.inv_num    = _viewModel.SelectedRow!.inv_num               ?? String.Empty;
@@ -81,11 +83,44 @@ public partial class Toolbar : UserControl
             form.User       = _viewModel.SelectedRow!.user_name             ?? String.Empty;
         }
 
-        RepairWindow window = new RepairWindow()
+        RepairWindow window = new RepairWindow(RepairWindowType.Create)
         {
             ViewModel = form
         };
         window.Show();
+    }
+
+    public async void addProf(object sender, RoutedEventArgs args)
+    {
+        RepairForm form = new RepairForm();
+
+        var _viewModel = this.DataContext as MainWindowViewModel;
+        if (_viewModel!.SelectedTabID != Global.RepairTab && _viewModel.SelectedRow != null)
+        {
+            form.id = _viewModel.SelectedRow!.id;
+
+            form.compl_num = _viewModel.SelectedRow!.compl_num.ToString() ?? String.Empty;
+            form.vnutr_num = _viewModel.SelectedRow!.vnutr_num.ToString() ?? String.Empty;
+            form.inv_num = _viewModel.SelectedRow!.inv_num ?? String.Empty;
+
+            form.name = _viewModel.SelectedRow!.name ?? String.Empty;
+            form.Department = _viewModel.SelectedRow!.dep_name ?? String.Empty;
+            form.User = _viewModel.SelectedRow!.user_name ?? String.Empty;
+        }
+
+        RepairWindow window = new RepairWindow(RepairWindowType.Prof)
+        {
+            ViewModel = form
+        };
+        var _res = await window.ShowDialog<RepairForm>(this.VisualRoot as Window);
+
+        if (_res != null)
+        {
+            _viewModel!.SelectedRow.date_prof = _res.doneTime;
+
+            var _con = SQLConn.Instance;
+            RepairModel.UpdateProfDate(_res, _con.GetConnection());
+        }
     }
 
     public async void deleteItem(object sender, RoutedEventArgs args)
@@ -142,7 +177,7 @@ public partial class Toolbar : UserControl
         if (tabID == Global.RepairTab)
         {
             RepairForm form = new RepairForm(row);
-            RepairWindow window = new(true)
+            RepairWindow window = new(RepairWindowType.Edit)
             {
                 ViewModel = form,
             };
